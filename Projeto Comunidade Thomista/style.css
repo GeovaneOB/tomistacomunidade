@@ -1,0 +1,388 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+}
+
+/* ================= NAVBAR ================= */
+
+header {
+    width: 100%;
+}
+
+/* Barra principal */
+header .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 100px;
+    padding: 0 5%;
+
+    background-color: #fffbef;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+/* Linha decorativa */
+.navbar-detail {
+    height: 10px;
+    width: 100%;
+    background-color: #C9A24D;
+
+    position: fixed;
+    top: 100px;
+    left: 0;
+    z-index: 9;
+}
+
+/* Logo */
+.navbar-logo .logo {
+    height: 80px;
+}
+
+/* Menu */
+nav.navbar-titles ul {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Links */
+nav.navbar-titles a {
+    text-decoration: none;
+    color: #1C1C1C;
+    font-size: 1rem;
+    transition: opacity 0.2s ease;
+}
+
+nav.navbar-titles a:hover {
+    opacity: 0.7;
+}
+
+nav.navbar-titles a.active {
+    color: #C9A24D; /* cor diferente */
+    font-weight: bold;
+}
+
+/* Redes sociais */
+.nav-contato {
+    display: flex;
+}
+
+.nav-contato img {
+    width: 40px;
+    padding: 5px;
+}
+
+/* ================= HERO ================= */
+
+.title-principal {
+    margin-bottom: 40px;
+}
+
+.title-principal h1 {
+    color: #fffbef;
+    font-size: 40px;
+    max-width: 800px;
+    margin: 130px 0 0 180px;
+}
+
+.title-principal p {
+    color: #fffbef;
+    font-size: 18px;
+    max-width: 600px;
+    margin: 15px 0 0 180px;
+}
+
+.title-principal strong {
+    color: #C9A24D;
+}
+
+.button-link {
+    display: inline-block;
+    margin-left: 180px;
+    margin-top: 25px;
+
+    background-color: #C9A24D;
+    color: #fffbef;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 15px 25px;
+    border-radius: 5px;
+
+    transition: opacity 0.3s ease;
+}
+
+.button-link:hover {
+    opacity: 0.7;
+}
+
+/* ================= ACESSOS ================= */
+
+.search-section {
+    width: 100%;
+    height: 250px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 200px;
+
+    background-color: #1C1C1C;
+}
+
+.search-section-elements a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-decoration: none;
+    color: #fffbef;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.search-section-elements img {
+    width: 55px;
+    margin-bottom: 10px;
+}
+
+/* ================= ATUALIZAÇÕES ================= */
+
+.section-update {
+    width: 100%;
+    height: 180px;
+
+    background-color: #282828;
+    padding: 30px;
+}
+
+.update-user-section {
+    margin-left: 40px;
+    width: 410px;
+}
+
+.update-title {
+    font-size: 30px;
+    color: #fffbef;
+    font-weight: 400;
+    margin: 0 auto;
+}
+
+.update-title-second {
+    font-size: 20px;
+    max-width: 500px;
+    font-weight: 300;
+    color: #fffbef;
+}
+
+/* ================= NEWSLETTER ================= */
+
+.update-content {
+    display: flex;
+    align-items: center;
+
+    max-width: 1200px;
+    margin: 0 auto;
+
+    gap: 60px; /* CONTROLA A DISTÂNCIA ENTRE TEXTO E INPUT */
+}
+
+
+.update-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.update-form input {
+    width: 280px;
+    padding: 12px 15px;
+
+    border-radius: 5px;
+    border: none;
+    outline: none;
+
+    font-family: inherit;
+    font-size: 15px;
+}
+
+.update-form input::placeholder {
+    color: #777;
+}
+
+.update-form button {
+    padding: 12px 20px;
+    width: 150px;
+    background-color: #C9A24D;
+    color: #fffbef;
+    border: none;
+    border-radius: 5px;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+
+    transition: opacity 0.3s ease;
+}
+
+.update-form button:hover {
+    opacity: 0.75;
+}
+
+.section-apoio-comunity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    background-color: #1C1C1C;
+    gap: 60px;
+}
+
+.section-apoio-comunity .comunidade-logo {
+    width: 100px;
+}
+
+.section-apoio-comunity .title-tomista {
+    font-size: 20px;
+    font-weight: 200;
+    color: #fffbef;
+}
+
+.section-apoio-comunity .title-tomista .author-title {
+    font-size: 13px;
+}
+
+.footer-credits {
+    display: flex;
+    height: 60px;
+    background-color: #282828;
+    border-top: 1px solid gray;
+    align-items: center;
+}
+
+.footer-credits .credits {
+    margin-left: 180px;
+    font-size: 12px;
+    color: #fffbef;
+    font-weight: 200;
+}
+
+.footer-credits .credits-dev {
+    margin-left: 800px;
+    font-size: 12px;
+    color: #fffbef;
+    font-weight: 200;
+}
+
+/* ================= CONTEÚDO PRINCIPAL ================= */
+
+main.container {
+    min-height: 100vh;
+    padding-top: 110px;
+
+    background-color: #1C1C1C;
+    background-image: url("img/Copy of Módulo principal (2).png");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+}
+
+/* ================= RESPONSIVO ================= */
+
+/* Tablets */
+@media (max-width: 1024px) {
+
+    header .navbar {
+        height: 90px;
+    }
+
+    .navbar-detail {
+        top: 90px;
+    }
+
+    .navbar-logo .logo {
+        height: 70px;
+    }
+
+    nav.navbar-titles ul {
+        gap: 25px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 768px) {
+
+    header .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 5%;
+        gap: 10px;
+    }
+
+    .navbar-detail {
+        position: relative;
+        top: 0;
+    }
+
+    nav.navbar-titles ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .navbar-logo .logo {
+        height: 60px;
+    }
+
+    .title-principal h1,
+    .title-principal p,
+    .button-link {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .button-link {
+        display: block;
+        margin: 20px auto;
+    }
+
+    .update-user-section {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .update-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .update-form {
+        justify-content: center;
+    }
+
+}
+
+/* Celulares pequenos */
+@media (max-width: 480px) {
+
+    nav.navbar-titles a {
+        font-size: 0.9rem;
+    }
+}
