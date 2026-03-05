@@ -88,7 +88,7 @@ nav.navbar-titles a.active {
     padding: 5px;
 }
 
-main.container {
+section.container {
     min-height: 50vh;
     padding-top: 110px;
 
@@ -105,4 +105,228 @@ section > h1.title-sobre {
     justify-content: center;
     margin-top: 100px;
     font-size: 50px;
+}
+
+section.comunidade-description {
+    background-color: #fffbef;
+    height: 100%;
+}
+
+div.sobre-inicio {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+}
+
+div.paragrafos {
+    padding: 20px;
+    text-align: center;
+    font-size: 18px;
+}
+
+div.paragrafos h1 {
+    text-align: center;
+}
+
+
+div.paragrafos h1:hover {
+    opacity: 0.75;
+    color: #C9A24D;
+}
+
+.section-apoio-comunity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    background-color: #1C1C1C;
+    gap: 60px;
+}
+
+.section-apoio-comunity .comunidade-logo {
+    width: 100px;
+}
+
+.section-apoio-comunity .title-tomista {
+    font-size: 20px;
+    font-weight: 200;
+    color: #fffbef;
+}
+
+.section-apoio-comunity .title-tomista .author-title {
+    font-size: 13px;
+}
+
+.footer-credits {
+    display: flex;
+    height: 60px;
+    background-color: #282828;
+    border-top: 1px solid gray;
+    align-items: center;
+}
+
+.footer-credits .credits {
+    margin-left: 180px;
+    font-size: 12px;
+    color: #fffbef;
+    font-weight: 200;
+}
+
+.footer-credits .credits-dev {
+    margin-left: 800px;
+    font-size: 12px;
+    color: #fffbef;
+    font-weight: 200;
+}
+
+@media screen and (max-width: 768px) {
+
+    html, body {
+        overflow-x: hidden;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    header .navbar {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+        padding: 20px;
+        gap: 20px;
+        position: relative;
+    }
+
+    .navbar-detail {
+        position: relative;
+        top: 0;
+    }
+
+    .navbar-logo .logo {
+        height: 50px;
+    }
+
+    nav.navbar-titles ul {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .nav-contato {
+        justify-content: center;
+    }
+
+    /* ================= HERO ================= */
+
+    .title-principal h1,
+    .title-principal p,
+    .button-link {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .title-principal h1 {
+        font-size: 28px;
+        margin-top: 40px;
+    }
+
+    .title-principal p {
+        font-size: 16px;
+    }
+
+    .button-link {
+        display: inline-block;
+    }
+
+    /* ================= ACESSOS ================= */
+
+    .search-section {
+        flex-direction: column;
+        height: auto;
+        gap: 40px;
+        padding: 40px 0;
+    }
+
+    /* ================= NEWSLETTER ================= */
+
+    .update-content {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .update-user-section {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .update-form {
+        flex-direction: column;
+    }
+
+    .update-form input,
+    .update-form button {
+        width: 100%;
+    }
+
+    /* ================= APOIO ================= */
+
+    .section-apoio-comunity {
+        flex-direction: column;
+        height: auto;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    /* ================= FOOTER ================= */
+
+    .footer-credits {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        height: auto;
+        padding: 15px;
+    }
+
+    .footer-credits .credits,
+    .footer-credits .credits-dev {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    section.container {
+        background-size: cover;
+        margin-top: -2px;
+    }
+
+    section > h1.title-sobre {
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 60px;
+        font-size: 50px;
+    }
+
+    
+    /* ===== ORGANIZAÇÃO EM FORMATO DE ARTIGO ===== */
+
+    div.sobre-inicio {
+        grid-template-columns: 1fr;  /* UMA COLUNA */
+        padding: 30px 20px;
+    }
+
+    div.paragrafos {
+        text-align: left;   /* artigo não é centralizado */
+        font-size: 16px;
+        line-height: 1.7;
+        padding: 10px 0;
+    }
+
+    div.paragrafos h1 {
+        text-align: left;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+    
 }
