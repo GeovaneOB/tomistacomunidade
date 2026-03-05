@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+}
+
+/* ================= NAVBAR ================= */
+
+header {
+    width: 100%;
+}
+
+/* Barra principal */
+header .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 100px;
+    padding: 0 5%;
+
+    background-color: #fffbef;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+/* Linha decorativa */
+.navbar-detail {
+    height: 10px;
+    width: 100%;
+    background-color: #C9A24D;
+
+    position: fixed;
+    top: 100px;
+    left: 0;
+    z-index: 9;
+}
+
+/* Logo */
+.navbar-logo .logo {
+    height: 80px;
+}
+
+/* Menu */
+nav.navbar-titles ul {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+
+    list-style: none;
+    margin: 300px;
+    padding: 0;
+}
+
+/* Links */
+nav.navbar-titles a {
+    text-decoration: none;
+    color: #1C1C1C;
+    font-size: 1rem;
+    transition: opacity 0.2s ease;
+}
+
+nav.navbar-titles a:hover {
+    opacity: 0.7;
+}
+
+nav.navbar-titles a.active {
+    color: #C9A24D; /* cor diferente */
+    font-weight: bold;
+}
+
+/* Redes sociais */
+.nav-contato {
+    display: flex;
+}
+
+.nav-contato img {
+    width: 40px;
+    padding: 5px;
+    
+}
+
+section.container {
+    min-height: 50vh;
+    padding-top: 110px;
+
+    background-image: url("img/e69z7pdxw1y78xmmlpywyd2z8zq5.jpg ");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+section > h1.title-sobre {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    font-size: 50px;
+}
+
+section.educacao-description {
+    background-color: #fffbef;
+    height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+
+    html, body {
+        overflow-x: hidden;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    header .navbar {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+        padding: 20px;
+        gap: 20px;
+        position: relative;
+    }
+
+    .navbar-detail {
+        position: relative;
+        top: 0;
+    }
+
+    .navbar-logo .logo {
+        height: 50px;
+    }
+
+    nav.navbar-titles ul {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+        margin: 0;
+    }
+
+    .nav-contato {
+        justify-content: center;
+    }
+}
