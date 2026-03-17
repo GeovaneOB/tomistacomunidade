@@ -180,6 +180,30 @@ div.paragrafos h1:hover {
     font-weight: 200;
 }
 
+
+div.titulo-colaboradores h1 {
+    color: #C9A24D;
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+    font-size: 30px;
+}
+
+section.colaboradores{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+}
+
+section.colaboradores img {
+    width: 500px;
+    border-radius: 10px;
+    box-shadow: #C9A24D 0px 4px 40px;
+}
+
+
+
 @media screen and (max-width: 768px) {
 
     html, body {
@@ -331,4 +355,25 @@ div.paragrafos h1:hover {
         margin-bottom: 10px;
     }
     
+    
+    div.titulo-colaboradores h1 {
+        color: #C9A24D;
+        margin-top: 40px;
+        padding: 20px;
+        text-align: center;
+        font-size: 30px;
+    }
+
+    section.colaboradores{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    section.colaboradores img {
+        width: 300px;
+        border-radius: 10px;
+        box-shadow: #C9A24D 0px 4px 40px;
+    }
 }
