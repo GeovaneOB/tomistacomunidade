@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO básico -->
+    <title>Comunidade Tomista | Home</title>
+    <meta name="description" content="Comunidade Tomista dedicada à educação, filosofia e formação intelectual.">
+    <link rel="shortcut icon" href="img/385304a8-2019-4a51-9206-1a709c6d7eb3.png" type="image/x-icon">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!--
+        Estilos específicos do Blog e do painel do Administrador.
+        Paleta 100% preservada do style.css (mesmos códigos hex):
+        #fffbef, #C9A24D, #1C1C1C, #282828, #777, #b23b3b.
+        Modernizações: variáveis de design, espaçamento em base 8px,
+        cantos arredondados, sombras suaves e microinterações.
+    -->
+    <style>
+        :root {
+            --color-cream:      #fffbef;
+            --color-gold:        #C9A24D;
+            --color-ink:          #1C1C1C;
+            --color-charcoal:    #282828;
+            --color-white:       #ffffff;
+            --color-gray:         #777777;
+            --color-error:        #b23b3b;
+
+            --gold-rgb: 201, 162, 77;
+            --ink-rgb: 28, 28, 28;
+
+            --font-display: "Cormorant Garamond", "Iowan Old Style", serif;
+            --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
+
+            --space-1: 8px;
+            --space-2: 16px;
+            --space-3: 24px;
+            --space-4: 32px;
+            --space-5: 40px;
+            --space-6: 48px;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+
+            --shadow-sm: 0 2px 8px rgba(var(--ink-rgb), 0.06);
+            --shadow-md: 0 12px 32px rgba(var(--ink-rgb), 0.12);
+            --shadow-gold: 0 10px 30px rgba(var(--gold-rgb), 0.28);
+
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.2s var(--ease);
+            --transition-base: 0.3s var(--ease);
+        }
+
+        /* Empurra o conteúdo para baixo da navbar fixa (100px) + linha decorativa */
+        .blog-main {
+            background-color: var(--color-cream);
+            min-height: 100vh;
+            color: var(--color-ink);
+            font-family: var(--font-body);
+            padding: 150px 5% var(--space-6);
+        }
+
+        /* ---------- Hero do blog ---------- */
+        .blog-hero {
+            background-color: var(--color-ink);
+            background-image: radial-gradient(circle at top right, rgba(var(--gold-rgb), 0.15), transparent 60%);
+            border-radius: var(--radius-lg);
+            padding: 56px 40px;
+            max-width: 900px;
+            margin: 0 auto var(--space-6);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .blog-hero .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+        }
+
+        .blog-hero h1 {
+            color: var(--color-cream);
+            font-family: var(--font-display);
+            font-size: 44px;
+            font-weight: 700;
+            line-height: 1.15;
+            margin: var(--space-2) 0 var(--space-2);
+        }
+
+        .blog-hero h1 strong {
+            color: var(--color-gold);
+        }
+
+        .blog-hero p {
+            color: var(--color-cream);
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.85;
+        }
+
+        /* ---------- Barra de contas (visitante + administrador) ---------- */
+        .account-bar {
+            max-width: 900px;
+            margin: 0 auto var(--space-5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            background-color: var(--color-white);
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-3);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .visitor-account,
+        .admin-account {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+        }
+
+        .admin-status-text,
+        .visitor-status-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--color-ink);
+            opacity: 0.7;
+        }
+
+        /* ---------- Abas dentro do modal (Entrar / Cadastrar) ---------- */
+        .modal-tabs {
+            display: flex;
+            gap: var(--space-3);
+            margin-bottom: var(--space-3);
+            border-bottom: 1px solid rgba(var(--gold-rgb), 0.35);
+        }
+
+        .modal-tab-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-ink);
+            opacity: 0.5;
+            padding: 0 0 0.7rem;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: opacity var(--transition-fast), color var(--transition-fast);
+        }
+
+        .modal-tab-btn:hover {
+            opacity: 0.85;
+        }
+
+        .modal-tab-btn.active {
+            opacity: 1;
+            color: var(--color-gold);
+            border-bottom-color: var(--color-gold);
+        }
+
+        .modal-tab-panel[hidden] { display: none; }
+
+        /* Botões seguem o padrão de .button-link do site */
+        .btn-ct {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 12px 22px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform var(--transition-fast), opacity var(--transition-fast), box-shadow var(--transition-fast);
+            background-color: var(--color-gold);
+            color: var(--color-cream);
+            box-shadow: var(--shadow-gold);
+        }
+        .btn-ct:hover {
+            opacity: 0.92;
+            transform: translateY(-2px);
+        }
+        .btn-ct:active { transform: translateY(0); }
+
+        .btn-ct.outline {
+            background-color: transparent;
+            color: var(--color-ink);
+            border: 1.5px solid var(--color-gold);
+            box-shadow: none;
+        }
+        .btn-ct.outline:hover {
+            background-color: rgba(var(--gold-rgb), 0.08);
+        }
+
+        .btn-ct.danger {
+            background-color: var(--color-ink);
+            color: var(--color-cream);
+            box-shadow: none;
+        }
+        .btn-ct.danger:hover {
+            opacity: 0.85;
+        }
+
+        /* ---------- Modal de login do administrador ---------- */
+        .admin-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(28, 28, 28, 0.6);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: var(--space-2);
+        }
+        .admin-modal-backdrop[hidden] { display: none; }
+
+        .admin-modal {
+            background: var(--color-cream);
+            border-top: 5px solid var(--color-gold);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            max-width: 360px;
+            width: 100%;
+            box-shadow: var(--shadow-md);
+            animation: modal-in var(--transition-base);
+        }
+
+        @keyframes modal-in {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .admin-modal h2 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin: 0 0 0.3rem;
+        }
+
+        .admin-modal p.hint {
+            font-size: 0.8rem;
+            color: var(--color-ink);
+            opacity: 0.7;
+            margin: 0 0 var(--space-3);
+        }
+
+        .field-group { margin-bottom: var(--space-2); }
+
+        .field-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: var(--color-ink);
+            opacity: 0.75;
+            margin-bottom: 0.35rem;
+        }
+
+        .field-group input,
+        .field-group textarea {
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            padding: 0.7rem 0.8rem;
+            border: 1.5px solid rgba(var(--gold-rgb), 0.5);
+            border-radius: var(--radius-sm);
+            background: var(--color-white);
+            color: var(--color-ink);
+            box-sizing: border-box;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .field-group input:focus,
+        .field-group textarea:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 4px rgba(var(--gold-rgb), 0.18);
+        }
+
+        .field-group textarea { resize: vertical; min-height: 110px; }
+
+        .admin-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-1);
+            margin-top: var(--space-3);
+        }
+
+        .admin-error {
+            font-size: 0.78rem;
+            color: var(--color-error);
+            margin: 0.4rem 0 0;
+            min-height: 1em;
+        }
+
+        /* ---------- Painel de publicação (somente admin logado) ---------- */
+        .publish-panel {
+            max-width: 780px;
+            margin: 0 auto var(--space-6);
+            background: var(--color-white);
+            border: 1px solid rgba(var(--gold-rgb), 0.35);
+            border-left: 5px solid var(--color-gold);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            box-shadow: var(--shadow-sm);
+        }
+        .publish-panel[hidden] { display: none; }
+
+        .publish-panel h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 var(--space-2);
+            color: var(--color-ink);
+        }
+
+        .publish-panel .publish-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-1);
+            margin-top: 0.4rem;
+        }
+
+        /* ---------- Lista de artigos ---------- */
+        .blog-list {
+            max-width: 780px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .blog-post {
+            padding: var(--space-4) var(--space-3);
+            background-color: var(--color-white);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+        }
+        .blog-post:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .blog-post .post-meta {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+        }
+
+        .blog-post h3 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin: 0.1rem 0 0.3rem;
+            color: var(--color-ink);
+        }
+
+        .blog-post .post-excerpt {
+            color: var(--color-ink);
+            opacity: 0.8;
+            line-height: 1.6;
+            font-size: 0.98rem;
+        }
+
+        .blog-post img.post-image {
+            width: 100%;
+            max-height: 320px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+            margin: 0.5rem 0;
+        }
+
+        .blog-post .post-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .blog-post .post-author {
+            font-size: 0.78rem;
+            color: var(--color-ink);
+            opacity: 0.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--color-ink);
+            opacity: 0.6;
+            font-size: 0.9rem;
+            padding: var(--space-5) 0;
+        }
+
+        @media (max-width: 600px) {
+            .admin-bar { justify-content: space-between; }
+            .blog-hero { padding: var(--space-4) var(--space-3); }
+            .blog-hero h1 { font-size: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- CABEÇALHO -->
+    <header>
+        <div class="navbar">
+            <div class="navbar-logo">
+                <a href="/">
+                    <img
+                        class="logo"
+                        src="img/385304a8-2019-4a51-9206-1a709c6d7eb3.png"
+                        alt="Logo da Comunidade Tomista">
+                </a>
+            </div>
+            <nav class="navbar-titles" aria-label="Menu principal">
+                <ul>    
+                    <li><a href="index.html">Inicial</a></li>
+                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="educacao.html">Educação</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
+                    <li><a href="mailto:tomistacomunidade@gmail.com">Contato</a></li>
+                    <li class="nav-contato" aria-label="Redes sociais">
+                        <a href="https://www.instagram.com/comunidade_tomista?igsh=MWJsZWdwYjh1czRuOQ==" target="_blank"><img class="media" src="img/instagram.png" alt="Instagram"></a>
+                        <a href="https://youtube.com/@comunidadetomista?si=FdLPEXtPwTkDObHS" target="_blank"><img class="media" src="img/youtube.png" alt="YouTube"></a>
+                        <a href="https://www.tiktok.com/@comunidadetomista?_r=1&_t=ZS-93qb0MaSJZX" target="_blank"><img class="media" src="img/tiktok.png" alt="TikTok"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Linha decorativa -->
+        <div class="navbar-detail" aria-hidden="true"></div>
+    </header>
+
+    <!-- BLOG -->
+    <main class="blog-main">
+
+        <section class="blog-hero">
+            <span class="eyebrow">Blog da Comunidade</span>
+            <h1>Artigos &amp; Reflexões</h1>
+            <p>Textos sobre teologia tomista, educação clássica e formação do caráter, escritos pela nossa comunidade.</p>
+        </section>
+
+        <!-- Barra de contas: visitante (cadastro/login) e administrador -->
+        <div class="account-bar">
+            <div class="visitor-account">
+                <span class="visitor-status-text" id="visitorStatusText">Você não está identificado</span>
+                <button type="button" class="btn-ct outline" id="btnVisitorAccount">Entrar / Cadastrar</button>
+                <button type="button" class="btn-ct danger" id="btnVisitorLogout" hidden>Sair</button>
+            </div>
+            <div class="admin-account">
+                <span class="admin-status-text" id="adminStatusText">Visitante</span>
+                <button type="button" class="btn-ct" id="btnAdminLogin">Área do administrador</button>
+                <button type="button" class="btn-ct danger" id="btnAdminLogout" hidden>Sair</button>
+            </div>
+        </div>
+
+        <!-- Modal de cadastro/login do VISITANTE -->
+        <div class="admin-modal-backdrop" id="visitorModal" hidden>
+            <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="visitorModalTitle">
+                <h2 id="visitorModalTitle">Sua conta</h2>
+                <p class="hint">Crie uma conta ou entre para acompanhar os artigos da Comunidade Tomista.</p>
+
+                <div class="modal-tabs">
+                    <button type="button" class="modal-tab-btn active" id="tabBtnLogin">Entrar</button>
+                    <button type="button" class="modal-tab-btn" id="tabBtnRegister">Cadastrar</button>
+                </div>
+
+                <!-- Aba: login do visitante -->
+                <div class="modal-tab-panel" id="tabPanelLogin">
+                    <form id="visitorLoginForm">
+                        <div class="field-group">
+                            <label for="visitorLoginEmail">E-mail</label>
+                            <input type="email" id="visitorLoginEmail" autocomplete="email" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="visitorLoginPass">Senha</label>
+                            <input type="password" id="visitorLoginPass" autocomplete="current-password" required>
+                        </div>
+                        <p class="admin-error" id="visitorLoginError"></p>
+                        <div class="admin-modal-actions">
+                            <button type="button" class="btn-ct outline" id="btnCancelVisitor">Cancelar</button>
+                            <button type="submit" class="btn-ct solid">Entrar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Aba: cadastro do visitante -->
+                <div class="modal-tab-panel" id="tabPanelRegister" hidden>
+                    <form id="visitorRegisterForm">
+                        <div class="field-group">
+                            <label for="visitorRegName">Nome</label>
+                            <input type="text" id="visitorRegName" autocomplete="name" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="visitorRegEmail">E-mail</label>
+                            <input type="email" id="visitorRegEmail" autocomplete="email" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="visitorRegPass">Senha</label>
+                            <input type="password" id="visitorRegPass" autocomplete="new-password" minlength="6" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="visitorRegPassConfirm">Confirmar senha</label>
+                            <input type="password" id="visitorRegPassConfirm" autocomplete="new-password" minlength="6" required>
+                        </div>
+                        <p class="admin-error" id="visitorRegisterError"></p>
+                        <div class="admin-modal-actions">
+                            <button type="button" class="btn-ct outline" id="btnCancelVisitor2">Cancelar</button>
+                            <button type="submit" class="btn-ct solid">Criar conta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de login do ADMINISTRADOR (separado do login de visitante) -->
+        <div class="admin-modal-backdrop" id="adminModal" hidden>
+            <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+                <h2 id="adminModalTitle">Login do administrador</h2>
+                <p class="hint">Somente o administrador da Comunidade Tomista pode publicar artigos.</p>
+
+                <form id="adminLoginForm">
+                    <div class="field-group">
+                        <label for="adminUser">Usuário</label>
+                        <input type="text" id="adminUser" autocomplete="username" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="adminPass">Senha</label>
+                        <input type="password" id="adminPass" autocomplete="current-password" required>
+                    </div>
+                    <p class="admin-error" id="adminError"></p>
+                    <div class="admin-modal-actions">
+                        <button type="button" class="btn-ct" id="btnCancelLogin">Cancelar</button>
+                        <button type="submit" class="btn-ct solid">Entrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Painel de publicação: só fica visível quando o admin está logado -->
+        <section class="publish-panel" id="publishPanel" hidden>
+            <h2>Publicar novo artigo</h2>
+            <form id="newPostForm">
+                <div class="field-group">
+                    <label for="postTitle">Título</label>
+                    <input type="text" id="postTitle" required>
+                </div>
+                <div class="field-group">
+                    <label for="postExcerpt">Resumo</label>
+                    <input type="text" id="postExcerpt" placeholder="Uma linha de apresentação do artigo" required>
+                </div>
+                <div class="field-group">
+                    <label for="postContent">Conteúdo</label>
+                    <textarea id="postContent" required></textarea>
+                </div>
+                <div class="field-group">
+                    <label for="postImage">URL da imagem (opcional)</label>
+                    <input type="url" id="postImage" placeholder="https://...">
+                </div>
+                <div class="publish-actions">
+                    <button type="submit" class="btn-ct solid">Publicar artigo</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Lista de artigos publicados -->
+        <section class="blog-list" id="blogList" aria-live="polite">
+            <!-- Preenchido dinamicamente via JavaScript -->
+        </section>
+
+    </main>
+
+    <script>
+    (function () {
+        /*
+            ==========================================================================
+            AUTENTICAÇÃO DO ADMINISTRADOR
+            ==========================================================================
+            Isto é uma verificação SOMENTE NO NAVEGADOR (client-side), útil para
+            protótipo e para esconder o formulário de quem não é admin.
+
+            IMPORTANTE PARA PRODUÇÃO:
+            Qualquer pessoa com conhecimento técnico pode abrir o "Inspecionar
+            elemento" e ver estas credenciais, ou simplesmente rodar
+            `sessionStorage.setItem('ct_is_admin', 'true')` no console para burlar
+            este login. Para segurança de verdade, substitua este bloco por uma
+            chamada a um backend (ex: Node/Express, PHP, Firebase Auth, Supabase)
+            que valide usuário/senha no servidor e devolva um token de sessão.
+        */
+        /*
+            ==========================================================================
+            AUTENTICAÇÃO DO ADMINISTRADOR (versão reforçada)
+            ==========================================================================
+            Continua sendo uma verificação SOMENTE NO NAVEGADOR — sem um servidor
+            por trás, não existe segurança 100% à prova de alguém tecnicamente
+            capaz de ler todo o código-fonte da página. O que foi adicionado aqui
+            eleva bastante a dificuldade de um bypass casual. Para segurança de
+            produção de verdade, isso ainda precisa virar uma chamada a um backend
+            (Node/Express, PHP, Firebase Auth, Supabase etc.) que valide a senha
+            no servidor e devolva um token de sessão real.
+
+            Camadas de proteção adicionadas nesta versão:
+            1) A senha não fica mais em texto puro no código — só o hash (SHA-256).
+            2) A sessão de admin deixou de ser uma flag simples ('true'/'false')
+               que qualquer um cria digitando uma linha no console. Agora é um
+               token derivado do hash da senha + um número aleatório da sessão.
+               Esse token é conferido de novo (de forma assíncrona) a cada
+               carregamento de página, e o resultado fica guardado numa variável
+               que só existe na memória do script — as checagens do dia a dia
+               (isAdmin()) não leem mais o sessionStorage diretamente, então
+               forçar uma chave lá não tem efeito nenhum sozinho.
+            3) Tentativas de login incorretas são limitadas: depois de várias
+               senhas erradas, o formulário bloqueia por um tempo (dificulta
+               tentativas de força bruta pelo console).
+            4) A sessão expira sozinha depois de um tempo definido.
+        */
+        const ADMIN_USER = 'admin';
+        // Hash SHA-256 da senha "tomista2026". Para trocar a senha: gere o hash
+        // SHA-256 da nova senha (dá pra usar o próprio hashText() lá embaixo, no
+        // console do navegador) e substitua o valor abaixo por ele.
+        const ADMIN_PASS_HASH = 'cda0287a4407840a77bc3acf0c9aef94d14ccac5be9aa02150ad73bbcd37acb2';
+
+        const SESSION_ADMIN_TOKEN_KEY = 'ct_admin_token';
+        const SESSION_ADMIN_NONCE_KEY = 'ct_admin_nonce';
+        const SESSION_ADMIN_EXPIRES_KEY = 'ct_admin_expires';
+        const SESSION_ADMIN_ATTEMPTS_KEY = 'ct_admin_attempts';
+        const SESSION_ADMIN_LOCKOUT_KEY = 'ct_admin_lockout_until';
+
+        const MAX_LOGIN_ATTEMPTS = 5;
+        const LOCKOUT_DURATION_MS = 60 * 1000;        // 1 minuto de bloqueio
+        const SESSION_DURATION_MS = 30 * 60 * 1000;   // 30 minutos de sessão
+
+        // Guardada só na memória do script (não no sessionStorage): é a fonte da
+        // verdade usada por isAdmin() no dia a dia — ver explicação acima.
+        let adminSessionVerified = false;
+
+        // Chave renomeada (v2) para descartar automaticamente qualquer post de
+        // exemplo que já estivesse salvo no navegador de visitas anteriores.
+        const STORAGE_POSTS_KEY = 'ct_blog_posts_v2';
+
+        // Nenhum artigo de exemplo: o blog começa vazio até o administrador publicar.
+        const DEFAULT_POSTS = [];
+
+        /*
+            ==========================================================================
+            CADASTRO/LOGIN DE VISITANTES
+            ==========================================================================
+            Sistema separado do login do administrador. Qualquer pessoa pode criar
+            conta aqui, mas isso NUNCA concede permissão de publicar artigos —
+            só o login definido em ADMIN_USER/ADMIN_PASS acima faz isso.
+
+            IMPORTANTE PARA PRODUÇÃO:
+            Os "usuários" abaixo ficam salvos no localStorage do próprio navegador,
+            ou seja, só existem nesse navegador/computador — não é uma base de
+            dados real nem sincroniza entre dispositivos. As senhas passam por um
+            hash (SHA-256) antes de serem salvas, então não ficam em texto puro,
+            mas isso ainda não é segurança de verdade (falta "salt" único por
+            usuário e validação no servidor). Para um cadastro de usuários de
+            verdade, isso precisa rodar num backend com banco de dados e uma
+            biblioteca própria para senhas (ex: bcrypt/argon2 no Node ou PHP).
+        */
+        const STORAGE_USERS_KEY = 'ct_blog_users';
+        const SESSION_VISITOR_KEY = 'ct_visitor';
+
+        // ---------- Elementos: administrador ----------
+        const btnAdminLogin = document.getElementById('btnAdminLogin');
+        const btnAdminLogout = document.getElementById('btnAdminLogout');
+        const adminStatusText = document.getElementById('adminStatusText');
+        const adminModal = document.getElementById('adminModal');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const adminError = document.getElementById('adminError');
+        const btnCancelLogin = document.getElementById('btnCancelLogin');
+        const publishPanel = document.getElementById('publishPanel');
+        const newPostForm = document.getElementById('newPostForm');
+        const blogList = document.getElementById('blogList');
+
+        // ---------- Elementos: visitante (cadastro/login) ----------
+        const btnVisitorAccount = document.getElementById('btnVisitorAccount');
+        const btnVisitorLogout = document.getElementById('btnVisitorLogout');
+        const visitorStatusText = document.getElementById('visitorStatusText');
+        const visitorModal = document.getElementById('visitorModal');
+        const btnCancelVisitor = document.getElementById('btnCancelVisitor');
+        const btnCancelVisitor2 = document.getElementById('btnCancelVisitor2');
+
+        const tabBtnLogin = document.getElementById('tabBtnLogin');
+        const tabBtnRegister = document.getElementById('tabBtnRegister');
+        const tabPanelLogin = document.getElementById('tabPanelLogin');
+        const tabPanelRegister = document.getElementById('tabPanelRegister');
+
+        const visitorLoginForm = document.getElementById('visitorLoginForm');
+        const visitorLoginError = document.getElementById('visitorLoginError');
+        const visitorRegisterForm = document.getElementById('visitorRegisterForm');
+        const visitorRegisterError = document.getElementById('visitorRegisterError');
+
+        // ---------- Persistência dos artigos ----------
+        function getPosts() {
+            const raw = localStorage.getItem(STORAGE_POSTS_KEY);
+            if (!raw) {
+                localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(DEFAULT_POSTS));
+                return DEFAULT_POSTS.slice();
+            }
+            try {
+                return JSON.parse(raw);
+            } catch (e) {
+                return DEFAULT_POSTS.slice();
+            }
+        }
+
+        function savePosts(posts) {
+            localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(posts));
+        }
+
+        // ---------- Estado do admin ----------
+        // isAdmin() agora só consulta a variável em memória (adminSessionVerified),
+        // nunca lê o sessionStorage diretamente — por isso forçar uma chave no
+        // console não é suficiente para virar admin (ver comentário no topo).
+        function isAdmin() {
+            return adminSessionVerified;
+        }
+
+        // Cria uma sessão de admin válida: gera um nonce novo, deriva um token a
+        // partir dele + do hash da senha, e salva os dois junto com a validade.
+        async function createAdminSession() {
+            const nonce = generateNonce();
+            const token = await hashText(ADMIN_PASS_HASH + ':' + nonce);
+            const expires = Date.now() + SESSION_DURATION_MS;
+
+            sessionStorage.setItem(SESSION_ADMIN_NONCE_KEY, nonce);
+            sessionStorage.setItem(SESSION_ADMIN_TOKEN_KEY, token);
+            sessionStorage.setItem(SESSION_ADMIN_EXPIRES_KEY, String(expires));
+
+            adminSessionVerified = true;
+            refreshAdminUI();
+        }
+
+        // Confere se existe uma sessão de admin válida e ainda dentro do prazo.
+        // Roda de forma assíncrona (por causa do hash) no carregamento da página
+        // e periodicamente, para expirar sessões automaticamente.
+        async function verifyAdminSession() {
+            const nonce = sessionStorage.getItem(SESSION_ADMIN_NONCE_KEY);
+            const token = sessionStorage.getItem(SESSION_ADMIN_TOKEN_KEY);
+            const expires = Number(sessionStorage.getItem(SESSION_ADMIN_EXPIRES_KEY) || 0);
+
+            let valid = false;
+            if (nonce && token && expires > Date.now()) {
+                const expectedToken = await hashText(ADMIN_PASS_HASH + ':' + nonce);
+                valid = (expectedToken === token);
+            }
+
+            adminSessionVerified = valid;
+            if (!valid) clearAdminSession();
+            refreshAdminUI();
+        }
+
+        function clearAdminSession() {
+            sessionStorage.removeItem(SESSION_ADMIN_NONCE_KEY);
+            sessionStorage.removeItem(SESSION_ADMIN_TOKEN_KEY);
+            sessionStorage.removeItem(SESSION_ADMIN_EXPIRES_KEY);
+            adminSessionVerified = false;
+        }
+
+        function logoutAdmin() {
+            clearAdminSession();
+            refreshAdminUI();
+        }
+
+        function refreshAdminUI() {
+            const logged = isAdmin();
+            publishPanel.hidden = !logged;
+            btnAdminLogin.hidden = logged;
+            btnAdminLogout.hidden = !logged;
+            adminStatusText.textContent = logged ? 'Administrador conectado' : 'Visitante';
+            renderPosts(); // re-renderiza para mostrar/ocultar botão "Excluir"
+        }
+
+        // ---------- Bloqueio por tentativas (força bruta) ----------
+        function getLockoutRemainingSeconds() {
+            const until = Number(sessionStorage.getItem(SESSION_ADMIN_LOCKOUT_KEY) || 0);
+            const remaining = until - Date.now();
+            return remaining > 0 ? Math.ceil(remaining / 1000) : 0;
+        }
+
+        function registerFailedAttempt() {
+            const attempts = Number(sessionStorage.getItem(SESSION_ADMIN_ATTEMPTS_KEY) || 0) + 1;
+            sessionStorage.setItem(SESSION_ADMIN_ATTEMPTS_KEY, String(attempts));
+            if (attempts >= MAX_LOGIN_ATTEMPTS) {
+                sessionStorage.setItem(SESSION_ADMIN_LOCKOUT_KEY, String(Date.now() + LOCKOUT_DURATION_MS));
+                sessionStorage.setItem(SESSION_ADMIN_ATTEMPTS_KEY, '0');
+            }
+        }
+
+        function clearFailedAttempts() {
+            sessionStorage.removeItem(SESSION_ADMIN_ATTEMPTS_KEY);
+            sessionStorage.removeItem(SESSION_ADMIN_LOCKOUT_KEY);
+        }
+
+        // ---------- Modal de login ----------
+        function openModal() {
+            adminError.textContent = '';
+            adminLoginForm.reset();
+            const remaining = getLockoutRemainingSeconds();
+            if (remaining > 0) {
+                adminError.textContent = 'Muitas tentativas erradas. Tente novamente em ' + remaining + 's.';
+            }
+            adminModal.hidden = false;
+            document.getElementById('adminUser').focus();
+        }
+
+        function closeModal() {
+            adminModal.hidden = true;
+        }
+
+        btnAdminLogin.addEventListener('click', openModal);
+        btnCancelLogin.addEventListener('click', closeModal);
+        adminModal.addEventListener('click', function (e) {
+            if (e.target === adminModal) closeModal();
+        });
+
+        adminLoginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            adminError.textContent = '';
+
+            const remaining = getLockoutRemainingSeconds();
+            if (remaining > 0) {
+                adminError.textContent = 'Muitas tentativas erradas. Tente novamente em ' + remaining + 's.';
+                return;
+            }
+
+            const user = document.getElementById('adminUser').value.trim();
+            const pass = document.getElementById('adminPass').value;
+            const passHash = await hashText(pass);
+
+            // Verificação client-side (ver aviso de segurança no topo do script)
+            if (user === ADMIN_USER && passHash === ADMIN_PASS_HASH) {
+                clearFailedAttempts();
+                await createAdminSession();
+                closeModal();
+            } else {
+                registerFailedAttempt();
+                const nowRemaining = getLockoutRemainingSeconds();
+                adminError.textContent = nowRemaining > 0
+                    ? 'Muitas tentativas erradas. Tente novamente em ' + nowRemaining + 's.'
+                    : 'Usuário ou senha incorretos.';
+            }
+        });
+
+        btnAdminLogout.addEventListener('click', function () {
+            logoutAdmin();
+        });
+
+        /*
+            ==========================================================================
+            LÓGICA DE CADASTRO/LOGIN DE VISITANTES
+            ==========================================================================
+        */
+
+        // Gera um hash SHA-256 de qualquer texto (nativo do navegador via Web
+        // Crypto API). Usado tanto para senhas de visitantes quanto para o token
+        // de sessão do administrador. Evita salvar segredos em texto puro, mas
+        // ainda não substitui uma implementação real de backend (ver aviso acima).
+        async function hashText(text) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+        }
+
+        // Gera uma string aleatória para usar como "nonce" (número usado uma vez)
+        // de cada sessão de administrador.
+        function generateNonce() {
+            const array = new Uint8Array(16);
+            crypto.getRandomValues(array);
+            return Array.from(array).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+        }
+
+        function getUsers() {
+            const raw = localStorage.getItem(STORAGE_USERS_KEY);
+            if (!raw) return [];
+            try {
+                return JSON.parse(raw);
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
+        }
+
+        function getVisitor() {
+            const raw = sessionStorage.getItem(SESSION_VISITOR_KEY);
+            if (!raw) return null;
+            try {
+                return JSON.parse(raw);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function setVisitor(visitor) {
+            if (visitor) {
+                sessionStorage.setItem(SESSION_VISITOR_KEY, JSON.stringify(visitor));
+            } else {
+                sessionStorage.removeItem(SESSION_VISITOR_KEY);
+            }
+            refreshVisitorUI();
+        }
+
+        function refreshVisitorUI() {
+            const visitor = getVisitor();
+            const logged = !!visitor;
+            btnVisitorAccount.hidden = logged;
+            btnVisitorLogout.hidden = !logged;
+            visitorStatusText.textContent = logged
+                ? 'Olá, ' + visitor.name
+                : 'Você não está identificado';
+        }
+
+        // ---------- Abrir/fechar modal do visitante ----------
+        function openVisitorModal() {
+            visitorLoginError.textContent = '';
+            visitorRegisterError.textContent = '';
+            visitorLoginForm.reset();
+            visitorRegisterForm.reset();
+            switchVisitorTab('login');
+            visitorModal.hidden = false;
+            document.getElementById('visitorLoginEmail').focus();
+        }
+
+        function closeVisitorModal() {
+            visitorModal.hidden = true;
+        }
+
+        function switchVisitorTab(tab) {
+            const isLogin = tab === 'login';
+            tabBtnLogin.classList.toggle('active', isLogin);
+            tabBtnRegister.classList.toggle('active', !isLogin);
+            tabPanelLogin.hidden = !isLogin;
+            tabPanelRegister.hidden = isLogin;
+        }
+
+        btnVisitorAccount.addEventListener('click', openVisitorModal);
+        btnCancelVisitor.addEventListener('click', closeVisitorModal);
+        btnCancelVisitor2.addEventListener('click', closeVisitorModal);
+        visitorModal.addEventListener('click', function (e) {
+            if (e.target === visitorModal) closeVisitorModal();
+        });
+
+        tabBtnLogin.addEventListener('click', function () { switchVisitorTab('login'); });
+        tabBtnRegister.addEventListener('click', function () { switchVisitorTab('register'); });
+
+        // ---------- Cadastro do visitante ----------
+        visitorRegisterForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            visitorRegisterError.textContent = '';
+
+            const name = document.getElementById('visitorRegName').value.trim();
+            const email = document.getElementById('visitorRegEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('visitorRegPass').value;
+            const passConfirm = document.getElementById('visitorRegPassConfirm').value;
+
+            if (pass.length < 6) {
+                visitorRegisterError.textContent = 'A senha precisa ter pelo menos 6 caracteres.';
+                return;
+            }
+            if (pass !== passConfirm) {
+                visitorRegisterError.textContent = 'As senhas não coincidem.';
+                return;
+            }
+
+            const users = getUsers();
+            const alreadyExists = users.some(function (u) { return u.email === email; });
+            if (alreadyExists) {
+                visitorRegisterError.textContent = 'Já existe uma conta cadastrada com este e-mail.';
+                return;
+            }
+
+            const passwordHash = await hashText(pass);
+            users.push({ name: name, email: email, passwordHash: passwordHash });
+            saveUsers(users);
+
+            // Cadastro concluído: já entra automaticamente na conta criada.
+            setVisitor({ name: name, email: email });
+            closeVisitorModal();
+        });
+
+        // ---------- Login do visitante ----------
+        visitorLoginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            visitorLoginError.textContent = '';
+
+            const email = document.getElementById('visitorLoginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('visitorLoginPass').value;
+
+            const users = getUsers();
+            const user = users.find(function (u) { return u.email === email; });
+
+            if (!user) {
+                visitorLoginError.textContent = 'Não encontramos uma conta com este e-mail.';
+                return;
+            }
+
+            const passwordHash = await hashText(pass);
+            if (passwordHash !== user.passwordHash) {
+                visitorLoginError.textContent = 'Senha incorreta.';
+                return;
+            }
+
+            setVisitor({ name: user.name, email: user.email });
+            closeVisitorModal();
+        });
+
+        // ---------- Logout do visitante ----------
+        btnVisitorLogout.addEventListener('click', function () {
+            setVisitor(null);
+        });
+
+        // ---------- Publicar novo artigo (somente admin) ----------
+        newPostForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Segunda verificação de segurança: mesmo que alguém force a exibição
+            // do formulário via DevTools, a publicação só ocorre se isAdmin() for true.
+            if (!isAdmin()) {
+                alert('Apenas o administrador pode publicar artigos.');
+                return;
+            }
+
+            const title = document.getElementById('postTitle').value.trim();
+            const excerpt = document.getElementById('postExcerpt').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const image = document.getElementById('postImage').value.trim();
+
+            if (!title || !excerpt || !content) return;
+
+            const posts = getPosts();
+            posts.unshift({
+                id: 'post-' + Date.now(),
+                title: title,
+                excerpt: excerpt,
+                content: content,
+                image: image,
+                author: 'Comunidade Tomista',
+                date: new Date().toISOString().slice(0, 10)
+            });
+            savePosts(posts);
+            newPostForm.reset();
+            renderPosts();
+        });
+
+        // ---------- Excluir artigo (somente admin) ----------
+        function deletePost(id) {
+            if (!isAdmin()) return;
+            if (!confirm('Excluir este artigo?')) return;
+            const posts = getPosts().filter(function (p) { return p.id !== id; });
+            savePosts(posts);
+            renderPosts();
+        }
+
+        // ---------- Renderização da lista ----------
+        function formatDate(iso) {
+            const d = new Date(iso + 'T00:00:00');
+            return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+        }
+
+        function renderPosts() {
+            const posts = getPosts();
+            blogList.innerHTML = '';
+
+            if (posts.length === 0) {
+                blogList.innerHTML = '<p class="empty-state">Nenhum artigo publicado ainda.</p>';
+                return;
+            }
+
+            posts.forEach(function (post) {
+                const article = document.createElement('article');
+                article.className = 'blog-post';
+
+                const meta = document.createElement('p');
+                meta.className = 'post-meta';
+                meta.textContent = formatDate(post.date);
+                article.appendChild(meta);
+
+                const h3 = document.createElement('h3');
+                h3.textContent = post.title;
+                article.appendChild(h3);
+
+                if (post.image) {
+                    const img = document.createElement('img');
+                    img.className = 'post-image';
+                    img.src = post.image;
+                    img.alt = post.title;
+                    article.appendChild(img);
+                }
+
+                const excerpt = document.createElement('p');
+                excerpt.className = 'post-excerpt';
+                excerpt.textContent = post.excerpt;
+                article.appendChild(excerpt);
+
+                const footerRow = document.createElement('div');
+                footerRow.className = 'post-footer-row';
+
+                const author = document.createElement('span');
+                author.className = 'post-author';
+                author.textContent = 'Por ' + post.author;
+                footerRow.appendChild(author);
+
+                if (isAdmin()) {
+                    const del = document.createElement('button');
+                    del.type = 'button';
+                    del.className = 'btn-ct danger';
+                    del.textContent = 'Excluir';
+                    del.addEventListener('click', function () { deletePost(post.id); });
+                    footerRow.appendChild(del);
+                }
+
+                article.appendChild(footerRow);
+                blogList.appendChild(article);
+            });
+        }
+
+        // ---------- Inicialização ----------
+        refreshAdminUI();      // primeiro render, assumindo "Visitante" até verificar
+        refreshVisitorUI();
+        verifyAdminSession();  // confere de forma assíncrona se há sessão de admin válida
+
+        // Confere a expiração da sessão de admin periodicamente, para deslogar
+        // sozinho quando o tempo definido em SESSION_DURATION_MS acabar.
+        setInterval(function () {
+            if (isAdmin()) verifyAdminSession();
+        }, 30 * 1000);
+    })();
+    </script>
+</body>
+</html>

@@ -1,379 +1,88 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Montserrat", sans-serif;
-}
-
-/* ================= NAVBAR ================= */
-
-header {
-    width: 100%;
-}
-
-/* Barra principal */
-header .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    width: 100%;
-    height: 100px;
-    padding: 0 5%;
-
-    background-color: #fffbef;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-}
-
-/* Linha decorativa */
-.navbar-detail {
-    height: 10px;
-    width: 100%;
-    background-color: #C9A24D;
-
-    position: fixed;
-    top: 100px;
-    left: 0;
-    z-index: 9;
-}
-
-/* Logo */
-.navbar-logo .logo {
-    height: 80px;
-}
-
-/* Menu */
-nav.navbar-titles ul {
-    display: flex;
-    align-items: center;
-    gap: 50px;
-
-    list-style: none;
-    margin: 300px;
-    padding: 0;
-}
-
-/* Links */
-nav.navbar-titles a {
-    text-decoration: none;
-    color: #1C1C1C;
-    font-size: 1rem;
-    transition: opacity 0.2s ease;
-    font-weight: 500;
-}
-
-nav.navbar-titles a:hover {
-    opacity: 0.7;
-}
-
-nav.navbar-titles a.active {
-    color: #C9A24D; /* cor diferente */
-    font-weight: bold;
-}
-
-/* Redes sociais */
-.nav-contato {
-    display: flex;
-}
-
-.nav-contato img {
-    width: 40px;
-    padding: 5px;
-}
+/* ==========================================================================
+   PÁGINA: SOBRE (sobre.html)
+   Importa o sistema compartilhado; define o conteúdo específico —
+   grade de quatro cartões "marginália" e a faixa de colaboradores.
+   ========================================================================== */
+@import url("tokens.css");
 
 section.container {
-    min-height: 50vh;
-    padding-top: 110px;
-
     background-image: url("img/luxa.org-opacity-changed-._tomas-de-aquino.jpg");
-    background-repeat: no-repeat;
-    background-position: center 2px;
-    background-size: cover;
-}
-
-section > h1.title-sobre {
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 100px;
-    font-size: 50px;
+    background-position: 44% 22%;
 }
 
 section.comunidade-description {
-    background-color: #fffbef;
-    height: 100%;
+    background-color: var(--color-cream);
+    padding: var(--space-8) 0 var(--space-6);
 }
 
 div.sobre-inicio {
     display: grid;
-    gap: 20px;
+    gap: var(--space-3);
     grid-template-columns: 1fr 1fr;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--space-3);
 }
 
-div.paragrafos {
-    padding: 20px;
-    text-align: center;
-    font-size: 18px;
-}
+/* ---------- COLABORADORES ----------
+   Título tratado como uma "rubrica" de manuscrito: pequena, dourada,
+   sobre um fio horizontal — não mais um H1 solto e genérico. */
 
-div.paragrafos h1 {
-    text-align: center;
-}
-
-
-div.paragrafos h1:hover {
-    opacity: 0.75;
-    color: #C9A24D;
-}
-
-.section-apoio-comunity {
+div.titulo-colaboradores {
+    max-width: var(--content-width);
+    margin: var(--space-8) auto 0;
+    padding: 0 var(--space-3);
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 300px;
-    background-color: #1C1C1C;
-    gap: 60px;
+    gap: var(--space-2);
 }
 
-.section-apoio-comunity .comunidade-logo {
-    width: 100px;
+div.titulo-colaboradores::before,
+div.titulo-colaboradores::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: var(--gold-24);
 }
-
-.section-apoio-comunity .title-tomista {
-    font-size: 20px;
-    font-weight: 200;
-    color: #fffbef;
-}
-
-.section-apoio-comunity .title-tomista .author-title {
-    font-size: 13px;
-}
-
-.footer-credits {
-    display: flex;
-    height: 60px;
-    background-color: #282828;
-    border-top: 1px solid gray;
-    align-items: center;
-}
-
-.footer-credits .credits {
-    margin-left: 180px;
-    font-size: 12px;
-    color: #fffbef;
-    font-weight: 200;
-}
-
-.footer-credits .credits-dev {
-    margin-left: 800px;
-    font-size: 12px;
-    color: #fffbef;
-    font-weight: 200;
-}
-
 
 div.titulo-colaboradores h1 {
-    color: #C9A24D;
-    margin-top: 40px;
-    padding: 20px;
+    color: var(--color-gold);
     text-align: center;
-    font-size: 30px;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    font-style: italic;
+    white-space: nowrap;
+    padding: 0 var(--space-2);
 }
 
-section.colaboradores{
+section.colaboradores {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px 0;
+    padding: var(--space-5) var(--space-3) var(--space-8);
 }
 
 section.colaboradores img {
-    width: 500px;
-    border-radius: 10px;
-    box-shadow: #C9A24D 0px 4px 40px;
+    width: 640px;
+    max-width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
-
+section.colaboradores img:hover {
+    transform: scale(1.01);
+    box-shadow: var(--shadow-lg);
+}
 
 @media screen and (max-width: 768px) {
-
-    html, body {
-        overflow-x: hidden;
-    }
-
-    /* ================= NAVBAR ================= */
-
-    header .navbar {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: auto;
-        padding: 20px;
-        gap: 20px;
-        position: relative;
-    }
-
-    .navbar-detail {
-        position: relative;
-        top: 0;
-    }
-
-    .navbar-logo .logo {
-        height: 50px;
-    }
-
-    nav.navbar-titles ul {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-        margin: 0;
-    }
-
-    .nav-contato {
-        justify-content: center;
-    }
-
-    /* ================= HERO ================= */
-
-    .title-principal h1,
-    .title-principal p,
-    .button-link {
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-
-    .title-principal h1 {
-        font-size: 28px;
-        margin-top: 40px;
-    }
-
-    .title-principal p {
-        font-size: 16px;
-    }
-
-    .button-link {
-        display: inline-block;
-    }
-
-    /* ================= ACESSOS ================= */
-
-    .search-section {
-        flex-direction: column;
-        height: auto;
-        gap: 40px;
-        padding: 40px 0;
-    }
-
-    /* ================= NEWSLETTER ================= */
-
-    .update-content {
-        flex-direction: column;
-        gap: 30px;
-        text-align: center;
-    }
-
-    .update-user-section {
-        margin-left: 0;
-        width: 100%;
-    }
-
-    .update-form {
-        flex-direction: column;
-    }
-
-    .update-form input,
-    .update-form button {
-        width: 100%;
-    }
-
-    /* ================= APOIO ================= */
-
-    .section-apoio-comunity {
-        flex-direction: column;
-        height: auto;
-        padding: 40px 20px;
-        text-align: center;
-    }
-
-    /* ================= FOOTER ================= */
-
-    .footer-credits {
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-        height: auto;
-        padding: 15px;
-    }
-
-    .footer-credits .credits,
-    .footer-credits .credits-dev {
-        margin-left: 0;
-        margin-top: 5px;
-    }
-
-    section.container {
-        background-size: cover;
-        margin-top: -2px;
-    }
-
-    section > h1.title-sobre {
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 60px;
-        font-size: 50px;
-    }
-
-    
-    /* ===== ORGANIZAÇÃO EM FORMATO DE ARTIGO ===== */
-
     div.sobre-inicio {
-        grid-template-columns: 1fr;  /* UMA COLUNA */
-        padding: 30px 20px;
+        grid-template-columns: 1fr;
+        padding: var(--space-3) var(--space-2);
     }
 
-    div.paragrafos {
-        text-align: left;   /* artigo não é centralizado */
-        font-size: 16px;
-        line-height: 1.7;
-        padding: 10px 0;
-    }
+    div.titulo-colaboradores h1 { font-size: var(--text-md); white-space: normal; }
 
-    div.paragrafos h1 {
-        text-align: left;
-        font-size: 22px;
-        margin-bottom: 10px;
-    }
-    
-    
-    div.titulo-colaboradores h1 {
-        color: #C9A24D;
-        margin-top: 40px;
-        padding: 20px;
-        text-align: center;
-        font-size: 30px;
-    }
-
-    section.colaboradores{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px 0;
-    }
-
-    section.colaboradores img {
-        width: 300px;
-        border-radius: 10px;
-        box-shadow: #C9A24D 0px 4px 40px;
-    }
+    section.colaboradores { padding: var(--space-5) var(--space-2); }
+    section.colaboradores img { width: 100%; }
 }

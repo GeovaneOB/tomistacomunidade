@@ -1,0 +1,547 @@
+/* ==========================================================================
+   COMUNIDADE TOMISTA — SISTEMA DE DESIGN
+   ==========================================================================
+   Este arquivo é a fonte única de verdade do sistema visual do site.
+   Todas as páginas (index, sobre, educação, blog) importam este arquivo
+   antes de suas regras específicas. Isso elimina a duplicação de ~200
+   linhas de CSS idênticas que existiam em cada arquivo e garante que
+   qualquer ajuste de marca (cor, tipografia, sombra) se propague para
+   o site inteiro a partir de um único lugar.
+
+   PALETA: 100% preservada — nenhum código hex foi alterado.
+   TIPOGRAFIA: corpo migrado de Montserrat → Inter, conforme direção
+   de "tipografia premium" solicitada. Cormorant Garamond seguue como
+   face de destaque (títulos), agora usada com mais restrição e em
+   escala maior, para reforçar o caráter erudito da marca.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+:root {
+    /* ---------- Cor: paleta original, papel redefinido ---------- */
+    --color-cream:      #fffbef;   /* superfície clara / texto sobre fundo escuro */
+    --color-gold:       #C9A24D;   /* assinatura da marca — a "iluminura" */
+    --color-ink:        #1C1C1C;   /* superfície escura principal / texto primário */
+    --color-charcoal:   #282828;   /* superfície escura secundária (rodapé, faixas) */
+    --color-white:      #ffffff;   /* superfície de cartão */
+    --color-gray:       #777777;   /* texto auxiliar, placeholders */
+    --color-error:      #b23b3b;   /* validação e alertas */
+
+    --gold-rgb: 201, 162, 77;
+    --ink-rgb: 28, 28, 28;
+    --cream-rgb: 255, 251, 239;
+
+    /* Tons derivados — mesmos hex, apenas com opacidade controlada */
+    --gold-04: rgba(var(--gold-rgb), 0.04);
+    --gold-08: rgba(var(--gold-rgb), 0.08);
+    --gold-14: rgba(var(--gold-rgb), 0.14);
+    --gold-24: rgba(var(--gold-rgb), 0.24);
+    --gold-40: rgba(var(--gold-rgb), 0.40);
+    --ink-06:  rgba(var(--ink-rgb), 0.06);
+    --ink-12:  rgba(var(--ink-rgb), 0.12);
+    --ink-45:  rgba(var(--ink-rgb), 0.45);
+    --ink-70:  rgba(var(--ink-rgb), 0.70);
+
+    /* ---------- Tipografia ---------- */
+    --font-display: "Cormorant Garamond", "Iowan Old Style", serif;
+    --font-body: "Inter", -apple-system, "SF Pro Text", "Segoe UI", sans-serif;
+
+    /* Escala tipográfica — proporção ~1.25, com clamp fluido nos extremos */
+    --text-xs:   0.75rem;                                   /* 12px — legendas, olho */
+    --text-sm:   0.875rem;                                  /* 14px — auxiliares, nav */
+    --text-base: 1rem;                                      /* 16px — corpo */
+    --text-md:   1.125rem;                                  /* 18px — corpo destacado */
+    --text-lg:   1.375rem;                                  /* 22px — subtítulos */
+    --text-xl:   clamp(1.75rem, 1.5rem + 1vw, 2.25rem);      /* 28–36px — títulos de seção */
+    --text-2xl:  clamp(2.25rem, 1.8rem + 2vw, 3.25rem);      /* 36–52px — títulos de página */
+    --text-3xl:  clamp(2.75rem, 2rem + 3.2vw, 4rem);         /* 44–64px — hero */
+
+    --lh-tight: 1.15;
+    --lh-snug:  1.35;
+    --lh-body:  1.7;
+
+    /* ---------- Espaçamento — base 8px ---------- */
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 40px;
+    --space-6: 48px;
+    --space-8: 64px;
+    --space-10: 80px;
+    --space-12: 96px;
+    --space-16: 128px;
+
+    /* ---------- Forma ---------- */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-pill: 999px;
+
+    /* ---------- Elevação ---------- */
+    --shadow-xs: 0 1px 2px rgba(var(--ink-rgb), 0.05);
+    --shadow-sm: 0 2px 8px rgba(var(--ink-rgb), 0.06);
+    --shadow-md: 0 12px 32px rgba(var(--ink-rgb), 0.12);
+    --shadow-lg: 0 24px 56px rgba(var(--ink-rgb), 0.18);
+    --shadow-gold: 0 10px 30px rgba(var(--gold-rgb), 0.28);
+    --shadow-gold-lg: 0 16px 40px rgba(var(--gold-rgb), 0.36);
+
+    /* ---------- Movimento ---------- */
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast: 0.2s var(--ease);
+    --transition-base: 0.3s var(--ease);
+    --transition-slow: 0.5s var(--ease-out-soft);
+
+    /* ---------- Layout ---------- */
+    --nav-height: 88px;
+    --content-width: 1200px;
+    --content-narrow: 760px;
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-height) + 24px);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-ink);
+    background-color: var(--color-cream);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); }
+
+p { margin: 0; }
+
+/* Foco visível — acessibilidade de teclado em toda a interface */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ==========================================================================
+   NAVBAR
+   Refinamento: a antiga barra sólida de 4px foi substituída por um traço
+   de 2px com esmaecimento nas pontas — a mesma ideia de "moldura dourada",
+   porém com o peso visual de uma vitrine, não de um sublinhado escolar.
+   O fundo ganha leve desfoque (glass) ao ficar fixo sobre o conteúdo.
+   ========================================================================== */
+
+header { width: 100%; }
+
+header .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: var(--nav-height);
+    padding: 0 5%;
+
+    background-color: rgba(var(--cream-rgb), 0.92);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-xs);
+}
+
+.navbar-detail {
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--color-gold) 18%,
+        var(--color-gold) 82%,
+        transparent 100%);
+
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    z-index: 99;
+}
+
+.navbar-logo .logo {
+    height: 56px;
+    transition: transform var(--transition-fast);
+}
+
+.navbar-logo a:hover .logo {
+    transform: scale(1.05) rotate(-2deg);
+}
+
+nav.navbar-titles ul {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav.navbar-titles a {
+    position: relative;
+    text-decoration: none;
+    color: var(--color-ink);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: var(--space-1) 0;
+    transition: color var(--transition-fast);
+}
+
+nav.navbar-titles a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-gold);
+    transition: width var(--transition-base);
+}
+
+nav.navbar-titles a:hover { color: var(--color-gold); }
+nav.navbar-titles a:hover::after { width: 100%; }
+
+nav.navbar-titles a.active {
+    color: var(--color-gold);
+    font-weight: 700;
+}
+nav.navbar-titles a.active::after { width: 100%; }
+
+.nav-contato {
+    display: flex;
+    gap: var(--space-1);
+    margin-left: var(--space-2);
+    padding-left: var(--space-3);
+    border-left: 1px solid var(--ink-12);
+}
+
+.nav-contato img {
+    width: 32px;
+    padding: 6px;
+    border-radius: var(--radius-pill);
+    background-color: transparent;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.nav-contato a:hover img {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-gold);
+}
+
+/* ==========================================================================
+   COMPONENTE: BOTÕES
+   Um único par (preenchido / contorno) reutilizado no site inteiro.
+   ========================================================================== */
+
+.button-link,
+.btn-ct {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 16px 28px;
+    background-color: var(--color-gold);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-gold);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.button-link:hover,
+.btn-ct:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold-lg);
+}
+
+.button-link:active,
+.btn-ct:active { transform: translateY(0); }
+
+.btn-ct.outline {
+    background-color: transparent;
+    color: var(--color-cream);
+    border: 1.5px solid var(--color-gold);
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   COMPONENTE: CARTÃO COM MARGINÁLIA
+   Assinatura visual do site: um traço dourado à esquerda evoca a glosa
+   marginal dos manuscritos escolásticos — a mesma prática de comentário
+   à margem do texto que a tradição tomista praticava. Usado em todo
+   conteúdo estruturado em blocos (sobre, educação, blog).
+   ========================================================================== */
+
+.paragrafos {
+    position: relative;
+    padding: var(--space-4) var(--space-3) var(--space-3) var(--space-4);
+    text-align: left;
+    font-size: var(--text-md);
+    line-height: var(--lh-body);
+    color: var(--color-ink);
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+    border-left: 3px solid var(--ink-06);
+}
+
+.paragrafos::before {
+    content: attr(data-mark);
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-gold);
+    letter-spacing: 0.04em;
+}
+
+.paragrafos:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-left-color: var(--color-gold);
+}
+
+.paragrafos h1 {
+    font-weight: 700;
+    font-size: var(--text-lg);
+    color: var(--color-ink);
+    text-align: left;
+    margin: var(--space-3) 0 var(--space-2);
+    transition: color var(--transition-fast);
+}
+
+.paragrafos h1:hover { color: var(--color-gold); }
+
+.paragrafos p { margin-bottom: var(--space-2); }
+.paragrafos p:last-child { margin-bottom: 0; }
+
+/* ==========================================================================
+   FAIXA / BANNER DE PÁGINA INTERNA
+   ========================================================================== */
+
+section.container {
+    min-height: 46vh;
+    padding-top: var(--nav-height);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+}
+
+section.container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(28,28,28,0.55) 0%, rgba(28,28,28,0.25) 55%, rgba(28,28,28,0.65) 100%);
+    pointer-events: none;
+}
+
+section.container .sobre {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-3) var(--space-6);
+}
+
+section.container .eyebrow {
+    display: block;
+    color: var(--color-gold);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-1);
+}
+
+section > h1.title-sobre {
+    color: var(--color-cream);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin: 0;
+    font-size: var(--text-2xl);
+    line-height: var(--lh-tight);
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.45);
+    text-align: left;
+    justify-content: flex-start;
+}
+
+/* ==========================================================================
+   APOIO À COMUNIDADE (citação)
+   ========================================================================== */
+
+.section-apoio-comunity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 260px;
+    background-color: var(--color-ink);
+    background-image: radial-gradient(circle at 15% 30%, var(--gold-08), transparent 55%);
+    gap: var(--space-8);
+    padding: var(--space-6) var(--space-3);
+}
+
+.section-apoio-comunity .comunidade-logo {
+    width: 88px;
+    filter: drop-shadow(0 6px 18px rgba(var(--gold-rgb), 0.3));
+}
+
+.section-apoio-comunity .title-tomista {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    font-style: italic;
+    line-height: var(--lh-snug);
+    max-width: 560px;
+    color: var(--color-cream);
+}
+
+.section-apoio-comunity .title-tomista .author-title {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    font-style: normal;
+    font-family: var(--font-body);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+}
+
+/* ==========================================================================
+   RODAPÉ
+   ========================================================================== */
+
+.footer-credits {
+    display: flex;
+    min-height: 56px;
+    background-color: var(--color-charcoal);
+    border-top: 1px solid var(--gold-24);
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+}
+
+.footer-credits .credits,
+.footer-credits .credits-dev {
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--color-cream);
+    opacity: 0.7;
+    font-family: var(--font-body);
+}
+
+.footer-credits .credits { margin-left: var(--space-10); }
+.footer-credits .credits-dev { margin-left: auto; margin-right: var(--space-10); }
+
+/* ==========================================================================
+   RESPONSIVO — regras compartilhadas
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+    html, body { overflow-x: hidden; }
+
+    header .navbar {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+        padding: var(--space-3);
+        gap: var(--space-3);
+        position: relative;
+    }
+
+    .navbar-detail { position: relative; top: 0; }
+    .navbar-logo .logo { height: 46px; }
+
+    nav.navbar-titles ul {
+        flex-direction: column;
+        gap: var(--space-3);
+        text-align: center;
+        margin: 0;
+    }
+
+    .nav-contato {
+        justify-content: center;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
+        padding-top: var(--space-2);
+        border-top: 1px solid var(--ink-12);
+        width: 100%;
+    }
+
+    section.container { align-items: center; }
+    section.container .sobre { text-align: center; padding: var(--space-6) var(--space-3); }
+    section > h1.title-sobre { justify-content: center; text-align: center; font-size: var(--text-xl); }
+    section.container .eyebrow { text-align: center; }
+
+    .paragrafos { text-align: left; }
+
+    .section-apoio-comunity {
+        flex-direction: column;
+        height: auto;
+        padding: var(--space-6) var(--space-3);
+        text-align: center;
+    }
+
+    .footer-credits {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        height: auto;
+        padding: var(--space-3);
+        gap: 4px;
+    }
+
+    .footer-credits .credits,
+    .footer-credits .credits-dev { margin-left: 0; margin-right: 0; }
+}
