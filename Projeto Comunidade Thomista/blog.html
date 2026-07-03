@@ -104,36 +104,109 @@
             opacity: 0.85;
         }
 
-        /* ---------- Barra de contas (visitante + administrador) ---------- */
-        .account-bar {
-            max-width: 900px;
-            margin: 0 auto var(--space-5);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: var(--space-2);
-            background-color: var(--color-white);
-            border-radius: var(--radius-md);
-            padding: var(--space-2) var(--space-3);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .visitor-account,
-        .admin-account {
+        /* ---------- Conta do visitante integrada à navbar ---------- */
+        .nav-account {
             display: flex;
             align-items: center;
-            gap: var(--space-2);
-            flex-wrap: wrap;
         }
 
-        .admin-status-text,
-        .visitor-status-text {
-            font-size: 0.8rem;
-            font-weight: 500;
+        .nav-account-btn {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1.5px solid var(--color-gold);
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+        }
+        .nav-account-btn:hover {
+            background-color: var(--color-gold);
             color: var(--color-ink);
-            opacity: 0.7;
+            transform: translateY(-1px);
         }
+
+        .nav-account-loggedin {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-account-loggedin[hidden] { display: none; }
+
+        .nav-account-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0.9;
+            white-space: nowrap;
+        }
+
+        .nav-account-logout {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1.5px solid rgba(var(--gold-rgb), 0.6);
+            background: transparent;
+            color: inherit;
+            opacity: 0.75;
+            cursor: pointer;
+            transition: opacity var(--transition-fast), background-color var(--transition-fast);
+        }
+        .nav-account-logout:hover {
+            opacity: 1;
+            background-color: rgba(var(--gold-rgb), 0.15);
+        }
+
+        /*
+            ---------- Indicador discreto do administrador ----------
+            Este indicador NÃO fica visível para visitantes comuns: ele só é
+            exibido quando já existe uma sessão de administrador ativa (ver
+            script). Não existe nenhum botão "Área do administrador" na
+            interface — o acesso ao login é feito de forma discreta (ver
+            comentário "ACESSO DISCRETO DO ADMINISTRADOR" no script).
+        */
+        .admin-secret-indicator {
+            position: fixed;
+            bottom: var(--space-2);
+            right: var(--space-2);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--color-ink);
+            color: var(--color-cream);
+            padding: 8px 12px;
+            border-radius: 999px;
+            box-shadow: var(--shadow-md);
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+        .admin-secret-indicator[hidden] { display: none; }
+
+        .admin-secret-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-gold);
+            box-shadow: 0 0 0 3px rgba(var(--gold-rgb), 0.25);
+        }
+
+        .admin-secret-indicator button {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: none;
+            border: none;
+            color: var(--color-gold);
+            cursor: pointer;
+            padding: 0;
+        }
+        .admin-secret-indicator button:hover { text-decoration: underline; }
 
         /* ---------- Abas dentro do modal (Entrar / Cadastrar) ---------- */
         .modal-tabs {
@@ -410,9 +483,9 @@
         }
 
         @media (max-width: 600px) {
-            .admin-bar { justify-content: space-between; }
             .blog-hero { padding: var(--space-4) var(--space-3); }
             .blog-hero h1 { font-size: 30px; }
+            .nav-account-name { display: none; }
         }
     </style>
 </head>
@@ -435,6 +508,14 @@
                     <li><a href="educacao.html">Educação</a></li>
                     <li><a href="blog.html" class="active">Blog</a></li>
                     <li><a href="mailto:tomistacomunidade@gmail.com">Contato</a></li>
+                    <!-- Conta do visitante: agora vive dentro da navbar -->
+                    <li class="nav-account">
+                        <button type="button" class="nav-account-btn" id="btnVisitorAccount">Entrar / Cadastrar</button>
+                        <span class="nav-account-loggedin" id="visitorLoggedInWrap" hidden>
+                            <span class="nav-account-name" id="visitorStatusText"></span>
+                            <button type="button" class="nav-account-logout" id="btnVisitorLogout">Sair</button>
+                        </span>
+                    </li>
                     <li class="nav-contato" aria-label="Redes sociais">
                         <a href="https://www.instagram.com/comunidade_tomista?igsh=MWJsZWdwYjh1czRuOQ==" target="_blank"><img class="media" src="img/instagram.png" alt="Instagram"></a>
                         <a href="https://youtube.com/@comunidadetomista?si=FdLPEXtPwTkDObHS" target="_blank"><img class="media" src="img/youtube.png" alt="YouTube"></a>
@@ -455,20 +536,6 @@
             <h1>Artigos &amp; Reflexões</h1>
             <p>Textos sobre teologia tomista, educação clássica e formação do caráter, escritos pela nossa comunidade.</p>
         </section>
-
-        <!-- Barra de contas: visitante (cadastro/login) e administrador -->
-        <div class="account-bar">
-            <div class="visitor-account">
-                <span class="visitor-status-text" id="visitorStatusText">Você não está identificado</span>
-                <button type="button" class="btn-ct outline" id="btnVisitorAccount">Entrar / Cadastrar</button>
-                <button type="button" class="btn-ct danger" id="btnVisitorLogout" hidden>Sair</button>
-            </div>
-            <div class="admin-account">
-                <span class="admin-status-text" id="adminStatusText">Visitante</span>
-                <button type="button" class="btn-ct" id="btnAdminLogin">Área do administrador</button>
-                <button type="button" class="btn-ct danger" id="btnAdminLogout" hidden>Sair</button>
-            </div>
-        </div>
 
         <!-- Modal de cadastro/login do VISITANTE -->
         <div class="admin-modal-backdrop" id="visitorModal" hidden>
@@ -529,7 +596,12 @@
             </div>
         </div>
 
-        <!-- Modal de login do ADMINISTRADOR (separado do login de visitante) -->
+        <!--
+            Modal de login do ADMINISTRADOR.
+            Não existe mais nenhum botão visível que abra este modal — ver o
+            bloco "ACESSO DISCRETO DO ADMINISTRADOR" no script no fim da página
+            para saber como ele é aberto.
+        -->
         <div class="admin-modal-backdrop" id="adminModal" hidden>
             <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
                 <h2 id="adminModalTitle">Login do administrador</h2>
@@ -586,23 +658,19 @@
 
     </main>
 
+    <!--
+        Indicador discreto do administrador: só aparece quando existe uma
+        sessão de admin válida (ver refreshAdminUI no script). Não é um botão
+        de login — é apenas o jeito de o admin ver que está logado e sair.
+    -->
+    <div class="admin-secret-indicator" id="adminIndicator" hidden>
+        <span class="admin-secret-dot" aria-hidden="true"></span>
+        <span>Administrador</span>
+        <button type="button" id="btnAdminLogout">Sair</button>
+    </div>
+
     <script>
     (function () {
-        /*
-            ==========================================================================
-            AUTENTICAÇÃO DO ADMINISTRADOR
-            ==========================================================================
-            Isto é uma verificação SOMENTE NO NAVEGADOR (client-side), útil para
-            protótipo e para esconder o formulário de quem não é admin.
-
-            IMPORTANTE PARA PRODUÇÃO:
-            Qualquer pessoa com conhecimento técnico pode abrir o "Inspecionar
-            elemento" e ver estas credenciais, ou simplesmente rodar
-            `sessionStorage.setItem('ct_is_admin', 'true')` no console para burlar
-            este login. Para segurança de verdade, substitua este bloco por uma
-            chamada a um backend (ex: Node/Express, PHP, Firebase Auth, Supabase)
-            que valide usuário/senha no servidor e devolva um token de sessão.
-        */
         /*
             ==========================================================================
             AUTENTICAÇÃO DO ADMINISTRADOR (versão reforçada)
@@ -618,23 +686,40 @@
             Camadas de proteção adicionadas nesta versão:
             1) A senha não fica mais em texto puro no código — só o hash (SHA-256).
             2) A sessão de admin deixou de ser uma flag simples ('true'/'false')
-               que qualquer um cria digitando uma linha no console. Agora é um
-               token derivado do hash da senha + um número aleatório da sessão.
-               Esse token é conferido de novo (de forma assíncrona) a cada
-               carregamento de página, e o resultado fica guardado numa variável
-               que só existe na memória do script — as checagens do dia a dia
-               (isAdmin()) não leem mais o sessionStorage diretamente, então
-               forçar uma chave lá não tem efeito nenhum sozinho.
+            que qualquer um cria digitando uma linha no console. Agora é um
+            token derivado do hash da senha + um número aleatório da sessão.
+            Esse token é conferido de novo (de forma assíncrona) a cada
+            carregamento de página, e o resultado fica guardado numa variável
+            que só existe na memória do script — as checagens do dia a dia
+            (isAdmin()) não leem mais o sessionStorage diretamente, então
+            forçar uma chave lá não tem efeito nenhum sozinho.
             3) Tentativas de login incorretas são limitadas: depois de várias
-               senhas erradas, o formulário bloqueia por um tempo (dificulta
-               tentativas de força bruta pelo console).
+            senhas erradas, o formulário bloqueia por um tempo (dificulta
+            tentativas de força bruta pelo console).
             4) A sessão expira sozinha depois de um tempo definido.
+
+            ==========================================================================
+            ACESSO DISCRETO DO ADMINISTRADOR
+            ==========================================================================
+            Não existe mais nenhum botão "Área do administrador" na tela: um
+            visitante comum não vê nenhum jeito de abrir o login do admin.
+            O modal de login do administrador pode ser aberto de duas formas,
+            pensadas para quem já sabe que elas existem:
+
+            1) Atalho de teclado: Ctrl + Alt + A (em qualquer parte da página).
+            2) Acessando a página com "#admin" no final do endereço, por
+               exemplo: https://seusite.com/blog.html#admin
+
+            Nenhuma das duas formas concede acesso por si só — elas apenas
+            abrem o formulário de usuário/senha, que continua protegido pelas
+            mesmas camadas descritas acima. Para trocar o atalho de teclado,
+            edite a condição dentro do "keydown" listener mais abaixo.
         */
-        const ADMIN_USER = 'admin';
+        const ADMIN_USER = 'THOMIST';
         // Hash SHA-256 da senha "tomista2026". Para trocar a senha: gere o hash
         // SHA-256 da nova senha (dá pra usar o próprio hashText() lá embaixo, no
         // console do navegador) e substitua o valor abaixo por ele.
-        const ADMIN_PASS_HASH = 'cda0287a4407840a77bc3acf0c9aef94d14ccac5be9aa02150ad73bbcd37acb2';
+        const ADMIN_PASS_HASH = '8b467476c652603d1964bc24444e3b52e1262c0a260b13e1b7514dad144fff20';
 
         const SESSION_ADMIN_TOKEN_KEY = 'ct_admin_token';
         const SESSION_ADMIN_NONCE_KEY = 'ct_admin_nonce';
@@ -663,7 +748,7 @@
             ==========================================================================
             Sistema separado do login do administrador. Qualquer pessoa pode criar
             conta aqui, mas isso NUNCA concede permissão de publicar artigos —
-            só o login definido em ADMIN_USER/ADMIN_PASS acima faz isso.
+            só o login definido em ADMIN_USER/ADMIN_PASS_HASH acima faz isso.
 
             IMPORTANTE PARA PRODUÇÃO:
             Os "usuários" abaixo ficam salvos no localStorage do próprio navegador,
@@ -679,9 +764,8 @@
         const SESSION_VISITOR_KEY = 'ct_visitor';
 
         // ---------- Elementos: administrador ----------
-        const btnAdminLogin = document.getElementById('btnAdminLogin');
         const btnAdminLogout = document.getElementById('btnAdminLogout');
-        const adminStatusText = document.getElementById('adminStatusText');
+        const adminIndicator = document.getElementById('adminIndicator');
         const adminModal = document.getElementById('adminModal');
         const adminLoginForm = document.getElementById('adminLoginForm');
         const adminError = document.getElementById('adminError');
@@ -690,9 +774,10 @@
         const newPostForm = document.getElementById('newPostForm');
         const blogList = document.getElementById('blogList');
 
-        // ---------- Elementos: visitante (cadastro/login) ----------
+        // ---------- Elementos: visitante (cadastro/login), agora na navbar ----------
         const btnVisitorAccount = document.getElementById('btnVisitorAccount');
         const btnVisitorLogout = document.getElementById('btnVisitorLogout');
+        const visitorLoggedInWrap = document.getElementById('visitorLoggedInWrap');
         const visitorStatusText = document.getElementById('visitorStatusText');
         const visitorModal = document.getElementById('visitorModal');
         const btnCancelVisitor = document.getElementById('btnCancelVisitor');
@@ -783,9 +868,7 @@
         function refreshAdminUI() {
             const logged = isAdmin();
             publishPanel.hidden = !logged;
-            btnAdminLogin.hidden = logged;
-            btnAdminLogout.hidden = !logged;
-            adminStatusText.textContent = logged ? 'Administrador conectado' : 'Visitante';
+            adminIndicator.hidden = !logged;
             renderPosts(); // re-renderiza para mostrar/ocultar botão "Excluir"
         }
 
@@ -810,8 +893,8 @@
             sessionStorage.removeItem(SESSION_ADMIN_LOCKOUT_KEY);
         }
 
-        // ---------- Modal de login ----------
-        function openModal() {
+        // ---------- Modal de login do administrador ----------
+        function openAdminModal() {
             adminError.textContent = '';
             adminLoginForm.reset();
             const remaining = getLockoutRemainingSeconds();
@@ -822,14 +905,18 @@
             document.getElementById('adminUser').focus();
         }
 
-        function closeModal() {
+        function closeAdminModal() {
             adminModal.hidden = true;
+            // Limpa o "#admin" da URL, se foi ele quem abriu o modal, para não
+            // reabrir sozinho ao atualizar a página.
+            if (window.location.hash === '#admin') {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
         }
 
-        btnAdminLogin.addEventListener('click', openModal);
-        btnCancelLogin.addEventListener('click', closeModal);
+        btnCancelLogin.addEventListener('click', closeAdminModal);
         adminModal.addEventListener('click', function (e) {
-            if (e.target === adminModal) closeModal();
+            if (e.target === adminModal) closeAdminModal();
         });
 
         adminLoginForm.addEventListener('submit', async function (e) {
@@ -850,7 +937,7 @@
             if (user === ADMIN_USER && passHash === ADMIN_PASS_HASH) {
                 clearFailedAttempts();
                 await createAdminSession();
-                closeModal();
+                closeAdminModal();
             } else {
                 registerFailedAttempt();
                 const nowRemaining = getLockoutRemainingSeconds();
@@ -863,6 +950,23 @@
         btnAdminLogout.addEventListener('click', function () {
             logoutAdmin();
         });
+
+        // ---------- Gatilhos discretos para abrir o login do administrador ----------
+        // 1) Atalho de teclado Ctrl+Alt+A em qualquer lugar da página.
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && e.altKey && (e.key === 'a' || e.key === 'A')) {
+                e.preventDefault();
+                if (!isAdmin()) openAdminModal();
+            }
+        });
+
+        // 2) Acessar a página com "#admin" no final da URL.
+        function checkAdminHash() {
+            if (window.location.hash === '#admin' && !isAdmin()) {
+                openAdminModal();
+            }
+        }
+        window.addEventListener('hashchange', checkAdminHash);
 
         /*
             ==========================================================================
@@ -927,10 +1031,8 @@
             const visitor = getVisitor();
             const logged = !!visitor;
             btnVisitorAccount.hidden = logged;
-            btnVisitorLogout.hidden = !logged;
-            visitorStatusText.textContent = logged
-                ? 'Olá, ' + visitor.name
-                : 'Você não está identificado';
+            visitorLoggedInWrap.hidden = !logged;
+            visitorStatusText.textContent = logged ? 'Olá, ' + visitor.name : '';
         }
 
         // ---------- Abrir/fechar modal do visitante ----------
@@ -1138,9 +1240,10 @@
         }
 
         // ---------- Inicialização ----------
-        refreshAdminUI();      // primeiro render, assumindo "Visitante" até verificar
+        refreshAdminUI();      // primeiro render, assumindo "deslogado" até verificar
         refreshVisitorUI();
         verifyAdminSession();  // confere de forma assíncrona se há sessão de admin válida
+        checkAdminHash();      // abre o login se a página foi acessada com "#admin"
 
         // Confere a expiração da sessão de admin periodicamente, para deslogar
         // sozinho quando o tempo definido em SESSION_DURATION_MS acabar.
