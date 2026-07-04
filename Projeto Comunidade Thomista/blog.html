@@ -609,8 +609,8 @@
 
                 <form id="adminLoginForm">
                     <div class="field-group">
-                        <label for="adminUser">Usuário</label>
-                        <input type="text" id="adminUser" autocomplete="username" required>
+                        <label for="adminUser">E-mail do administrador</label>
+                        <input type="email" id="adminUser" autocomplete="username" required>
                     </div>
                     <div class="field-group">
                         <label for="adminPass">Senha</label>
@@ -669,99 +669,52 @@
         <button type="button" id="btnAdminLogout">Sair</button>
     </div>
 
+    <!-- SDK do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
     (function () {
         /*
             ==========================================================================
-            AUTENTICAÇÃO DO ADMINISTRADOR (versão reforçada)
+            CONFIGURAÇÃO DO SUPABASE
             ==========================================================================
-            Continua sendo uma verificação SOMENTE NO NAVEGADOR — sem um servidor
-            por trás, não existe segurança 100% à prova de alguém tecnicamente
-            capaz de ler todo o código-fonte da página. O que foi adicionado aqui
-            eleva bastante a dificuldade de um bypass casual. Para segurança de
-            produção de verdade, isso ainda precisa virar uma chamada a um backend
-            (Node/Express, PHP, Firebase Auth, Supabase etc.) que valide a senha
-            no servidor e devolva um token de sessão real.
+            Cole aqui a URL e a chave "anon public" do seu projeto
+            (Project Settings → API no painel do Supabase). A chave anon é feita
+            para ficar exposta no site — quem protege o banco são as políticas
+            de RLS criadas na tabela "posts" (ver guia SUPABASE-BLOG-SETUP.md).
+            NUNCA coloque aqui a chave "service_role".
+        */
+        const SUPABASE_URL = 'https://ajdcxxtpgkqhnukgbrit.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZGN4eHRwZ2txaG51a2dicml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwODAzOTUsImV4cCI6MjA5ODY1NjM5NX0.zAcqnENHIhYK6sihvB9_c7fUwZNAqt35vT_DIIvLrTo';
 
-            Camadas de proteção adicionadas nesta versão:
-            1) A senha não fica mais em texto puro no código — só o hash (SHA-256).
-            2) A sessão de admin deixou de ser uma flag simples ('true'/'false')
-            que qualquer um cria digitando uma linha no console. Agora é um
-            token derivado do hash da senha + um número aleatório da sessão.
-            Esse token é conferido de novo (de forma assíncrona) a cada
-            carregamento de página, e o resultado fica guardado numa variável
-            que só existe na memória do script — as checagens do dia a dia
-            (isAdmin()) não leem mais o sessionStorage diretamente, então
-            forçar uma chave lá não tem efeito nenhum sozinho.
-            3) Tentativas de login incorretas são limitadas: depois de várias
-            senhas erradas, o formulário bloqueia por um tempo (dificulta
-            tentativas de força bruta pelo console).
-            4) A sessão expira sozinha depois de um tempo definido.
+        // Precisa ser o MESMO e-mail usado nas policies de RLS da tabela "posts"
+        // e o mesmo e-mail do usuário administrador criado no painel do Supabase
+        // (Authentication → Users).
 
+        const ADMIN_EMAILS = [
+            'tomistacomunidade@gmail.com',
+            'segundo-admin@dominio.com'
+        ];
+
+        const { createClient } = supabase;
+        const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        /*
             ==========================================================================
             ACESSO DISCRETO DO ADMINISTRADOR
             ==========================================================================
-            Não existe mais nenhum botão "Área do administrador" na tela: um
-            visitante comum não vê nenhum jeito de abrir o login do admin.
-            O modal de login do administrador pode ser aberto de duas formas,
-            pensadas para quem já sabe que elas existem:
+            Não existe nenhum botão "Área do administrador" visível na tela.
+            O modal de login do administrador é aberto de duas formas, pensadas
+            para quem já sabe que elas existem:
 
             1) Atalho de teclado: Ctrl + Alt + A (em qualquer parte da página).
             2) Acessando a página com "#admin" no final do endereço, por
                exemplo: https://seusite.com/blog.html#admin
 
-            Nenhuma das duas formas concede acesso por si só — elas apenas
-            abrem o formulário de usuário/senha, que continua protegido pelas
-            mesmas camadas descritas acima. Para trocar o atalho de teclado,
-            edite a condição dentro do "keydown" listener mais abaixo.
+            A autenticação em si (usuário/senha) agora é validada pelo Supabase
+            Auth no servidor — não existe mais senha ou hash guardados no
+            código-fonte da página.
         */
-        const ADMIN_USER = 'THOMIST';
-        // Hash SHA-256 da senha "tomista2026". Para trocar a senha: gere o hash
-        // SHA-256 da nova senha (dá pra usar o próprio hashText() lá embaixo, no
-        // console do navegador) e substitua o valor abaixo por ele.
-        const ADMIN_PASS_HASH = '8b467476c652603d1964bc24444e3b52e1262c0a260b13e1b7514dad144fff20';
-
-        const SESSION_ADMIN_TOKEN_KEY = 'ct_admin_token';
-        const SESSION_ADMIN_NONCE_KEY = 'ct_admin_nonce';
-        const SESSION_ADMIN_EXPIRES_KEY = 'ct_admin_expires';
-        const SESSION_ADMIN_ATTEMPTS_KEY = 'ct_admin_attempts';
-        const SESSION_ADMIN_LOCKOUT_KEY = 'ct_admin_lockout_until';
-
-        const MAX_LOGIN_ATTEMPTS = 5;
-        const LOCKOUT_DURATION_MS = 60 * 1000;        // 1 minuto de bloqueio
-        const SESSION_DURATION_MS = 30 * 60 * 1000;   // 30 minutos de sessão
-
-        // Guardada só na memória do script (não no sessionStorage): é a fonte da
-        // verdade usada por isAdmin() no dia a dia — ver explicação acima.
-        let adminSessionVerified = false;
-
-        // Chave renomeada (v2) para descartar automaticamente qualquer post de
-        // exemplo que já estivesse salvo no navegador de visitas anteriores.
-        const STORAGE_POSTS_KEY = 'ct_blog_posts_v2';
-
-        // Nenhum artigo de exemplo: o blog começa vazio até o administrador publicar.
-        const DEFAULT_POSTS = [];
-
-        /*
-            ==========================================================================
-            CADASTRO/LOGIN DE VISITANTES
-            ==========================================================================
-            Sistema separado do login do administrador. Qualquer pessoa pode criar
-            conta aqui, mas isso NUNCA concede permissão de publicar artigos —
-            só o login definido em ADMIN_USER/ADMIN_PASS_HASH acima faz isso.
-
-            IMPORTANTE PARA PRODUÇÃO:
-            Os "usuários" abaixo ficam salvos no localStorage do próprio navegador,
-            ou seja, só existem nesse navegador/computador — não é uma base de
-            dados real nem sincroniza entre dispositivos. As senhas passam por um
-            hash (SHA-256) antes de serem salvas, então não ficam em texto puro,
-            mas isso ainda não é segurança de verdade (falta "salt" único por
-            usuário e validação no servidor). Para um cadastro de usuários de
-            verdade, isso precisa rodar num backend com banco de dados e uma
-            biblioteca própria para senhas (ex: bcrypt/argon2 no Node ou PHP).
-        */
-        const STORAGE_USERS_KEY = 'ct_blog_users';
-        const SESSION_VISITOR_KEY = 'ct_visitor';
 
         // ---------- Elementos: administrador ----------
         const btnAdminLogout = document.getElementById('btnAdminLogout');
@@ -774,7 +727,7 @@
         const newPostForm = document.getElementById('newPostForm');
         const blogList = document.getElementById('blogList');
 
-        // ---------- Elementos: visitante (cadastro/login), agora na navbar ----------
+        // ---------- Elementos: visitante (cadastro/login), na navbar ----------
         const btnVisitorAccount = document.getElementById('btnVisitorAccount');
         const btnVisitorLogout = document.getElementById('btnVisitorLogout');
         const visitorLoggedInWrap = document.getElementById('visitorLoggedInWrap');
@@ -793,122 +746,55 @@
         const visitorRegisterForm = document.getElementById('visitorRegisterForm');
         const visitorRegisterError = document.getElementById('visitorRegisterError');
 
-        // ---------- Persistência dos artigos ----------
-        function getPosts() {
-            const raw = localStorage.getItem(STORAGE_POSTS_KEY);
-            if (!raw) {
-                localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(DEFAULT_POSTS));
-                return DEFAULT_POSTS.slice();
-            }
-            try {
-                return JSON.parse(raw);
-            } catch (e) {
-                return DEFAULT_POSTS.slice();
-            }
-        }
+        // Sessão atual (preenchida pelo Supabase Auth)
+        let currentSession = null;
 
-        function savePosts(posts) {
-            localStorage.setItem(STORAGE_POSTS_KEY, JSON.stringify(posts));
-        }
-
-        // ---------- Estado do admin ----------
-        // isAdmin() agora só consulta a variável em memória (adminSessionVerified),
-        // nunca lê o sessionStorage diretamente — por isso forçar uma chave no
-        // console não é suficiente para virar admin (ver comentário no topo).
         function isAdmin() {
-            return adminSessionVerified;
+            return !!currentSession && ADMIN_EMAILS.includes(currentSession.user.email);
         }
 
-        // Cria uma sessão de admin válida: gera um nonce novo, deriva um token a
-        // partir dele + do hash da senha, e salva os dois junto com a validade.
-        async function createAdminSession() {
-            const nonce = generateNonce();
-            const token = await hashText(ADMIN_PASS_HASH + ':' + nonce);
-            const expires = Date.now() + SESSION_DURATION_MS;
-
-            sessionStorage.setItem(SESSION_ADMIN_NONCE_KEY, nonce);
-            sessionStorage.setItem(SESSION_ADMIN_TOKEN_KEY, token);
-            sessionStorage.setItem(SESSION_ADMIN_EXPIRES_KEY, String(expires));
-
-            adminSessionVerified = true;
-            refreshAdminUI();
+        function isVisitorLoggedIn() {
+            return !!currentSession && !isAdmin();
         }
 
-        // Confere se existe uma sessão de admin válida e ainda dentro do prazo.
-        // Roda de forma assíncrona (por causa do hash) no carregamento da página
-        // e periodicamente, para expirar sessões automaticamente.
-        async function verifyAdminSession() {
-            const nonce = sessionStorage.getItem(SESSION_ADMIN_NONCE_KEY);
-            const token = sessionStorage.getItem(SESSION_ADMIN_TOKEN_KEY);
-            const expires = Number(sessionStorage.getItem(SESSION_ADMIN_EXPIRES_KEY) || 0);
+        // ---------- Atualiza a UI a partir da sessão do Supabase ----------
+        async function refreshSessionUI() {
+            const { data: { session } } = await sb.auth.getSession();
+            currentSession = session;
 
-            let valid = false;
-            if (nonce && token && expires > Date.now()) {
-                const expectedToken = await hashText(ADMIN_PASS_HASH + ':' + nonce);
-                valid = (expectedToken === token);
+            // Barra do visitante (navbar)
+            const visitorLogged = isVisitorLoggedIn();
+            btnVisitorAccount.hidden = visitorLogged || isAdmin();
+            visitorLoggedInWrap.hidden = !visitorLogged;
+            if (visitorLogged) {
+                const name = session.user.user_metadata && session.user.user_metadata.name
+                    ? session.user.user_metadata.name
+                    : session.user.email;
+                visitorStatusText.textContent = 'Olá, ' + name;
             }
 
-            adminSessionVerified = valid;
-            if (!valid) clearAdminSession();
-            refreshAdminUI();
+            // Indicador discreto + painel de publicação (admin)
+            const admin = isAdmin();
+            adminIndicator.hidden = !admin;
+            publishPanel.hidden = !admin;
+
+            renderPosts();
         }
 
-        function clearAdminSession() {
-            sessionStorage.removeItem(SESSION_ADMIN_NONCE_KEY);
-            sessionStorage.removeItem(SESSION_ADMIN_TOKEN_KEY);
-            sessionStorage.removeItem(SESSION_ADMIN_EXPIRES_KEY);
-            adminSessionVerified = false;
-        }
-
-        function logoutAdmin() {
-            clearAdminSession();
-            refreshAdminUI();
-        }
-
-        function refreshAdminUI() {
-            const logged = isAdmin();
-            publishPanel.hidden = !logged;
-            adminIndicator.hidden = !logged;
-            renderPosts(); // re-renderiza para mostrar/ocultar botão "Excluir"
-        }
-
-        // ---------- Bloqueio por tentativas (força bruta) ----------
-        function getLockoutRemainingSeconds() {
-            const until = Number(sessionStorage.getItem(SESSION_ADMIN_LOCKOUT_KEY) || 0);
-            const remaining = until - Date.now();
-            return remaining > 0 ? Math.ceil(remaining / 1000) : 0;
-        }
-
-        function registerFailedAttempt() {
-            const attempts = Number(sessionStorage.getItem(SESSION_ADMIN_ATTEMPTS_KEY) || 0) + 1;
-            sessionStorage.setItem(SESSION_ADMIN_ATTEMPTS_KEY, String(attempts));
-            if (attempts >= MAX_LOGIN_ATTEMPTS) {
-                sessionStorage.setItem(SESSION_ADMIN_LOCKOUT_KEY, String(Date.now() + LOCKOUT_DURATION_MS));
-                sessionStorage.setItem(SESSION_ADMIN_ATTEMPTS_KEY, '0');
-            }
-        }
-
-        function clearFailedAttempts() {
-            sessionStorage.removeItem(SESSION_ADMIN_ATTEMPTS_KEY);
-            sessionStorage.removeItem(SESSION_ADMIN_LOCKOUT_KEY);
+        function logoutSession() {
+            sb.auth.signOut().then(refreshSessionUI);
         }
 
         // ---------- Modal de login do administrador ----------
         function openAdminModal() {
             adminError.textContent = '';
             adminLoginForm.reset();
-            const remaining = getLockoutRemainingSeconds();
-            if (remaining > 0) {
-                adminError.textContent = 'Muitas tentativas erradas. Tente novamente em ' + remaining + 's.';
-            }
             adminModal.hidden = false;
             document.getElementById('adminUser').focus();
         }
 
         function closeAdminModal() {
             adminModal.hidden = true;
-            // Limpa o "#admin" da URL, se foi ele quem abriu o modal, para não
-            // reabrir sozinho ao atualizar a página.
             if (window.location.hash === '#admin') {
                 history.replaceState(null, '', window.location.pathname + window.location.search);
             }
@@ -923,35 +809,27 @@
             e.preventDefault();
             adminError.textContent = '';
 
-            const remaining = getLockoutRemainingSeconds();
-            if (remaining > 0) {
-                adminError.textContent = 'Muitas tentativas erradas. Tente novamente em ' + remaining + 's.';
+            const email = document.getElementById('adminUser').value.trim();
+            const pass = document.getElementById('adminPass').value;
+
+            const { error } = await sb.auth.signInWithPassword({ email: email, password: pass });
+            if (error) {
+                adminError.textContent = 'E-mail ou senha incorretos.';
+                return;
+            }
+            if (!ADMIN_EMAILS.includes(email)) {
+                // Logou com uma conta válida do Supabase, mas que não é a do admin.
+                await sb.auth.signOut();
+                adminError.textContent = 'Esta conta não tem permissão de administrador.';
                 return;
             }
 
-            const user = document.getElementById('adminUser').value.trim();
-            const pass = document.getElementById('adminPass').value;
-            const passHash = await hashText(pass);
-
-            // Verificação client-side (ver aviso de segurança no topo do script)
-            if (user === ADMIN_USER && passHash === ADMIN_PASS_HASH) {
-                clearFailedAttempts();
-                await createAdminSession();
-                closeAdminModal();
-            } else {
-                registerFailedAttempt();
-                const nowRemaining = getLockoutRemainingSeconds();
-                adminError.textContent = nowRemaining > 0
-                    ? 'Muitas tentativas erradas. Tente novamente em ' + nowRemaining + 's.'
-                    : 'Usuário ou senha incorretos.';
-            }
+            await refreshSessionUI();
+            closeAdminModal();
         });
 
-        btnAdminLogout.addEventListener('click', function () {
-            logoutAdmin();
-        });
+        btnAdminLogout.addEventListener('click', logoutSession);
 
-        // ---------- Gatilhos discretos para abrir o login do administrador ----------
         // 1) Atalho de teclado Ctrl+Alt+A em qualquer lugar da página.
         document.addEventListener('keydown', function (e) {
             if (e.ctrlKey && e.altKey && (e.key === 'a' || e.key === 'A')) {
@@ -970,72 +848,14 @@
 
         /*
             ==========================================================================
-            LÓGICA DE CADASTRO/LOGIN DE VISITANTES
+            CADASTRO/LOGIN DE VISITANTES (Supabase Auth)
             ==========================================================================
+            Sistema separado do login do administrador. Qualquer pessoa pode criar
+            conta aqui, mas isso NUNCA concede permissão de publicar artigos —
+            só a conta cujo e-mail é igual a ADMIN_EMAIL tem essa permissão
+            (conferido tanto na interface quanto pelas políticas de RLS no banco).
         */
 
-        // Gera um hash SHA-256 de qualquer texto (nativo do navegador via Web
-        // Crypto API). Usado tanto para senhas de visitantes quanto para o token
-        // de sessão do administrador. Evita salvar segredos em texto puro, mas
-        // ainda não substitui uma implementação real de backend (ver aviso acima).
-        async function hashText(text) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(text);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-        }
-
-        // Gera uma string aleatória para usar como "nonce" (número usado uma vez)
-        // de cada sessão de administrador.
-        function generateNonce() {
-            const array = new Uint8Array(16);
-            crypto.getRandomValues(array);
-            return Array.from(array).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-        }
-
-        function getUsers() {
-            const raw = localStorage.getItem(STORAGE_USERS_KEY);
-            if (!raw) return [];
-            try {
-                return JSON.parse(raw);
-            } catch (e) {
-                return [];
-            }
-        }
-
-        function saveUsers(users) {
-            localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
-        }
-
-        function getVisitor() {
-            const raw = sessionStorage.getItem(SESSION_VISITOR_KEY);
-            if (!raw) return null;
-            try {
-                return JSON.parse(raw);
-            } catch (e) {
-                return null;
-            }
-        }
-
-        function setVisitor(visitor) {
-            if (visitor) {
-                sessionStorage.setItem(SESSION_VISITOR_KEY, JSON.stringify(visitor));
-            } else {
-                sessionStorage.removeItem(SESSION_VISITOR_KEY);
-            }
-            refreshVisitorUI();
-        }
-
-        function refreshVisitorUI() {
-            const visitor = getVisitor();
-            const logged = !!visitor;
-            btnVisitorAccount.hidden = logged;
-            visitorLoggedInWrap.hidden = !logged;
-            visitorStatusText.textContent = logged ? 'Olá, ' + visitor.name : '';
-        }
-
-        // ---------- Abrir/fechar modal do visitante ----------
         function openVisitorModal() {
             visitorLoginError.textContent = '';
             visitorRegisterError.textContent = '';
@@ -1087,20 +907,27 @@
                 return;
             }
 
-            const users = getUsers();
-            const alreadyExists = users.some(function (u) { return u.email === email; });
-            if (alreadyExists) {
-                visitorRegisterError.textContent = 'Já existe uma conta cadastrada com este e-mail.';
+            const { error } = await sb.auth.signUp({
+                email: email,
+                password: pass,
+                options: { data: { name: name } }
+            });
+
+            if (error) {
+                visitorRegisterError.textContent = error.message;
                 return;
             }
 
-            const passwordHash = await hashText(pass);
-            users.push({ name: name, email: email, passwordHash: passwordHash });
-            saveUsers(users);
-
-            // Cadastro concluído: já entra automaticamente na conta criada.
-            setVisitor({ name: name, email: email });
-            closeVisitorModal();
+            // Se a confirmação por e-mail estiver ativada no projeto, ainda não
+            // haverá sessão neste momento; se estiver desativada, o usuário já
+            // entra automaticamente.
+            await refreshSessionUI();
+            if (currentSession) {
+                closeVisitorModal();
+            } else {
+                visitorRegisterError.style.color = 'var(--color-ink)';
+                visitorRegisterError.textContent = 'Conta criada! Verifique seu e-mail para confirmar e depois faça login.';
+            }
         });
 
         // ---------- Login do visitante ----------
@@ -1111,35 +938,30 @@
             const email = document.getElementById('visitorLoginEmail').value.trim().toLowerCase();
             const pass = document.getElementById('visitorLoginPass').value;
 
-            const users = getUsers();
-            const user = users.find(function (u) { return u.email === email; });
-
-            if (!user) {
-                visitorLoginError.textContent = 'Não encontramos uma conta com este e-mail.';
+            const { error } = await sb.auth.signInWithPassword({ email: email, password: pass });
+            if (error) {
+                visitorLoginError.textContent = 'E-mail ou senha incorretos.';
                 return;
             }
 
-            const passwordHash = await hashText(pass);
-            if (passwordHash !== user.passwordHash) {
-                visitorLoginError.textContent = 'Senha incorreta.';
-                return;
-            }
-
-            setVisitor({ name: user.name, email: user.email });
+            await refreshSessionUI();
             closeVisitorModal();
         });
 
         // ---------- Logout do visitante ----------
-        btnVisitorLogout.addEventListener('click', function () {
-            setVisitor(null);
-        });
+        btnVisitorLogout.addEventListener('click', logoutSession);
+
+        /*
+            ==========================================================================
+            ARTIGOS (tabela "posts" no Supabase — visível a TODOS os visitantes,
+            sem depender de localStorage/sessionStorage no navegador)
+            ==========================================================================
+        */
 
         // ---------- Publicar novo artigo (somente admin) ----------
-        newPostForm.addEventListener('submit', function (e) {
+        newPostForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            // Segunda verificação de segurança: mesmo que alguém force a exibição
-            // do formulário via DevTools, a publicação só ocorre se isAdmin() for true.
             if (!isAdmin()) {
                 alert('Apenas o administrador pode publicar artigos.');
                 return;
@@ -1152,41 +974,63 @@
 
             if (!title || !excerpt || !content) return;
 
-            const posts = getPosts();
-            posts.unshift({
-                id: 'post-' + Date.now(),
+            const { error } = await sb.from('posts').insert({
                 title: title,
                 excerpt: excerpt,
                 content: content,
-                image: image,
-                author: 'Comunidade Tomista',
-                date: new Date().toISOString().slice(0, 10)
+                image_url: image || null,
+                author: 'Comunidade Tomista'
             });
-            savePosts(posts);
+
+            if (error) {
+                alert('Erro ao publicar: ' + error.message);
+                return;
+            }
+
             newPostForm.reset();
             renderPosts();
         });
 
-        // ---------- Excluir artigo (somente admin) ----------
-        function deletePost(id) {
+        // ---------- Excluir artigo (somente admin, protegido também por RLS) ----------
+        async function deletePost(id) {
             if (!isAdmin()) return;
             if (!confirm('Excluir este artigo?')) return;
-            const posts = getPosts().filter(function (p) { return p.id !== id; });
-            savePosts(posts);
+
+            const { error } = await sb.from('posts').delete().eq('id', id);
+            if (error) {
+                alert('Erro ao excluir: ' + error.message);
+                return;
+            }
             renderPosts();
         }
 
         // ---------- Renderização da lista ----------
         function formatDate(iso) {
-            const d = new Date(iso + 'T00:00:00');
+            const d = new Date(iso);
             return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
         }
 
-        function renderPosts() {
-            const posts = getPosts();
+        function escapeHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str == null ? '' : str;
+            return d.innerHTML;
+        }
+
+        async function renderPosts() {
+            const { data: posts, error } = await sb
+                .from('posts')
+                .select('*')
+                .order('created_at', { ascending: false });
+
             blogList.innerHTML = '';
 
-            if (posts.length === 0) {
+            if (error) {
+                blogList.innerHTML = '<p class="empty-state">Não foi possível carregar os artigos.</p>';
+                console.error(error);
+                return;
+            }
+
+            if (!posts || posts.length === 0) {
                 blogList.innerHTML = '<p class="empty-state">Nenhum artigo publicado ainda.</p>';
                 return;
             }
@@ -1197,17 +1041,17 @@
 
                 const meta = document.createElement('p');
                 meta.className = 'post-meta';
-                meta.textContent = formatDate(post.date);
+                meta.textContent = formatDate(post.created_at);
                 article.appendChild(meta);
 
                 const h3 = document.createElement('h3');
                 h3.textContent = post.title;
                 article.appendChild(h3);
 
-                if (post.image) {
+                if (post.image_url) {
                     const img = document.createElement('img');
                     img.className = 'post-image';
-                    img.src = post.image;
+                    img.src = post.image_url;
                     img.alt = post.title;
                     article.appendChild(img);
                 }
@@ -1222,7 +1066,7 @@
 
                 const author = document.createElement('span');
                 author.className = 'post-author';
-                author.textContent = 'Por ' + post.author;
+                author.textContent = 'Por ' + (post.author || 'Comunidade Tomista');
                 footerRow.appendChild(author);
 
                 if (isAdmin()) {
@@ -1240,16 +1084,9 @@
         }
 
         // ---------- Inicialização ----------
-        refreshAdminUI();      // primeiro render, assumindo "deslogado" até verificar
-        refreshVisitorUI();
-        verifyAdminSession();  // confere de forma assíncrona se há sessão de admin válida
-        checkAdminHash();      // abre o login se a página foi acessada com "#admin"
-
-        // Confere a expiração da sessão de admin periodicamente, para deslogar
-        // sozinho quando o tempo definido em SESSION_DURATION_MS acabar.
-        setInterval(function () {
-            if (isAdmin()) verifyAdminSession();
-        }, 30 * 1000);
+        sb.auth.onAuthStateChange(function () { refreshSessionUI(); });
+        refreshSessionUI();
+        checkAdminHash(); // abre o login se a página foi acessada com "#admin"
     })();
     </script>
 </body>
