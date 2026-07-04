@@ -691,6 +691,122 @@
             margin: 1.5em 0;
         }
 
+        /* ==========================================================================
+           ESTILO "COMPÊNDIO DE TEOLOGIA" (Comunidade Tomista)
+           ==========================================================================
+           Opção de formatação selecionável no painel de publicação. Reproduz,
+           dentro do leitor de artigo, o padrão de títulos/subtítulos/parágrafos
+           do modelo em PDF: cabeçalho de página, título de Parte/Tratado (H1),
+           título de Dissertação/Capítulo (H2), título de Artigo (H3), marcadores
+           "Digo:"/"Prova:"/"Nota:" em negrito, citações patrísticas recuadas e
+           divisores entre seções. Ativado via a marca invisível
+           "<!--style:teologico-->" no início do conteúdo (ver STYLE_MARKER no
+           script), sem alterar o schema do banco de dados.
+        */
+        .article-reader-body.theological-style {
+            font-family: var(--font-display);
+        }
+
+        /* Cabeçalho decorativo, como o "COMUNIDADE TOMISTA" do topo de cada página do PDF */
+        .article-reader-body.theological-style::before {
+            content: "Comunidade Tomista";
+            display: block;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            color: var(--color-gold);
+            margin-bottom: var(--space-2);
+            padding-bottom: var(--space-2);
+            border-bottom: 1px solid rgba(var(--gold-rgb), 0.35);
+        }
+
+        /* Título de Parte/Tratado (nível 1) — ex.: "TRATADO SOBRE A SANTÍSSIMA TRINDADE" */
+        .article-reader-body.theological-style h1 {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 1.6em;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            padding-bottom: 0.4em;
+            border-bottom: 2px solid var(--color-gold);
+            margin: 1.6em 0 0.9em;
+        }
+
+        /* Título de Dissertação/Capítulo (nível 2) — ex.: "DISSERTAÇÃO I." */
+        .article-reader-body.theological-style h2 {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 1.3em;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--color-ink);
+            margin: 1.8em 0 0.3em;
+        }
+
+        /* Subtítulo descritivo logo abaixo do H2 (parágrafo/itálico imediatamente
+           após ele) — ex.: "Sobre a verdade do Mistério da Santíssima Trindade." */
+        .article-reader-body.theological-style h2 + p {
+            display: block;
+            text-align: center;
+            font-style: italic;
+            opacity: 0.8;
+            font-size: 0.95em;
+            margin-top: -0.2em;
+            margin-bottom: 1.2em;
+        }
+
+        /* Título de Artigo (nível 3) — ex.: "ARTIGO I." */
+        .article-reader-body.theological-style h3 {
+            text-transform: uppercase;
+            font-size: 1.08em;
+            font-weight: 700;
+            color: var(--color-gold);
+            border-left: 3px solid var(--color-gold);
+            padding-left: 0.6em;
+            margin: 1.4em 0 0.6em;
+        }
+
+        /* Marcadores inline de argumentação: "Digo:", "Prova.", "Nota:", "R." */
+        .article-reader-body.theological-style strong {
+            font-weight: 700;
+            color: var(--color-ink);
+        }
+
+        /* Citações bíblicas, patrísticas e conciliares recuadas */
+        .article-reader-body.theological-style blockquote {
+            border-left: 3px solid var(--color-gold);
+            background: rgba(var(--gold-rgb), 0.06);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 0.6em 1em;
+            font-style: italic;
+        }
+
+        /* Divisor entre Dissertações/Artigos, equivalente à linha horizontal do PDF */
+        .article-reader-body.theological-style hr {
+            width: 60%;
+            margin: 2em auto;
+            border-top: 1px solid rgba(var(--gold-rgb), 0.5);
+        }
+
+        /* Selo "Compêndio" no cartão da lista de artigos */
+        .post-style-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            border: 1px solid rgba(var(--gold-rgb), 0.5);
+            border-radius: 999px;
+            padding: 3px 10px;
+            margin-left: 8px;
+        }
+
         .article-reader-author {
             margin-top: var(--space-4);
             padding-top: var(--space-2);
@@ -764,11 +880,212 @@
             text-decoration: underline;
         }
 
+        /* ---------- Pré-visualização de PDF (iframe nativo do navegador) ---------- */
+        .pdf-preview-toggle-row {
+            display: flex;
+            gap: var(--space-2);
+        }
+        .pdf-preview-frame-wrap {
+            margin-top: 0.6rem;
+            border: 1.5px solid rgba(var(--gold-rgb), 0.4);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        .pdf-preview-frame-wrap .content-image-status {
+            padding: 10px 12px 0;
+            margin: 0;
+        }
+        .pdf-preview-frame {
+            width: 100%;
+            height: 480px;
+            border: none;
+            display: block;
+            background: var(--color-white);
+        }
+        .article-reader-preview-btn {
+            margin-top: 0.6rem;
+            font-size: 0.78rem;
+            padding: 8px 16px;
+        }
+        .article-reader-attachment-wrap .pdf-preview-frame-wrap .pdf-preview-frame {
+            height: 60vh;
+        }
+
         /* ---------- Anexo indicado no card da lista ---------- */
         .post-attachment-badge {
             font-size: 0.85rem;
             text-decoration: none;
             margin-left: 6px;
+        }
+
+        /* ---------- Inserir foto no corpo do conteúdo (formulário de publicação) ---------- */
+        .content-image-tools {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-top: 0.5rem;
+        }
+        .content-image-tools input[type="file"] { display: none; }
+        .content-image-status {
+            font-size: 0.75rem;
+            color: var(--color-ink);
+            opacity: 0.65;
+        }
+        .content-image-status.is-error { color: var(--color-error); opacity: 1; }
+
+        /* ---------- Publicação rápida somente com PDF ---------- */
+        .quick-pdf-publish {
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px dashed rgba(var(--gold-rgb), 0.4);
+        }
+        .quick-pdf-publish h3 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0 0 0.3rem;
+            color: var(--color-ink);
+        }
+        .quick-pdf-publish .hint {
+            font-size: 0.8rem;
+            color: var(--color-ink);
+            opacity: 0.7;
+            margin: 0 0 var(--space-2);
+        }
+        .quick-pdf-publish-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        /* ---------- Avaliação por estrelas ---------- */
+        .star-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .star-rating .star {
+            font-size: 1.3rem;
+            line-height: 1;
+            color: rgba(var(--gold-rgb), 0.35);
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .star-rating .star.filled { color: var(--color-gold); }
+        .star-rating.interactive .star {
+            cursor: pointer;
+            transition: transform var(--transition-fast), color var(--transition-fast);
+        }
+        .star-rating.interactive .star:hover { transform: scale(1.15); }
+
+        .rating-block {
+            margin: var(--space-3) 0;
+            padding: var(--space-2) 0;
+            border-top: 1px solid rgba(var(--gold-rgb), 0.25);
+            border-bottom: 1px solid rgba(var(--gold-rgb), 0.25);
+        }
+        .rating-block-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+        .rating-summary-text {
+            font-size: 0.8rem;
+            color: var(--color-ink);
+            opacity: 0.7;
+        }
+        .rating-login-hint {
+            font-size: 0.78rem;
+            color: var(--color-ink);
+            opacity: 0.55;
+            margin: 0.3rem 0 0;
+        }
+
+        .card-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            color: var(--color-ink);
+            opacity: 0.7;
+        }
+        .card-rating .star-rating .star { font-size: 0.85rem; }
+
+        /* ---------- Comentários ---------- */
+        .comments-section {
+            margin-top: var(--space-4);
+            padding-top: var(--space-3);
+            border-top: 1px solid rgba(var(--gold-rgb), 0.3);
+        }
+        .comments-section h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 var(--space-2);
+            color: var(--color-ink);
+        }
+        .comments-list {
+            list-style: none;
+            margin: 0 0 var(--space-3);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        .comment-item {
+            background: var(--color-white);
+            border-radius: var(--radius-sm);
+            padding: var(--space-2);
+            box-shadow: var(--shadow-sm);
+        }
+        .comment-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: var(--space-2);
+            margin-bottom: 0.3rem;
+        }
+        .comment-author {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--color-ink);
+        }
+        .comment-date {
+            font-size: 0.7rem;
+            color: var(--color-ink);
+            opacity: 0.55;
+            white-space: nowrap;
+        }
+        .comment-text {
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: var(--color-ink);
+            opacity: 0.9;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        .comment-form textarea {
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            padding: 0.7rem 0.8rem;
+            border: 1.5px solid rgba(var(--gold-rgb), 0.5);
+            border-radius: var(--radius-sm);
+            background: var(--color-white);
+            color: var(--color-ink);
+            box-sizing: border-box;
+            min-height: 80px;
+            resize: vertical;
+            margin-bottom: 0.6rem;
+        }
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 4px rgba(var(--gold-rgb), 0.18);
         }
 
         @media (max-width: 600px) {
@@ -981,6 +1298,30 @@
                     <label for="postContent">Conteúdo</label>
                     <textarea id="postContent" required placeholder="Escreva normalmente ou use Markdown: **negrito**, _itálico_, # Título, - lista, [link](url)..."></textarea>
                     <p class="field-hint">Aceita Markdown (títulos, negrito, listas, links, citações...) ou apenas texto corrido — os dois funcionam.</p>
+                    <!-- Upload de fotos dentro do corpo do artigo: a imagem é enviada ao
+                         Supabase Storage e o link é inserido como Markdown no ponto do
+                         cursor dentro do texto, para aparecer no meio do conteúdo. -->
+                    <div class="content-image-tools">
+                        <button type="button" class="btn-ct outline" id="btnInsertContentImage">📷 Inserir foto no conteúdo</button>
+                        <input type="file" id="postContentImageInput" accept="image/*">
+                        <span class="content-image-status" id="contentImageStatus"></span>
+                    </div>
+
+                    <!--
+                        Opção de estilo "Compêndio de Teologia": reproduz o padrão de
+                        títulos/subtítulos/parágrafos do modelo em PDF da Comunidade
+                        Tomista (Tratado > Dissertação > Artigo > "Digo:"/"Prova:").
+                        O botão insere um esqueleto em Markdown; o checkbox liga a
+                        formatação visual correspondente no leitor de artigo.
+                    -->
+                    <div class="content-image-tools" id="theologicalStyleRow">
+                        <button type="button" class="btn-ct outline" id="btnInsertTheologicalTemplate">📜 Inserir modelo </button>
+                        <label class="theological-style-toggle" for="postStyleTheological" style="display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;">
+                            <input type="checkbox" id="postStyleTheological">
+                            Usar o padrão (Tratado / Dissertação / Artigo)
+                        </label>
+                    </div>
+                    <p class="field-hint">O modelo organiza o texto em Título de Tratado, Dissertações, Artigos e marcadores "Digo:"/"Prova:"/"Nota:", como no Compêndio de Teologia da Comunidade Tomista.</p>
                 </div>
                 <div class="field-group">
                     <label for="postImage">URL da imagem (opcional)</label>
@@ -993,12 +1334,48 @@
                         Anexo atual: <span id="currentAttachmentName"></span> —
                         <button type="button" id="btnRemoveAttachment">remover anexo</button>
                     </p>
+                    <!-- Só aparece quando o arquivo escolhido acima é um PDF: extrai o
+                         texto do PDF (via PDF.js, no navegador) e reescreve o campo
+                         "Conteúdo" com esse texto. -->
+                    <div class="content-image-tools" id="rewriteFromPdfRow" hidden>
+                        <button type="button" class="btn-ct outline" id="btnRewriteFromPdf">📝 Reescrever conteúdo a partir do PDF</button>
+                        <span class="content-image-status" id="rewriteFromPdfStatus"></span>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Pré-visualização do PDF anexado</label>
+                    <div class="pdf-preview-toggle-row">
+                        <button type="button" class="btn-ct outline" id="btnTogglePdfPreviewForm" hidden>👁 Pré-visualizar PDF</button>
+                    </div>
+                    <div class="pdf-preview-frame-wrap" id="formPdfPreviewWrap" hidden>
+                        <iframe id="formPdfPreviewFrame" class="pdf-preview-frame" title="Pré-visualização do PDF"></iframe>
+                    </div>
                 </div>
                 <div class="publish-actions">
                     <button type="button" class="btn-ct outline" id="btnCancelEdit" hidden>Cancelar edição</button>
                     <button type="submit" class="btn-ct solid" id="btnSubmitPost">Publicar artigo</button>
                 </div>
             </form>
+
+            <!--
+                Publicação rápida: o administrador consegue publicar um artigo
+                apenas enviando um arquivo .pdf, sem precisar preencher o
+                formulário completo acima. O título é extraído do nome do
+                arquivo e o próprio PDF vira o conteúdo (anexo) do artigo.
+            -->
+            <div class="quick-pdf-publish">
+                <h3>Publicação rápida (somente PDF)</h3>
+                <p class="hint">Envie apenas um arquivo PDF para publicar um artigo imediatamente, sem preencher o formulário acima. O texto do PDF é extraído automaticamente e vira o conteúdo do artigo.</p>
+                <form id="quickPdfForm" class="quick-pdf-publish-row">
+                    <input type="file" id="quickPdfInput" accept=".pdf,application/pdf" required>
+                    <button type="button" class="btn-ct outline" id="btnToggleQuickPdfPreview" hidden>👁 Pré-visualizar PDF</button>
+                    <button type="submit" class="btn-ct solid" id="btnQuickPublishPdf">Publicar somente com PDF</button>
+                </form>
+                <div class="pdf-preview-frame-wrap" id="quickPdfPreviewWrap" hidden>
+                    <iframe id="quickPdfPreviewFrame" class="pdf-preview-frame" title="Pré-visualização do PDF"></iframe>
+                </div>
+                <p class="admin-error" id="quickPdfError"></p>
+            </div>
         </section>
 
         <!-- Lista de artigos publicados -->
@@ -1022,6 +1399,11 @@
                 <div class="article-reader-attachment-wrap" id="articleReaderAttachmentWrap" hidden>
                     <p class="article-reader-attachment-title">Anexos</p>
                     <a class="article-reader-attachment" id="articleReaderAttachment" href="#" target="_blank" rel="noopener">📎 Baixar anexo</a>
+                    <button type="button" class="btn-ct outline article-reader-preview-btn" id="btnToggleReaderPdfPreview" hidden>👁 Pré-visualizar PDF aqui</button>
+                    <div class="pdf-preview-frame-wrap" id="readerPdfPreviewWrap" hidden>
+                        <p class="content-image-status" id="readerPdfPreviewStatus"></p>
+                        <iframe id="readerPdfPreviewFrame" class="pdf-preview-frame" title="Pré-visualização do PDF"></iframe>
+                    </div>
                 </div>
                 <div class="article-reader-body" id="articleReaderBody"></div>
                 <div class="article-reader-pagination" id="articleReaderPagination" hidden>
@@ -1030,6 +1412,34 @@
                     <button type="button" class="btn-ct outline" id="btnReaderNext">Próxima ›</button>
                 </div>
                 <p class="article-reader-author" id="articleReaderAuthor"></p>
+
+                <!--
+                    Avaliação com 5 estrelas: qualquer visitante pode ver a média,
+                    mas só quem tem conta (cadastrado, logado via Supabase Auth)
+                    pode clicar nas estrelas para avaliar o artigo.
+                -->
+                <div class="rating-block">
+                    <div class="rating-block-row">
+                        <div class="star-rating" id="readerRatingStars" aria-label="Avaliação do artigo"></div>
+                        <span class="rating-summary-text" id="readerRatingSummary"></span>
+                    </div>
+                    <p class="rating-login-hint" id="readerRatingLoginHint" hidden>Faça login com sua conta para avaliar este artigo.</p>
+                </div>
+
+                <!--
+                    Comentários: a lista é visível para todos, mas somente
+                    usuários com conta (cadastrados e logados) podem escrever
+                    um novo comentário.
+                -->
+                <div class="comments-section">
+                    <h3>Comentários</h3>
+                    <ul class="comments-list" id="commentsList"></ul>
+                    <form class="comment-form" id="commentForm">
+                        <textarea id="commentText" placeholder="Escreva um comentário..." required></textarea>
+                        <button type="submit" class="btn-ct solid">Comentar</button>
+                    </form>
+                    <p class="rating-login-hint" id="commentLoginHint" hidden>Faça login com sua conta para comentar.</p>
+                </div>
             </div>
         </div>
 
@@ -1052,6 +1462,11 @@
     <!-- Conversão de Markdown para HTML (conteúdo do artigo) + sanitização -->
     <script src="https://cdn.jsdelivr.net/npm/marked@11/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+
+    <!-- PDF.js: usado para extrair o texto de dentro dos arquivos PDF no
+         próprio navegador (sem precisar de um servidor), para a opção
+         "Reescrever conteúdo a partir do PDF" e para a publicação rápida. -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
     <script>
     (function () {
@@ -1090,6 +1505,12 @@
         // só escreve texto corrido não precisa aprender Markdown para nada.
         if (window.marked) {
             marked.setOptions({ breaks: true, gfm: true });
+        }
+
+        // Worker do PDF.js: necessário para que a extração de texto do PDF
+        // funcione no navegador sem travar a página principal.
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
         }
 
         /*
@@ -1161,6 +1582,73 @@
         const articleReaderPageInfo = document.getElementById('articleReaderPageInfo');
         const btnReaderPrev = document.getElementById('btnReaderPrev');
         const btnReaderNext = document.getElementById('btnReaderNext');
+
+        // ---------- Elementos: foto no corpo do conteúdo ----------
+        const btnInsertContentImage = document.getElementById('btnInsertContentImage');
+        const postContentImageInput = document.getElementById('postContentImageInput');
+        const btnInsertTheologicalTemplate = document.getElementById('btnInsertTheologicalTemplate');
+        const postStyleTheological = document.getElementById('postStyleTheological');
+
+        /*
+            ==========================================================================
+            ESTILO "COMPÊNDIO DE TEOLOGIA" — marcador de formatação
+            ==========================================================================
+            Para não exigir alteração no schema do Supabase (sem coluna nova em
+            "posts"), o estilo escolhido é guardado como uma marca invisível na
+            própria primeira linha do campo "content": "<!--style:teologico-->".
+            Ela é removida antes de exibir o texto no formulário de edição e antes
+            de renderizar o Markdown, servindo apenas para acionar a classe CSS
+            ".theological-style" no leitor de artigo.
+        */
+        const STYLE_MARKER_THEOLOGICAL = '<!--style:teologico-->';
+
+        function hasTheologicalMarker(content) {
+            return (content || '').trimStart().startsWith(STYLE_MARKER_THEOLOGICAL);
+        }
+
+        function stripTheologicalMarker(content) {
+            return (content || '').replace(STYLE_MARKER_THEOLOGICAL, '').replace(/^\s+/, '');
+        }
+        const contentImageStatus = document.getElementById('contentImageStatus');
+        const postContentTextarea = document.getElementById('postContent');
+
+        // ---------- Elementos: publicação rápida somente com PDF ----------
+        const quickPdfForm = document.getElementById('quickPdfForm');
+        const quickPdfInput = document.getElementById('quickPdfInput');
+        const quickPdfError = document.getElementById('quickPdfError');
+        const btnQuickPublishPdf = document.getElementById('btnQuickPublishPdf');
+
+        // ---------- Elementos: reescrever conteúdo a partir do PDF anexado (formulário principal) ----------
+        const rewriteFromPdfRow = document.getElementById('rewriteFromPdfRow');
+        const btnRewriteFromPdf = document.getElementById('btnRewriteFromPdf');
+        const rewriteFromPdfStatus = document.getElementById('rewriteFromPdfStatus');
+
+        // ---------- Elementos: pré-visualização de PDF (formulário principal, publicação rápida e leitor) ----------
+        const btnTogglePdfPreviewForm = document.getElementById('btnTogglePdfPreviewForm');
+        const formPdfPreviewWrap = document.getElementById('formPdfPreviewWrap');
+        const formPdfPreviewFrame = document.getElementById('formPdfPreviewFrame');
+        const btnToggleQuickPdfPreview = document.getElementById('btnToggleQuickPdfPreview');
+        const quickPdfPreviewWrap = document.getElementById('quickPdfPreviewWrap');
+        const quickPdfPreviewFrame = document.getElementById('quickPdfPreviewFrame');
+        const btnToggleReaderPdfPreview = document.getElementById('btnToggleReaderPdfPreview');
+        const readerPdfPreviewWrap = document.getElementById('readerPdfPreviewWrap');
+        const readerPdfPreviewFrame = document.getElementById('readerPdfPreviewFrame');
+        const readerPdfPreviewStatus = document.getElementById('readerPdfPreviewStatus');
+        let readerPdfPreviewObjectUrl = null;
+
+        // ---------- Elementos: avaliação com estrelas ----------
+        const readerRatingStars = document.getElementById('readerRatingStars');
+        const readerRatingSummary = document.getElementById('readerRatingSummary');
+        const readerRatingLoginHint = document.getElementById('readerRatingLoginHint');
+
+        // ---------- Elementos: comentários ----------
+        const commentsList = document.getElementById('commentsList');
+        const commentForm = document.getElementById('commentForm');
+        const commentText = document.getElementById('commentText');
+        const commentLoginHint = document.getElementById('commentLoginHint');
+
+        // Id do artigo atualmente aberto no leitor (usado por avaliação/comentários)
+        let currentReaderPostId = null;
 
         // Sessão atual (preenchida pelo Supabase Auth)
         let currentSession = null;
@@ -1393,6 +1881,153 @@
             return name.replace(/[^a-zA-Z0-9._-]/g, '_');
         }
 
+        function getFileExt(name) {
+            return (name || '').split('.').pop().toLowerCase();
+        }
+
+        /*
+            Extrai o texto de dentro de um arquivo PDF inteiramente no
+            navegador, usando PDF.js — sem precisar de nenhum servidor.
+            Retorna o texto encontrado (parágrafo por página) ou lança um
+            erro se o PDF for só imagem escaneada (sem texto selecionável)
+            ou se o PDF.js não tiver carregado.
+        */
+        async function extractTextFromPdfFile(file) {
+            if (!window.pdfjsLib) {
+                throw new Error('Extração de texto indisponível (PDF.js não carregou).');
+            }
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+            // Coleta todas as "linhas" de todas as páginas, guardando também o
+            // tamanho da fonte e a distância vertical até a linha anterior —
+            // é isso que formatExtractedPdfText() usa para decidir o que é
+            // título, subtítulo ou parágrafo. O PDF.js não entrega essa
+            // estrutura: ele só devolve fragmentos de texto soltos, então
+            // primeiro precisamos reagrupá-los em linhas por posição (Y).
+            const allLines = [];
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+
+                const rows = [];
+                textContent.items.forEach(function (item) {
+                    if (!item.str || !item.str.trim()) return;
+                    const y = Math.round(item.transform[5]);
+                    const size = Math.abs(item.transform[3]) || Math.abs(item.transform[0]) || 0;
+                    // Fragmentos com Y muito próximo pertencem à mesma linha visual.
+                    let row = rows.find(function (r) { return Math.abs(r.y - y) < 3; });
+                    if (!row) {
+                        row = { y: y, size: size, parts: [] };
+                        rows.push(row);
+                    }
+                    row.parts.push(item.str);
+                    row.size = Math.max(row.size, size);
+                });
+
+                // Y no PDF cresce de baixo para cima -> ordena do topo da página para o fim.
+                rows.sort(function (a, b) { return b.y - a.y; });
+
+                rows.forEach(function (row, idx) {
+                    const text = row.parts.join(' ').replace(/\s+/g, ' ').trim();
+                    if (!text) return;
+                    const gap = idx > 0 ? (rows[idx - 1].y - row.y) : 0;
+                    allLines.push({ text: text, size: row.size, gap: gap });
+                });
+            }
+
+            if (!allLines.length) {
+                throw new Error('Não foi possível extrair texto deste PDF (provavelmente é uma imagem escaneada).');
+            }
+
+            return formatExtractedPdfText(allLines);
+        }
+
+        /*
+            ==========================================================================
+            PADRÃO DE TÍTULOS, SUBTÍTULOS E PARÁGRAFOS AO REESCREVER A PARTIR DO PDF
+            ==========================================================================
+            O PDF não guarda "isto é um título" ou "isto é um parágrafo" — ele só
+            guarda texto posicionado na página. Para reconstruir essa estrutura
+            usamos o TAMANHO DA FONTE de cada linha, comparado com o tamanho mais
+            comum do documento (que é, por definição, o corpo do texto):
+
+              • linha com fonte >= 1.4x o corpo do texto      -> Título     -> "# "
+              • linha com fonte >= 1.15x o corpo do texto     -> Subtítulo  -> "## "
+              • linha curta (até 70 caracteres) e sem pontuação
+                final, isolada entre linhas maiores            -> Subtítulo -> "## "
+              • linha começando com "•", "-", "*" ou "1.", "2)"...  -> item de lista -> "- "
+              • qualquer outra linha entra no parágrafo atual; um espaço vertical
+                bem maior que o normal entre duas linhas indica quebra de parágrafo
+
+            O resultado é sempre Markdown válido (#, ##, listas e parágrafos
+            separados por linha em branco), que é exatamente o que a função
+            renderMarkdown() mais abaixo já sabe transformar em HTML. Ou seja: o
+            padrão vale tanto para o texto extraído automaticamente do PDF quanto
+            para quem digita o conteúdo manualmente.
+        */
+        function formatExtractedPdfText(lines) {
+            // Descobre o tamanho de fonte mais frequente = corpo do texto.
+            const sizeCount = {};
+            lines.forEach(function (l) {
+                const key = Math.round(l.size);
+                sizeCount[key] = (sizeCount[key] || 0) + 1;
+            });
+            let bodySize = 0, bodyCount = 0;
+            Object.keys(sizeCount).forEach(function (key) {
+                if (sizeCount[key] > bodyCount) { bodyCount = sizeCount[key]; bodySize = Number(key); }
+            });
+            if (!bodySize) bodySize = 10;
+
+            const bulletRe = /^([•\-\*▪●]|\d{1,2}[.)])\s+/;
+
+            const blocks = [];
+            let paragraph = [];
+
+            function flushParagraph() {
+                if (paragraph.length) {
+                    blocks.push(paragraph.join(' ').replace(/\s+/g, ' ').trim());
+                    paragraph = [];
+                }
+            }
+
+            lines.forEach(function (line) {
+                const text = line.text;
+                const ratio = line.size / bodySize;
+                const isBullet = bulletRe.test(text);
+                const isShort = text.length <= 70 && !/[.,;:]$/.test(text);
+
+                if (isBullet) {
+                    flushParagraph();
+                    blocks.push(text.replace(bulletRe, '- '));
+                    return;
+                }
+
+                if (ratio >= 1.4) {
+                    flushParagraph();
+                    blocks.push('# ' + text);
+                    return;
+                }
+
+                if (ratio >= 1.15 || (isShort && ratio >= 1.05)) {
+                    flushParagraph();
+                    blocks.push('## ' + text);
+                    return;
+                }
+
+                // Espaço vertical bem maior que uma linha comum = novo parágrafo.
+                if (line.gap > line.size * 1.6 && paragraph.length) {
+                    flushParagraph();
+                }
+
+                paragraph.push(text);
+            });
+            flushParagraph();
+
+            return blocks.join('\n\n');
+        }
+
         function getAttachmentPublicUrl(path) {
             return sb.storage.from(ATTACHMENTS_BUCKET).getPublicUrl(path).data.publicUrl;
         }
@@ -1415,6 +2050,225 @@
             return { path: path, name: file.name };
         }
 
+        /*
+            ==========================================================================
+            REESCREVER CONTEÚDO A PARTIR DO PDF ANEXADO + PRÉ-VISUALIZAÇÃO
+            ==========================================================================
+            Quando o admin escolhe um PDF no campo de anexo do formulário
+            principal, aparecem duas opções extras:
+            1) "Reescrever conteúdo a partir do PDF": extrai o texto do PDF
+               (no navegador, via PDF.js) e substitui o campo "Conteúdo".
+            2) "Pré-visualizar PDF": mostra o PDF num iframe, na própria
+               página, sem precisar fazer upload nem abrir outra aba.
+        */
+        let formPdfPreviewUrl = null;
+
+        postAttachmentInput.addEventListener('change', function () {
+            const file = postAttachmentInput.files[0];
+            const isPdf = !!file && getFileExt(file.name) === 'pdf';
+
+            rewriteFromPdfRow.hidden = !isPdf;
+            rewriteFromPdfStatus.textContent = '';
+            rewriteFromPdfStatus.classList.remove('is-error');
+
+            btnTogglePdfPreviewForm.hidden = !isPdf;
+            formPdfPreviewWrap.hidden = true;
+            if (formPdfPreviewUrl) {
+                URL.revokeObjectURL(formPdfPreviewUrl);
+                formPdfPreviewUrl = null;
+            }
+            formPdfPreviewFrame.src = '';
+        });
+
+        btnRewriteFromPdf.addEventListener('click', async function () {
+            const file = postAttachmentInput.files[0];
+            if (!file) return;
+
+            if (postContentTextarea.value.trim() && !confirm('Isso vai substituir o texto atual do campo "Conteúdo" pelo texto extraído do PDF. Continuar?')) {
+                return;
+            }
+
+            rewriteFromPdfStatus.classList.remove('is-error');
+            rewriteFromPdfStatus.textContent = 'Extraindo texto do PDF...';
+
+            try {
+                const text = await extractTextFromPdfFile(file);
+                postContentTextarea.value = text;
+                rewriteFromPdfStatus.textContent = 'Conteúdo reescrito a partir do PDF!';
+            } catch (err) {
+                rewriteFromPdfStatus.classList.add('is-error');
+                rewriteFromPdfStatus.textContent = err.message;
+            }
+        });
+
+        btnTogglePdfPreviewForm.addEventListener('click', function () {
+            const file = postAttachmentInput.files[0];
+            if (!file) return;
+
+            const showing = !formPdfPreviewWrap.hidden;
+            if (showing) {
+                formPdfPreviewWrap.hidden = true;
+                btnTogglePdfPreviewForm.textContent = '👁 Pré-visualizar PDF';
+                return;
+            }
+
+            if (!formPdfPreviewUrl) {
+                formPdfPreviewUrl = URL.createObjectURL(file);
+                formPdfPreviewFrame.src = formPdfPreviewUrl;
+            }
+            formPdfPreviewWrap.hidden = false;
+            btnTogglePdfPreviewForm.textContent = '🙈 Ocultar pré-visualização';
+        });
+
+        /*
+            Pré-visualização na publicação rápida (somente PDF): mesma ideia,
+            mas usando o campo de arquivo do formulário rápido.
+        */
+        let quickPdfPreviewUrl = null;
+
+        quickPdfInput.addEventListener('change', function () {
+            const file = quickPdfInput.files[0];
+            const isPdf = !!file && getFileExt(file.name) === 'pdf';
+
+            btnToggleQuickPdfPreview.hidden = !isPdf;
+            quickPdfPreviewWrap.hidden = true;
+            if (quickPdfPreviewUrl) {
+                URL.revokeObjectURL(quickPdfPreviewUrl);
+                quickPdfPreviewUrl = null;
+            }
+            quickPdfPreviewFrame.src = '';
+        });
+
+        btnToggleQuickPdfPreview.addEventListener('click', function () {
+            const file = quickPdfInput.files[0];
+            if (!file) return;
+
+            const showing = !quickPdfPreviewWrap.hidden;
+            if (showing) {
+                quickPdfPreviewWrap.hidden = true;
+                btnToggleQuickPdfPreview.textContent = '👁 Pré-visualizar PDF';
+                return;
+            }
+
+            if (!quickPdfPreviewUrl) {
+                quickPdfPreviewUrl = URL.createObjectURL(file);
+                quickPdfPreviewFrame.src = quickPdfPreviewUrl;
+            }
+            quickPdfPreviewWrap.hidden = false;
+            btnToggleQuickPdfPreview.textContent = '🙈 Ocultar pré-visualização';
+        });
+
+        /*
+            ==========================================================================
+            FOTO NO CORPO DO CONTEÚDO
+            ==========================================================================
+            Permite ao administrador enviar uma foto que é inserida como imagem
+            Markdown (![alt](url)) diretamente no ponto do cursor dentro do
+            campo "Conteúdo" — assim a foto aparece no meio do texto do artigo,
+            e não apenas na capa. O arquivo é enviado ao mesmo bucket de
+            Storage usado para os anexos (ATTACHMENTS_BUCKET).
+        */
+        const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+        btnInsertContentImage.addEventListener('click', function () {
+            postContentImageInput.click();
+        });
+
+        postContentImageInput.addEventListener('change', async function () {
+            const file = postContentImageInput.files[0];
+            if (!file) return;
+
+            if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                contentImageStatus.textContent = 'Formato não suportado. Envie JPG, PNG, WEBP ou GIF.';
+                contentImageStatus.classList.add('is-error');
+                postContentImageInput.value = '';
+                return;
+            }
+
+            contentImageStatus.classList.remove('is-error');
+            contentImageStatus.textContent = 'Enviando foto...';
+
+            try {
+                const path = 'content-' + Date.now() + '-' + sanitizeFileName(file.name);
+                const { error } = await sb.storage.from(ATTACHMENTS_BUCKET).upload(path, file, { upsert: false });
+                if (error) throw error;
+
+                const url = sb.storage.from(ATTACHMENTS_BUCKET).getPublicUrl(path).data.publicUrl;
+                const markdownImage = '\n\n![' + (file.name || 'foto') + '](' + url + ')\n\n';
+
+                // Insere no ponto do cursor (ou no final, se o campo não estiver focado).
+                const start = postContentTextarea.selectionStart != null ? postContentTextarea.selectionStart : postContentTextarea.value.length;
+                const end = postContentTextarea.selectionEnd != null ? postContentTextarea.selectionEnd : postContentTextarea.value.length;
+                const before = postContentTextarea.value.slice(0, start);
+                const after = postContentTextarea.value.slice(end);
+                postContentTextarea.value = before + markdownImage + after;
+
+                const newCursorPos = (before + markdownImage).length;
+                postContentTextarea.focus();
+                postContentTextarea.setSelectionRange(newCursorPos, newCursorPos);
+
+                contentImageStatus.textContent = 'Foto inserida no conteúdo!';
+            } catch (uploadError) {
+                contentImageStatus.classList.add('is-error');
+                contentImageStatus.textContent = 'Erro ao enviar foto: ' + uploadError.message;
+            } finally {
+                postContentImageInput.value = '';
+            }
+        });
+
+        /*
+            Insere, no ponto do cursor (ou no início, se o campo estiver vazio), um
+            esqueleto em Markdown seguindo o padrão: Título de Tratado (H1) >
+            Dissertação/Capítulo (H2) + subtítulo em itálico > Artigo (H3) >
+            parágrafos com os marcadores "Digo:", "Prova.", "Nota:" e uma citação
+            recuada — reproduzindo a estrutura do Compêndio de Teologia da
+            Comunidade Tomista. O administrador substitui os textos entre [colchetes].
+        */
+        const THEOLOGICAL_TEMPLATE = [
+            '# TRATADO SOBRE [ASSUNTO DO TRATADO]',
+            '',
+            '## DISSERTAÇÃO I.',
+            '[Subtítulo descritivo da dissertação.]',
+            '',
+            '### ARTIGO I.',
+            '[Enunciado da questão a ser respondida.]',
+            '',
+            '**Digo:** [Afirmação doutrinal que responde à questão.]',
+            '',
+            '**Prova.** [Argumentação, com apoio na Escritura, nos Padres ou na razão.]',
+            '',
+            '> [Citação bíblica, patrística ou conciliar de apoio — ex.: Gênesis 1: ...]',
+            '',
+            '**Nota:** [Esclarecimento terminológico ou distinção conceitual, se necessário.]',
+            '',
+            '---',
+            '',
+            '### ARTIGO II.',
+            '[Enunciado da segunda questão.]',
+            '',
+            '**Digo:** [Resposta.]',
+            '',
+            '**Prova.** [Argumentação.]',
+            ''
+        ].join('\n');
+
+        btnInsertTheologicalTemplate.addEventListener('click', function () {
+            const start = postContentTextarea.selectionStart != null ? postContentTextarea.selectionStart : postContentTextarea.value.length;
+            const end = postContentTextarea.selectionEnd != null ? postContentTextarea.selectionEnd : postContentTextarea.value.length;
+            const before = postContentTextarea.value.slice(0, start);
+            const after = postContentTextarea.value.slice(end);
+            const separator = before && !before.endsWith('\n\n') ? '\n\n' : '';
+            postContentTextarea.value = before + separator + THEOLOGICAL_TEMPLATE + after;
+
+            // Ativa automaticamente o estilo visual correspondente, já que o
+            // modelo inserido só faz sentido com essa formatação.
+            postStyleTheological.checked = true;
+
+            postContentTextarea.focus();
+            const newCursorPos = (before + separator + THEOLOGICAL_TEMPLATE).length;
+            postContentTextarea.setSelectionRange(newCursorPos, newCursorPos);
+        });
+
         function updateAttachmentInfoUI() {
             if (editingAttachmentPath) {
                 currentAttachmentInfo.hidden = false;
@@ -1431,6 +2285,19 @@
         });
 
         // Volta o formulário para o modo "publicar novo artigo".
+        function resetPdfRewriteAndPreviewUI() {
+            rewriteFromPdfRow.hidden = true;
+            rewriteFromPdfStatus.textContent = '';
+            rewriteFromPdfStatus.classList.remove('is-error');
+            btnTogglePdfPreviewForm.hidden = true;
+            formPdfPreviewWrap.hidden = true;
+            formPdfPreviewFrame.src = '';
+            if (formPdfPreviewUrl) {
+                URL.revokeObjectURL(formPdfPreviewUrl);
+                formPdfPreviewUrl = null;
+            }
+        }
+
         function resetPublishForm() {
             editingPostId = null;
             editingAttachmentPath = null;
@@ -1440,6 +2307,7 @@
             publishPanelTitle.textContent = 'Publicar novo artigo';
             btnSubmitPost.textContent = 'Publicar artigo';
             btnCancelEdit.hidden = true;
+            resetPdfRewriteAndPreviewUI();
         }
 
         btnCancelEdit.addEventListener('click', resetPublishForm);
@@ -1453,9 +2321,14 @@
             document.getElementById('postTitle').value = post.title || '';
             document.getElementById('postAuthor').value = post.author || '';
             document.getElementById('postExcerpt').value = post.excerpt || '';
-            document.getElementById('postContent').value = post.content || '';
+            const isTheological = hasTheologicalMarker(post.content);
+            document.getElementById('postContent').value = isTheological
+                ? stripTheologicalMarker(post.content)
+                : (post.content || '');
+            postStyleTheological.checked = isTheological;
             document.getElementById('postImage').value = post.image_url || '';
             postAttachmentInput.value = '';
+            resetPdfRewriteAndPreviewUI();
 
             updateAttachmentInfoUI();
 
@@ -1478,10 +2351,18 @@
             const title = document.getElementById('postTitle').value.trim();
             const author = document.getElementById('postAuthor').value.trim();
             const excerpt = document.getElementById('postExcerpt').value.trim();
-            const content = document.getElementById('postContent').value.trim();
+            let content = document.getElementById('postContent').value.trim();
             const image = document.getElementById('postImage').value.trim();
 
             if (!title || !author || !excerpt || !content) return;
+
+            // Grava a opção de estilo "Compêndio de Teologia" como marca invisível
+            // no início do conteúdo, para o leitor de artigo reconhecer e aplicar
+            // a formatação de Tratado/Dissertação/Artigo (ver STYLE_MARKER_THEOLOGICAL).
+            content = stripTheologicalMarker(content);
+            if (postStyleTheological.checked) {
+                content = STYLE_MARKER_THEOLOGICAL + '\n' + content;
+            }
 
             let attachmentPath = editingAttachmentPath;
             let attachmentName = editingAttachmentName;
@@ -1548,6 +2429,276 @@
             if (editingPostId === id) resetPublishForm();
             renderPosts();
         }
+
+        /*
+            ==========================================================================
+            PUBLICAÇÃO RÁPIDA: ADMINISTRADOR PUBLICA UM ARTIGO APENAS COM UM PDF
+            ==========================================================================
+            Fluxo simplificado para o administrador: em vez de preencher o
+            formulário inteiro, basta escolher um arquivo PDF. O título do
+            artigo é extraído do nome do arquivo, o PDF é enviado ao Storage
+            e vinculado como anexo do post, e o conteúdo do artigo passa a
+            ser um aviso convidando o leitor a abrir o anexo.
+        */
+        function titleFromFileName(fileName) {
+            const withoutExt = fileName.replace(/\.[^/.]+$/, '');
+            const spaced = withoutExt.replace(/[_-]+/g, ' ').trim();
+            return spaced.length ? spaced.charAt(0).toUpperCase() + spaced.slice(1) : 'Novo artigo';
+        }
+
+        quickPdfForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            quickPdfError.textContent = '';
+
+            if (!isAdmin()) {
+                quickPdfError.textContent = 'Apenas o administrador pode publicar artigos.';
+                return;
+            }
+
+            const file = quickPdfInput.files[0];
+            if (!file) return;
+
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (ext !== 'pdf') {
+                quickPdfError.textContent = 'Envie um arquivo no formato PDF.';
+                return;
+            }
+
+            btnQuickPublishPdf.disabled = true;
+            btnQuickPublishPdf.textContent = 'Publicando...';
+
+            try {
+                // Tenta extrair o texto do PDF para usar como conteúdo do
+                // artigo; se não conseguir (por exemplo, PDF escaneado sem
+                // texto selecionável), cai num texto padrão avisando sobre o anexo.
+                let content;
+                try {
+                    content = await extractTextFromPdfFile(file);
+                } catch (extractError) {
+                    content = 'Este artigo foi publicado diretamente em PDF. Use o link de anexo abaixo (ou no card do artigo) para abrir e ler o documento completo.';
+                }
+
+                const path = Date.now() + '-' + sanitizeFileName(file.name);
+                const { error: uploadError } = await sb.storage.from(ATTACHMENTS_BUCKET).upload(path, file, { upsert: false });
+                if (uploadError) throw uploadError;
+
+                const title = titleFromFileName(file.name);
+                const adminName = (currentSession && currentSession.user && currentSession.user.email) || 'Comunidade Tomista';
+
+                const payload = {
+                    title: title,
+                    author: adminName,
+                    excerpt: 'Artigo publicado em PDF. Abra o anexo para ler o conteúdo completo.',
+                    content: content,
+                    image_url: null,
+                    attachment_path: path,
+                    attachment_name: file.name
+                };
+
+                const { error: insertError } = await sb.from('posts').insert(payload);
+                if (insertError) throw insertError;
+
+                quickPdfForm.reset();
+                btnToggleQuickPdfPreview.hidden = true;
+                quickPdfPreviewWrap.hidden = true;
+                renderPosts();
+            } catch (err) {
+                quickPdfError.textContent = 'Erro ao publicar: ' + err.message;
+            } finally {
+                btnQuickPublishPdf.disabled = false;
+                btnQuickPublishPdf.textContent = 'Publicar somente com PDF';
+            }
+        });
+
+        /*
+            ==========================================================================
+            AVALIAÇÃO COM 5 ESTRELAS (tabela "ratings" no Supabase)
+            ==========================================================================
+            Qualquer visitante pode ver a média de estrelas de um artigo, mas
+            somente quem tem conta e está logado (visitante cadastrado ou
+            administrador) pode avaliar. Cada usuário tem no máximo uma nota
+            por artigo (chave única user_id + post_id na tabela "ratings"),
+            e votar de novo atualiza a nota anterior.
+
+            SQL necessário no Supabase (rodar uma vez em SQL Editor):
+
+            create table ratings (
+                id bigint generated always as identity primary key,
+                post_id bigint references posts(id) on delete cascade,
+                user_id uuid references auth.users(id) on delete cascade,
+                stars smallint check (stars between 1 and 5),
+                created_at timestamptz default now(),
+                unique (post_id, user_id)
+            );
+            alter table ratings enable row level security;
+            create policy "Qualquer um pode ler avaliações" on ratings for select using (true);
+            create policy "Usuário logado pode avaliar" on ratings for insert with check (auth.uid() = user_id);
+            create policy "Usuário só edita a própria avaliação" on ratings for update using (auth.uid() = user_id);
+        */
+        function renderStarsMarkup(avg, interactive, userStars) {
+            let html = '';
+            for (let i = 1; i <= 5; i++) {
+                const filled = interactive ? (i <= (userStars || 0)) : (i <= Math.round(avg));
+                html += '<button type="button" class="star' + (filled ? ' filled' : '') + '" data-star="' + i + '"' + (interactive ? '' : ' disabled tabindex="-1"') + '>★</button>';
+            }
+            return html;
+        }
+
+        async function loadAndRenderRating(postId) {
+            const { data: allRatings, error } = await sb.from('ratings').select('stars, user_id').eq('post_id', postId);
+
+            if (error) {
+                readerRatingSummary.textContent = '';
+                readerRatingStars.innerHTML = '';
+                return;
+            }
+
+            const total = allRatings.length;
+            const avg = total ? allRatings.reduce(function (sum, r) { return sum + r.stars; }, 0) / total : 0;
+            const canRate = !!currentSession;
+            const myRating = canRate ? allRatings.find(function (r) { return r.user_id === currentSession.user.id; }) : null;
+
+            readerRatingStars.className = 'star-rating' + (canRate ? ' interactive' : '');
+            readerRatingStars.innerHTML = renderStarsMarkup(avg, canRate, myRating ? myRating.stars : 0);
+            readerRatingSummary.textContent = total
+                ? avg.toFixed(1) + ' de 5 (' + total + (total === 1 ? ' avaliação' : ' avaliações') + ')'
+                : 'Ainda sem avaliações';
+            readerRatingLoginHint.hidden = canRate;
+
+            if (canRate) {
+                Array.prototype.forEach.call(readerRatingStars.querySelectorAll('.star'), function (btn) {
+                    btn.addEventListener('click', async function () {
+                        const stars = parseInt(btn.getAttribute('data-star'), 10);
+                        await sb.from('ratings').upsert({
+                            post_id: postId,
+                            user_id: currentSession.user.id,
+                            stars: stars
+                        }, { onConflict: 'post_id,user_id' });
+                        loadAndRenderRating(postId);
+                    });
+                });
+            }
+        }
+
+        /*
+            ==========================================================================
+            COMENTÁRIOS (tabela "comments" no Supabase)
+            ==========================================================================
+            Qualquer visitante pode ler os comentários, mas somente quem tem
+            conta e está logado pode publicar um novo comentário.
+
+            SQL necessário no Supabase (rodar uma vez em SQL Editor):
+
+            create table comments (
+                id bigint generated always as identity primary key,
+                post_id bigint references posts(id) on delete cascade,
+                user_id uuid references auth.users(id) on delete cascade,
+                author_name text not null,
+                content text not null,
+                created_at timestamptz default now()
+            );
+            alter table comments enable row level security;
+            create policy "Qualquer um pode ler comentários" on comments for select using (true);
+            create policy "Usuário logado pode comentar" on comments for insert with check (auth.uid() = user_id);
+        */
+        function renderCommentsList(comments) {
+            commentsList.innerHTML = '';
+            if (!comments.length) {
+                commentsList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Nenhum comentário ainda. Seja o primeiro a comentar.</li>';
+                return;
+            }
+            comments.forEach(function (c) {
+                const li = document.createElement('li');
+                li.className = 'comment-item';
+
+                const header = document.createElement('div');
+                header.className = 'comment-item-header';
+
+                const author = document.createElement('span');
+                author.className = 'comment-author';
+                author.textContent = c.author_name || 'Usuário';
+                header.appendChild(author);
+
+                const date = document.createElement('span');
+                date.className = 'comment-date';
+                date.textContent = formatDate(c.created_at);
+                header.appendChild(date);
+
+                li.appendChild(header);
+
+                const text = document.createElement('p');
+                text.className = 'comment-text';
+                text.textContent = c.content;
+                li.appendChild(text);
+
+                commentsList.appendChild(li);
+            });
+        }
+
+        async function loadAndRenderComments(postId) {
+            const { data: comments, error } = await sb
+                .from('comments')
+                .select('*')
+                .eq('post_id', postId)
+                .order('created_at', { ascending: true });
+
+            if (error) {
+                commentsList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Não foi possível carregar os comentários.</li>';
+                return;
+            }
+            renderCommentsList(comments || []);
+        }
+
+        // Busca e exibe a média de estrelas (somente leitura) num cartão da lista.
+        async function loadCardRatingBadge(postId, container) {
+            const { data: allRatings, error } = await sb.from('ratings').select('stars').eq('post_id', postId);
+            if (error || !allRatings || !allRatings.length) return;
+
+            const total = allRatings.length;
+            const avg = allRatings.reduce(function (sum, r) { return sum + r.stars; }, 0) / total;
+
+            const starsWrap = document.createElement('div');
+            starsWrap.className = 'star-rating';
+            starsWrap.innerHTML = renderStarsMarkup(avg, false, 0);
+            container.appendChild(starsWrap);
+
+            const label = document.createElement('span');
+            label.textContent = avg.toFixed(1) + ' (' + total + ')';
+            container.appendChild(label);
+        }
+
+        function updateCommentFormVisibility() {
+            const canComment = !!currentSession;
+            commentForm.hidden = !canComment;
+            commentLoginHint.hidden = canComment;
+        }
+
+        commentForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            if (!currentSession || !currentReaderPostId) return;
+
+            const content = commentText.value.trim();
+            if (!content) return;
+
+            const authorName = (currentSession.user.user_metadata && currentSession.user.user_metadata.name)
+                ? currentSession.user.user_metadata.name
+                : currentSession.user.email;
+
+            const { error } = await sb.from('comments').insert({
+                post_id: currentReaderPostId,
+                user_id: currentSession.user.id,
+                author_name: authorName,
+                content: content
+            });
+
+            if (error) {
+                alert('Erro ao comentar: ' + error.message);
+                return;
+            }
+
+            commentText.value = '';
+            loadAndRenderComments(currentReaderPostId);
+        });
 
         /*
             ==========================================================================
@@ -1625,6 +2776,7 @@
         });
 
         function openArticleReader(post) {
+            currentReaderPostId = post.id;
             articleReaderMeta.textContent = formatDate(post.created_at);
             articleReaderTitle.textContent = post.title;
 
@@ -1638,14 +2790,75 @@
             }
 
             if (post.attachment_path) {
-                articleReaderAttachment.href = getAttachmentPublicUrl(post.attachment_path);
+                const attachmentUrl = getAttachmentPublicUrl(post.attachment_path);
+                articleReaderAttachment.href = attachmentUrl;
                 articleReaderAttachment.textContent = '📎 ' + (post.attachment_name || 'Baixar anexo');
                 articleReaderAttachmentWrap.hidden = false;
+
+                if (readerPdfPreviewObjectUrl) {
+                    URL.revokeObjectURL(readerPdfPreviewObjectUrl);
+                    readerPdfPreviewObjectUrl = null;
+                }
+
+                const isPdf = getFileExt(post.attachment_name || post.attachment_path) === 'pdf';
+                btnToggleReaderPdfPreview.hidden = !isPdf;
+                readerPdfPreviewWrap.hidden = true;
+                btnToggleReaderPdfPreview.textContent = '👁 Pré-visualizar PDF aqui';
+                readerPdfPreviewStatus.textContent = '';
+                readerPdfPreviewStatus.classList.remove('is-error');
+                readerPdfPreviewFrame.src = '';
+                btnToggleReaderPdfPreview.onclick = async function () {
+                    const showing = !readerPdfPreviewWrap.hidden;
+                    if (showing) {
+                        readerPdfPreviewWrap.hidden = true;
+                        btnToggleReaderPdfPreview.textContent = '👁 Pré-visualizar PDF aqui';
+                        return;
+                    }
+
+                    readerPdfPreviewWrap.hidden = false;
+                    btnToggleReaderPdfPreview.textContent = '🙈 Ocultar pré-visualização';
+
+                    // O link direto do Supabase Storage geralmente vem com o
+                    // cabeçalho "Content-Disposition: attachment", o que faz o
+                    // navegador tentar baixar o PDF em vez de exibi-lo dentro
+                    // do iframe (ficando em branco). Por isso, baixamos os
+                    // bytes do PDF (fetch) e criamos uma blob URL local — essa
+                    // sim é sempre exibida embutida pelo visualizador nativo
+                    // de PDF do navegador.
+                    if (!readerPdfPreviewObjectUrl) {
+                        readerPdfPreviewStatus.textContent = 'Carregando pré-visualização...';
+                        try {
+                            const response = await fetch(attachmentUrl);
+                            if (!response.ok) throw new Error('Não foi possível carregar o PDF.');
+                            const blob = await response.blob();
+                            readerPdfPreviewObjectUrl = URL.createObjectURL(blob);
+                            readerPdfPreviewFrame.src = readerPdfPreviewObjectUrl;
+                            readerPdfPreviewStatus.textContent = '';
+                        } catch (err) {
+                            readerPdfPreviewStatus.classList.add('is-error');
+                            readerPdfPreviewStatus.textContent = 'Não foi possível carregar a pré-visualização. Use o link "Baixar anexo" acima.';
+                        }
+                    }
+                };
             } else {
                 articleReaderAttachmentWrap.hidden = true;
+                btnToggleReaderPdfPreview.hidden = true;
+                readerPdfPreviewWrap.hidden = true;
+                readerPdfPreviewFrame.src = '';
+                if (readerPdfPreviewObjectUrl) {
+                    URL.revokeObjectURL(readerPdfPreviewObjectUrl);
+                    readerPdfPreviewObjectUrl = null;
+                }
             }
 
-            readerPages = splitContentIntoPages(post.content);
+            // Estilo "Compêndio de Teologia": se o conteúdo carrega a marca,
+            // aplica a classe visual correspondente e remove a marca antes de
+            // dividir o texto em páginas (ela não deve aparecer para o leitor).
+            const isTheological = hasTheologicalMarker(post.content);
+            articleReaderBody.classList.toggle('theological-style', isTheological);
+            const readableContent = isTheological ? stripTheologicalMarker(post.content) : post.content;
+
+            readerPages = splitContentIntoPages(readableContent);
             readerPageIndex = 0;
             renderReaderPage();
 
@@ -1653,11 +2866,21 @@
 
             articleReaderBackdrop.hidden = false;
             document.body.style.overflow = 'hidden';
+
+            updateCommentFormVisibility();
+            loadAndRenderRating(post.id);
+            loadAndRenderComments(post.id);
         }
 
         function closeArticleReader() {
             articleReaderBackdrop.hidden = true;
             document.body.style.overflow = '';
+            currentReaderPostId = null;
+            readerPdfPreviewFrame.src = '';
+            if (readerPdfPreviewObjectUrl) {
+                URL.revokeObjectURL(readerPdfPreviewObjectUrl);
+                readerPdfPreviewObjectUrl = null;
+            }
         }
 
         btnCloseArticleReader.addEventListener('click', closeArticleReader);
@@ -1745,6 +2968,13 @@
 
                 const h3 = document.createElement('h3');
                 h3.textContent = post.title;
+                if (hasTheologicalMarker(post.content)) {
+                    const styleBadge = document.createElement('span');
+                    styleBadge.className = 'post-style-badge';
+                    styleBadge.textContent = '📜';
+                    styleBadge.title = 'Este artigo usa o padrão do Compêndio de Teologia';
+                    h3.appendChild(styleBadge);
+                }
                 article.appendChild(h3);
 
                 if (post.image_url) {
@@ -1759,6 +2989,12 @@
                 excerpt.className = 'post-excerpt';
                 excerpt.textContent = post.excerpt;
                 article.appendChild(excerpt);
+
+                // Média de avaliação (estrelas) exibida no cartão, somente leitura.
+                const cardRating = document.createElement('div');
+                cardRating.className = 'card-rating';
+                article.appendChild(cardRating);
+                loadCardRatingBadge(post.id, cardRating);
 
                 const footerRow = document.createElement('div');
                 footerRow.className = 'post-footer-row';
