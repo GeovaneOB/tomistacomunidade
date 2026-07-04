@@ -53,6 +53,21 @@
             --transition-base: 0.3s var(--ease);
         }
 
+        /* ---------- Animações modernas ----------
+           Conjunto pequeno de keyframes reaproveitados pelo hero, pelo painel
+           de publicação e pela entrada em cascata dos cartões do blog.
+           A preferência por "menos movimento" já é tratada globalmente em
+           tokens.css (encurta a duração de toda animação/transição do site). */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
         /* Empurra o conteúdo para baixo da navbar fixa (100px) + linha decorativa */
         .blog-main {
             background-color: var(--color-cream);
@@ -72,6 +87,7 @@
             margin: 0 auto var(--space-6);
             text-align: center;
             box-shadow: var(--shadow-md);
+            animation: fadeInUp var(--transition-slow) both;
         }
 
         .blog-hero .eyebrow {
@@ -80,6 +96,9 @@
             letter-spacing: 0.16em;
             text-transform: uppercase;
             color: var(--color-gold);
+            display: inline-block;
+            animation: fadeIn var(--transition-slow) both;
+            animation-delay: 0.12s;
         }
 
         .blog-hero h1 {
@@ -89,6 +108,8 @@
             font-weight: 700;
             line-height: 1.15;
             margin: var(--space-2) 0 var(--space-2);
+            animation: fadeInUp var(--transition-slow) both;
+            animation-delay: 0.2s;
         }
 
         .blog-hero h1 strong {
@@ -101,7 +122,13 @@
             line-height: 1.7;
             max-width: 600px;
             margin: 0 auto;
-            opacity: 0.85;
+            animation: heroParaFadeIn var(--transition-slow) both;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes heroParaFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 0.85; transform: translateY(0); }
         }
 
         /* ---------- Conta do visitante integrada à navbar ---------- */
@@ -187,6 +214,7 @@
             font-weight: 600;
         }
         .admin-secret-indicator[hidden] { display: none; }
+        .admin-secret-indicator { animation: fadeInUp var(--transition-base) both; }
 
         .admin-secret-dot {
             width: 8px;
@@ -194,6 +222,18 @@
             border-radius: 50%;
             background-color: var(--color-gold);
             box-shadow: 0 0 0 3px rgba(var(--gold-rgb), 0.25);
+            flex-shrink: 0;
+        }
+
+        #adminIndicatorEmail {
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            #adminIndicatorEmail { max-width: 140px; }
         }
 
         .admin-secret-indicator button {
@@ -390,6 +430,7 @@
             box-shadow: var(--shadow-sm);
         }
         .publish-panel[hidden] { display: none; }
+        .publish-panel { animation: fadeInUp var(--transition-slow) both; }
 
         .publish-panel h2 {
             font-family: var(--font-display);
@@ -406,28 +447,38 @@
             margin-top: 0.4rem;
         }
 
-        /* ---------- Lista de artigos ---------- */
+        /* ---------- Lista de artigos (grid moderno) ---------- */
         .blog-list {
-            max-width: 780px;
+            max-width: 1120px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-1);
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-3);
+            align-items: stretch;
         }
 
         .blog-post {
-            padding: var(--space-4) var(--space-3);
+            padding: var(--space-3);
             background-color: var(--color-white);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm);
             display: grid;
+            grid-template-rows: auto auto auto 1fr auto;
             grid-template-columns: 1fr;
             gap: 0.5rem;
             transition: transform var(--transition-base), box-shadow var(--transition-base);
+            opacity: 0;
+        }
+        /* Entrada em cascata: cada cartão recebe sua vez conforme entra na
+           tela (ver observeCardReveal no script). --reveal-delay é definido
+           por cartão via JS para escalonar a sequência. */
+        .blog-post.in-view {
+            animation: fadeInUp var(--transition-slow) both;
+            animation-delay: var(--reveal-delay, 0s);
         }
         .blog-post:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: var(--shadow-lg);
         }
 
         .blog-post .post-meta {
@@ -455,7 +506,7 @@
 
         .blog-post img.post-image {
             width: 100%;
-            max-height: 320px;
+            height: 190px;
             object-fit: cover;
             border-radius: var(--radius-sm);
             margin: 0.5rem 0;
@@ -465,6 +516,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-1);
             margin-top: 0.5rem;
         }
 
@@ -474,7 +527,14 @@
             opacity: 0.6;
         }
 
+        /* ---------- Botão "Ler artigo completo" ---------- */
+        .btn-read-article {
+            font-size: 0.78rem;
+            padding: 8px 16px;
+        }
+
         .empty-state {
+            grid-column: 1 / -1;
             text-align: center;
             color: var(--color-ink);
             opacity: 0.6;
@@ -482,10 +542,286 @@
             padding: var(--space-5) 0;
         }
 
+        /* ---------- Leitor de artigo (conteúdo principal, formato para leitura longa) ---------- */
+        .article-reader-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(28, 28, 28, 0.75);
+            backdrop-filter: blur(3px);
+            z-index: 110;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+            padding: var(--space-5) var(--space-2);
+        }
+        .article-reader-backdrop[hidden] { display: none; }
+
+        .article-reader {
+            position: relative;
+            background: var(--color-cream);
+            border-radius: var(--radius-lg);
+            max-width: 720px;
+            width: 100%;
+            margin: 0 auto;
+            padding: var(--space-6) var(--space-5);
+            box-shadow: var(--shadow-md);
+            animation: modal-in var(--transition-base);
+        }
+
+        .article-reader-close {
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            line-height: 1;
+            color: var(--color-ink);
+            opacity: 0.55;
+            cursor: pointer;
+            padding: 0;
+        }
+        .article-reader-close:hover { opacity: 1; }
+
+        .article-reader-meta {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            margin: 0 0 var(--space-1);
+        }
+
+        .article-reader h2 {
+            font-family: var(--font-display);
+            font-size: 2.1rem;
+            line-height: 1.2;
+            color: var(--color-ink);
+            margin: 0 0 var(--space-3);
+        }
+
+        .article-reader-image {
+            width: 100%;
+            max-height: 380px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            margin: 0 0 var(--space-3);
+        }
+
+        .field-hint {
+            font-size: 0.72rem;
+            color: var(--color-ink);
+            opacity: 0.6;
+            margin: 0.4rem 0 0;
+        }
+
+        .article-reader-body {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            line-height: 1.85;
+            color: var(--color-ink);
+        }
+
+        /* ---------- Conteúdo do artigo renderizado a partir do Markdown ---------- */
+        .article-reader-body :is(h1, h2, h3, h4, h5, h6) {
+            font-family: var(--font-display);
+            color: var(--color-ink);
+            line-height: 1.25;
+            margin: 1.3em 0 0.5em;
+        }
+        .article-reader-body h1 { font-size: 1.7em; }
+        .article-reader-body h2 { font-size: 1.45em; }
+        .article-reader-body h3 { font-size: 1.2em; }
+
+        .article-reader-body p { margin: 0 0 1em; }
+
+        .article-reader-body ul,
+        .article-reader-body ol {
+            margin: 0 0 1em;
+            padding-left: 1.4em;
+        }
+        .article-reader-body li { margin-bottom: 0.4em; }
+
+        .article-reader-body a {
+            color: var(--color-gold);
+            text-decoration: underline;
+        }
+
+        .article-reader-body strong { font-weight: 700; }
+        .article-reader-body em { font-style: italic; }
+
+        .article-reader-body blockquote {
+            margin: 0 0 1em;
+            padding: 0.4em 1em;
+            border-left: 3px solid var(--color-gold);
+            color: var(--color-ink);
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .article-reader-body code {
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.85em;
+            background: rgba(var(--gold-rgb), 0.12);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+        }
+        .article-reader-body pre {
+            background: rgba(var(--ink-rgb), 0.06);
+            padding: var(--space-2);
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            margin: 0 0 1em;
+        }
+        .article-reader-body pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .article-reader-body img {
+            max-width: 100%;
+            border-radius: var(--radius-sm);
+            margin: 0.5em 0;
+        }
+
+        .article-reader-body hr {
+            border: none;
+            border-top: 1px solid rgba(var(--gold-rgb), 0.3);
+            margin: 1.5em 0;
+        }
+
+        .article-reader-author {
+            margin-top: var(--space-4);
+            padding-top: var(--space-2);
+            border-top: 1px solid rgba(var(--gold-rgb), 0.3);
+            font-size: 0.85rem;
+            color: var(--color-ink);
+            opacity: 0.65;
+        }
+
+        .article-reader-attachment-wrap {
+            margin: 0 0 var(--space-3);
+        }
+        .article-reader-attachment-wrap[hidden] { display: none; }
+
+        .article-reader-attachment-title {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink);
+            opacity: 0.55;
+            margin: 0 0 0.35rem;
+        }
+
+        .article-reader-attachment {
+            display: inline-block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--color-gold);
+            text-decoration: none;
+        }
+        .article-reader-attachment:hover { text-decoration: underline; }
+
+        .article-reader-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-2);
+            margin-top: var(--space-4);
+            padding-top: var(--space-3);
+            border-top: 1px solid rgba(var(--gold-rgb), 0.25);
+        }
+        .article-reader-pagination button:disabled {
+            opacity: 0.35;
+            cursor: default;
+            pointer-events: none;
+        }
+        .article-reader-pagination span {
+            font-size: 0.8rem;
+            color: var(--color-ink);
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        /* ---------- Anexo no formulário de publicação/edição ---------- */
+        .current-attachment-info {
+            font-size: 0.78rem;
+            color: var(--color-ink);
+            opacity: 0.75;
+            margin: 0.5rem 0 0;
+        }
+        .current-attachment-info button {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--color-error);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* ---------- Anexo indicado no card da lista ---------- */
+        .post-attachment-badge {
+            font-size: 0.85rem;
+            text-decoration: none;
+            margin-left: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .article-reader { padding: var(--space-4) var(--space-3); }
+            .article-reader h2 { font-size: 1.6rem; }
+        }
+
         @media (max-width: 600px) {
             .blog-hero { padding: var(--space-4) var(--space-3); }
             .blog-hero h1 { font-size: 30px; }
             .nav-account-name { display: none; }
+        }
+
+        /* ---------- Responsividade adicional ----------
+           A navbar compartilhada (tokens.css) empilha em coluna abaixo de
+           768px, ficando mais alta; o espaço reservado no topo do blog
+           precisa acompanhar essa mudança para o hero não ficar coberto. */
+        @media screen and (max-width: 768px) {
+            .blog-main { padding-top: 260px; }
+
+            .blog-list { grid-template-columns: 1fr; }
+
+            .admin-modal { max-width: 100%; }
+
+            .article-reader { padding: var(--space-5) var(--space-4); }
+        }
+
+        @media screen and (max-width: 480px) {
+            .blog-main { padding-top: 320px; padding-left: 4%; padding-right: 4%; }
+
+            .blog-hero h1 { font-size: 26px; }
+            .blog-hero p { font-size: 15px; }
+
+            .admin-modal-actions {
+                flex-wrap: wrap;
+                justify-content: stretch;
+            }
+            .admin-modal-actions .btn-ct { flex: 1 1 100%; text-align: center; }
+
+            .article-reader-pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+                gap: var(--space-1);
+            }
+
+            .publish-panel .publish-actions {
+                flex-wrap: wrap;
+            }
+            .publish-panel .publish-actions .btn-ct { flex: 1 1 100%; text-align: center; }
+
+            .blog-post .post-footer-row { flex-direction: column; align-items: stretch; }
+            .blog-post .post-footer-row .btn-ct { text-align: center; }
         }
     </style>
 </head>
@@ -627,11 +963,15 @@
 
         <!-- Painel de publicação: só fica visível quando o admin está logado -->
         <section class="publish-panel" id="publishPanel" hidden>
-            <h2>Publicar novo artigo</h2>
+            <h2 id="publishPanelTitle">Publicar novo artigo</h2>
             <form id="newPostForm">
                 <div class="field-group">
                     <label for="postTitle">Título</label>
                     <input type="text" id="postTitle" required>
+                </div>
+                <div class="field-group">
+                    <label for="postAuthor">Nome do autor</label>
+                    <input type="text" id="postAuthor" placeholder="Quem escreveu este artigo" required>
                 </div>
                 <div class="field-group">
                     <label for="postExcerpt">Resumo</label>
@@ -639,14 +979,24 @@
                 </div>
                 <div class="field-group">
                     <label for="postContent">Conteúdo</label>
-                    <textarea id="postContent" required></textarea>
+                    <textarea id="postContent" required placeholder="Escreva normalmente ou use Markdown: **negrito**, _itálico_, # Título, - lista, [link](url)..."></textarea>
+                    <p class="field-hint">Aceita Markdown (títulos, negrito, listas, links, citações...) ou apenas texto corrido — os dois funcionam.</p>
                 </div>
                 <div class="field-group">
                     <label for="postImage">URL da imagem (opcional)</label>
                     <input type="url" id="postImage" placeholder="https://...">
                 </div>
+                <div class="field-group">
+                    <label for="postAttachment">📎 Anexar documento (PDF ou DOCX, opcional)</label>
+                    <input type="file" id="postAttachment" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <p class="current-attachment-info" id="currentAttachmentInfo" hidden>
+                        Anexo atual: <span id="currentAttachmentName"></span> —
+                        <button type="button" id="btnRemoveAttachment">remover anexo</button>
+                    </p>
+                </div>
                 <div class="publish-actions">
-                    <button type="submit" class="btn-ct solid">Publicar artigo</button>
+                    <button type="button" class="btn-ct outline" id="btnCancelEdit" hidden>Cancelar edição</button>
+                    <button type="submit" class="btn-ct solid" id="btnSubmitPost">Publicar artigo</button>
                 </div>
             </form>
         </section>
@@ -655,6 +1005,33 @@
         <section class="blog-list" id="blogList" aria-live="polite">
             <!-- Preenchido dinamicamente via JavaScript -->
         </section>
+
+        <!--
+            Leitor de artigo: aberto pelo botão "Ler artigo completo" em cada
+            card. Mostra apenas o conteúdo principal do post (sem os outros
+            elementos da página), num formato pensado para leitura longa.
+            Textos grandes são divididos em páginas (ver paginação abaixo).
+            Disponível para todos os visitantes, sem precisar de login.
+        -->
+        <div class="article-reader-backdrop" id="articleReaderBackdrop" hidden>
+            <div class="article-reader" role="dialog" aria-modal="true" aria-labelledby="articleReaderTitle">
+                <button type="button" class="article-reader-close" id="btnCloseArticleReader" aria-label="Fechar leitura">&times;</button>
+                <p class="article-reader-meta" id="articleReaderMeta"></p>
+                <h2 id="articleReaderTitle"></h2>
+                <img class="article-reader-image" id="articleReaderImage" alt="" hidden>
+                <div class="article-reader-attachment-wrap" id="articleReaderAttachmentWrap" hidden>
+                    <p class="article-reader-attachment-title">Anexos</p>
+                    <a class="article-reader-attachment" id="articleReaderAttachment" href="#" target="_blank" rel="noopener">📎 Baixar anexo</a>
+                </div>
+                <div class="article-reader-body" id="articleReaderBody"></div>
+                <div class="article-reader-pagination" id="articleReaderPagination" hidden>
+                    <button type="button" class="btn-ct outline" id="btnReaderPrev">‹ Anterior</button>
+                    <span id="articleReaderPageInfo"></span>
+                    <button type="button" class="btn-ct outline" id="btnReaderNext">Próxima ›</button>
+                </div>
+                <p class="article-reader-author" id="articleReaderAuthor"></p>
+            </div>
+        </div>
 
     </main>
 
@@ -665,12 +1042,16 @@
     -->
     <div class="admin-secret-indicator" id="adminIndicator" hidden>
         <span class="admin-secret-dot" aria-hidden="true"></span>
-        <span>Administrador</span>
+        <span id="adminIndicatorEmail">Administrador</span>
         <button type="button" id="btnAdminLogout">Sair</button>
     </div>
 
     <!-- SDK do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Conversão de Markdown para HTML (conteúdo do artigo) + sanitização -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
     <script>
     (function () {
@@ -687,17 +1068,29 @@
         const SUPABASE_URL = 'https://ajdcxxtpgkqhnukgbrit.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZGN4eHRwZ2txaG51a2dicml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwODAzOTUsImV4cCI6MjA5ODY1NjM5NX0.zAcqnENHIhYK6sihvB9_c7fUwZNAqt35vT_DIIvLrTo';
 
-        // Precisa ser o MESMO e-mail usado nas policies de RLS da tabela "posts"
-        // e o mesmo e-mail do usuário administrador criado no painel do Supabase
-        // (Authentication → Users).
-
+        // Lista de e-mails com permissão de administrador. Cada e-mail aqui
+        // precisa também: (1) ter uma conta criada em Authentication → Users
+        // no painel do Supabase, e (2) estar liberado nas policies de RLS da
+        // tabela "posts" (ver RLS-SUPABASE-GUIA.md, seção 9, se estiver usando
+        // a tabela "admins" no banco em vez de e-mails fixos no SQL).
         const ADMIN_EMAILS = [
-            'tomistacomunidade@gmail.com',
-            'segundo-admin@dominio.com'
+            'tomistacomunidade@gmail.com', 'fleizinfp@gmail.com'
         ];
+
+        // Nome do bucket de Storage usado para os anexos (PDF/DOCX) dos artigos.
+        // Precisa existir no Supabase com esse mesmo nome — ver guia
+        // SUPABASE-ANEXOS-SETUP.md.
+        const ATTACHMENTS_BUCKET = 'post-attachments';
 
         const { createClient } = supabase;
         const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // "breaks: true" faz o texto normal (sem sintaxe de Markdown) continuar
+        // funcionando bem: uma quebra de linha simples já vira <br>, então quem
+        // só escreve texto corrido não precisa aprender Markdown para nada.
+        if (window.marked) {
+            marked.setOptions({ breaks: true, gfm: true });
+        }
 
         /*
             ==========================================================================
@@ -719,12 +1112,20 @@
         // ---------- Elementos: administrador ----------
         const btnAdminLogout = document.getElementById('btnAdminLogout');
         const adminIndicator = document.getElementById('adminIndicator');
+        const adminIndicatorEmail = document.getElementById('adminIndicatorEmail');
         const adminModal = document.getElementById('adminModal');
         const adminLoginForm = document.getElementById('adminLoginForm');
         const adminError = document.getElementById('adminError');
         const btnCancelLogin = document.getElementById('btnCancelLogin');
         const publishPanel = document.getElementById('publishPanel');
+        const publishPanelTitle = document.getElementById('publishPanelTitle');
         const newPostForm = document.getElementById('newPostForm');
+        const btnSubmitPost = document.getElementById('btnSubmitPost');
+        const btnCancelEdit = document.getElementById('btnCancelEdit');
+        const postAttachmentInput = document.getElementById('postAttachment');
+        const currentAttachmentInfo = document.getElementById('currentAttachmentInfo');
+        const currentAttachmentName = document.getElementById('currentAttachmentName');
+        const btnRemoveAttachment = document.getElementById('btnRemoveAttachment');
         const blogList = document.getElementById('blogList');
 
         // ---------- Elementos: visitante (cadastro/login), na navbar ----------
@@ -746,8 +1147,33 @@
         const visitorRegisterForm = document.getElementById('visitorRegisterForm');
         const visitorRegisterError = document.getElementById('visitorRegisterError');
 
+        // ---------- Elementos: leitor de artigo (aberto para todos os visitantes) ----------
+        const articleReaderBackdrop = document.getElementById('articleReaderBackdrop');
+        const btnCloseArticleReader = document.getElementById('btnCloseArticleReader');
+        const articleReaderMeta = document.getElementById('articleReaderMeta');
+        const articleReaderTitle = document.getElementById('articleReaderTitle');
+        const articleReaderImage = document.getElementById('articleReaderImage');
+        const articleReaderAttachmentWrap = document.getElementById('articleReaderAttachmentWrap');
+        const articleReaderAttachment = document.getElementById('articleReaderAttachment');
+        const articleReaderBody = document.getElementById('articleReaderBody');
+        const articleReaderAuthor = document.getElementById('articleReaderAuthor');
+        const articleReaderPagination = document.getElementById('articleReaderPagination');
+        const articleReaderPageInfo = document.getElementById('articleReaderPageInfo');
+        const btnReaderPrev = document.getElementById('btnReaderPrev');
+        const btnReaderNext = document.getElementById('btnReaderNext');
+
         // Sessão atual (preenchida pelo Supabase Auth)
         let currentSession = null;
+
+        // Estado do formulário de publicação: null = criando um artigo novo;
+        // com valor = editando o artigo com esse id.
+        let editingPostId = null;
+        let editingAttachmentPath = null;
+        let editingAttachmentName = null;
+
+        // Estado da paginação do leitor de artigo.
+        let readerPages = [];
+        let readerPageIndex = 0;
 
         function isAdmin() {
             return !!currentSession && ADMIN_EMAILS.includes(currentSession.user.email);
@@ -777,6 +1203,9 @@
             const admin = isAdmin();
             adminIndicator.hidden = !admin;
             publishPanel.hidden = !admin;
+            if (admin) {
+                adminIndicatorEmail.textContent = session.user.email;
+            }
 
             renderPosts();
         }
@@ -818,7 +1247,7 @@
                 return;
             }
             if (!ADMIN_EMAILS.includes(email)) {
-                // Logou com uma conta válida do Supabase, mas que não é a do admin.
+                // Logou com uma conta válida do Supabase, mas que não está na lista de admins.
                 await sb.auth.signOut();
                 adminError.textContent = 'Esta conta não tem permissão de administrador.';
                 return;
@@ -958,7 +1387,86 @@
             ==========================================================================
         */
 
-        // ---------- Publicar novo artigo (somente admin) ----------
+        const ALLOWED_ATTACHMENT_EXT = ['pdf', 'doc', 'docx'];
+
+        function sanitizeFileName(name) {
+            return name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        }
+
+        function getAttachmentPublicUrl(path) {
+            return sb.storage.from(ATTACHMENTS_BUCKET).getPublicUrl(path).data.publicUrl;
+        }
+
+        // Envia o arquivo escolhido no campo de anexo para o Supabase Storage.
+        // Retorna { path, name } do arquivo enviado, ou null se nada foi escolhido.
+        async function uploadAttachmentIfAny() {
+            const file = postAttachmentInput.files[0];
+            if (!file) return null;
+
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (!ALLOWED_ATTACHMENT_EXT.includes(ext)) {
+                throw new Error('Formato não suportado. Envie um arquivo PDF ou DOCX.');
+            }
+
+            const path = Date.now() + '-' + sanitizeFileName(file.name);
+            const { error } = await sb.storage.from(ATTACHMENTS_BUCKET).upload(path, file, { upsert: false });
+            if (error) throw error;
+
+            return { path: path, name: file.name };
+        }
+
+        function updateAttachmentInfoUI() {
+            if (editingAttachmentPath) {
+                currentAttachmentInfo.hidden = false;
+                currentAttachmentName.textContent = editingAttachmentName || editingAttachmentPath;
+            } else {
+                currentAttachmentInfo.hidden = true;
+            }
+        }
+
+        btnRemoveAttachment.addEventListener('click', function () {
+            editingAttachmentPath = null;
+            editingAttachmentName = null;
+            updateAttachmentInfoUI();
+        });
+
+        // Volta o formulário para o modo "publicar novo artigo".
+        function resetPublishForm() {
+            editingPostId = null;
+            editingAttachmentPath = null;
+            editingAttachmentName = null;
+            newPostForm.reset();
+            currentAttachmentInfo.hidden = true;
+            publishPanelTitle.textContent = 'Publicar novo artigo';
+            btnSubmitPost.textContent = 'Publicar artigo';
+            btnCancelEdit.hidden = true;
+        }
+
+        btnCancelEdit.addEventListener('click', resetPublishForm);
+
+        // Preenche o formulário com os dados de um artigo existente para edição.
+        function startEditPost(post) {
+            editingPostId = post.id;
+            editingAttachmentPath = post.attachment_path || null;
+            editingAttachmentName = post.attachment_name || null;
+
+            document.getElementById('postTitle').value = post.title || '';
+            document.getElementById('postAuthor').value = post.author || '';
+            document.getElementById('postExcerpt').value = post.excerpt || '';
+            document.getElementById('postContent').value = post.content || '';
+            document.getElementById('postImage').value = post.image_url || '';
+            postAttachmentInput.value = '';
+
+            updateAttachmentInfoUI();
+
+            publishPanelTitle.textContent = 'Editar artigo';
+            btnSubmitPost.textContent = 'Salvar alterações';
+            btnCancelEdit.hidden = false;
+
+            publishPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ---------- Publicar novo artigo OU salvar edição (somente admin) ----------
         newPostForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
@@ -968,31 +1476,62 @@
             }
 
             const title = document.getElementById('postTitle').value.trim();
+            const author = document.getElementById('postAuthor').value.trim();
             const excerpt = document.getElementById('postExcerpt').value.trim();
             const content = document.getElementById('postContent').value.trim();
             const image = document.getElementById('postImage').value.trim();
 
-            if (!title || !excerpt || !content) return;
+            if (!title || !author || !excerpt || !content) return;
 
-            const { error } = await sb.from('posts').insert({
-                title: title,
-                excerpt: excerpt,
-                content: content,
-                image_url: image || null,
-                author: 'Comunidade Tomista'
-            });
+            let attachmentPath = editingAttachmentPath;
+            let attachmentName = editingAttachmentName;
 
-            if (error) {
-                alert('Erro ao publicar: ' + error.message);
+            try {
+                const uploaded = await uploadAttachmentIfAny();
+                if (uploaded) {
+                    // Se estava editando e já existia um anexo diferente, remove o antigo do Storage.
+                    if (editingPostId && editingAttachmentPath && editingAttachmentPath !== uploaded.path) {
+                        await sb.storage.from(ATTACHMENTS_BUCKET).remove([editingAttachmentPath]);
+                    }
+                    attachmentPath = uploaded.path;
+                    attachmentName = uploaded.name;
+                }
+                // Se nenhum arquivo novo foi escolhido, attachmentPath/attachmentName já
+                // vieram de editingAttachmentPath/editingAttachmentName no início da função
+                // (null se o admin clicou em "remover anexo").
+            } catch (uploadError) {
+                alert('Erro ao enviar anexo: ' + uploadError.message);
                 return;
             }
 
-            newPostForm.reset();
+            const payload = {
+                title: title,
+                author: author,
+                excerpt: excerpt,
+                content: content,
+                image_url: image || null,
+                attachment_path: attachmentPath,
+                attachment_name: attachmentName
+            };
+
+            let error;
+            if (editingPostId) {
+                ({ error } = await sb.from('posts').update(payload).eq('id', editingPostId));
+            } else {
+                ({ error } = await sb.from('posts').insert(payload));
+            }
+
+            if (error) {
+                alert('Erro ao salvar: ' + error.message);
+                return;
+            }
+
+            resetPublishForm();
             renderPosts();
         });
 
         // ---------- Excluir artigo (somente admin, protegido também por RLS) ----------
-        async function deletePost(id) {
+        async function deletePost(id, attachmentPath) {
             if (!isAdmin()) return;
             if (!confirm('Excluir este artigo?')) return;
 
@@ -1001,8 +1540,133 @@
                 alert('Erro ao excluir: ' + error.message);
                 return;
             }
+
+            if (attachmentPath) {
+                await sb.storage.from(ATTACHMENTS_BUCKET).remove([attachmentPath]);
+            }
+
+            if (editingPostId === id) resetPublishForm();
             renderPosts();
         }
+
+        /*
+            ==========================================================================
+            LEITOR DE ARTIGO (conteúdo principal em formato para leitura longa,
+            dividido em páginas quando o texto é muito extenso)
+            ==========================================================================
+            Aberto pelo botão "Ler artigo completo" em cada card. Não exige
+            login nem é restrito ao admin — qualquer visitante pode usar.
+        */
+        const READER_PAGE_CHAR_LIMIT = 1800;
+
+        // Divide o texto em páginas, preferindo quebrar entre parágrafos
+        // (linhas em branco) para não cortar uma frase no meio.
+        function splitContentIntoPages(text) {
+            const paragraphs = (text || '').split(/\n{2,}/);
+            const pages = [];
+            let current = '';
+
+            paragraphs.forEach(function (paragraph) {
+                const candidate = current ? current + '\n\n' + paragraph : paragraph;
+                if (candidate.length > READER_PAGE_CHAR_LIMIT && current) {
+                    pages.push(current);
+                    current = paragraph;
+                } else {
+                    current = candidate;
+                }
+            });
+            if (current) pages.push(current);
+
+            return pages.length ? pages : [text || ''];
+        }
+
+        // Converte um trecho em Markdown (ou texto normal) para HTML seguro.
+        // Funciona igual para os dois casos: quem escreve texto corrido recebe
+        // parágrafos normais; quem usa sintaxe de Markdown recebe a formatação.
+        function renderMarkdown(text) {
+            if (!window.marked || !window.DOMPurify) {
+                // Se as bibliotecas não carregarem por algum motivo, cai para
+                // texto simples em vez de quebrar a página.
+                const fallback = document.createElement('div');
+                fallback.textContent = text || '';
+                return fallback.innerHTML;
+            }
+            const rawHtml = marked.parse(text || '');
+            return DOMPurify.sanitize(rawHtml);
+        }
+
+        function renderReaderPage() {
+            articleReaderBody.innerHTML = renderMarkdown(readerPages[readerPageIndex]);
+
+            const total = readerPages.length;
+            if (total > 1) {
+                articleReaderPagination.hidden = false;
+                articleReaderPageInfo.textContent = 'Página ' + (readerPageIndex + 1) + ' de ' + total;
+                btnReaderPrev.disabled = readerPageIndex === 0;
+                btnReaderNext.disabled = readerPageIndex === total - 1;
+            } else {
+                articleReaderPagination.hidden = true;
+            }
+
+            articleReaderBackdrop.scrollTop = 0;
+        }
+
+        btnReaderPrev.addEventListener('click', function () {
+            if (readerPageIndex > 0) {
+                readerPageIndex -= 1;
+                renderReaderPage();
+            }
+        });
+        btnReaderNext.addEventListener('click', function () {
+            if (readerPageIndex < readerPages.length - 1) {
+                readerPageIndex += 1;
+                renderReaderPage();
+            }
+        });
+
+        function openArticleReader(post) {
+            articleReaderMeta.textContent = formatDate(post.created_at);
+            articleReaderTitle.textContent = post.title;
+
+            if (post.image_url) {
+                articleReaderImage.src = post.image_url;
+                articleReaderImage.alt = post.title;
+                articleReaderImage.hidden = false;
+            } else {
+                articleReaderImage.hidden = true;
+                articleReaderImage.removeAttribute('src');
+            }
+
+            if (post.attachment_path) {
+                articleReaderAttachment.href = getAttachmentPublicUrl(post.attachment_path);
+                articleReaderAttachment.textContent = '📎 ' + (post.attachment_name || 'Baixar anexo');
+                articleReaderAttachmentWrap.hidden = false;
+            } else {
+                articleReaderAttachmentWrap.hidden = true;
+            }
+
+            readerPages = splitContentIntoPages(post.content);
+            readerPageIndex = 0;
+            renderReaderPage();
+
+            articleReaderAuthor.textContent = 'Por ' + (post.author || 'Comunidade Tomista');
+
+            articleReaderBackdrop.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleReader() {
+            articleReaderBackdrop.hidden = true;
+            document.body.style.overflow = '';
+        }
+
+        btnCloseArticleReader.addEventListener('click', closeArticleReader);
+        articleReaderBackdrop.addEventListener('click', function (e) {
+            if (e.target === articleReaderBackdrop) closeArticleReader();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !articleReaderBackdrop.hidden) closeArticleReader();
+        });
 
         // ---------- Renderização da lista ----------
         function formatDate(iso) {
@@ -1014,6 +1678,30 @@
             const d = document.createElement('div');
             d.textContent = str == null ? '' : str;
             return d.innerHTML;
+        }
+
+        // ---------- Revelação em cascata dos cartões do blog ----------
+        // Cada cartão só recebe a animação de entrada quando entra na tela,
+        // em vez de todos animarem juntos no carregamento — efeito de
+        // "scroll reveal" mais moderno, na mesma linha do que já existe em
+        // script.js para as outras páginas do site.
+        var cardObserver = ("IntersectionObserver" in window)
+            ? new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("in-view");
+                        cardObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 })
+            : null;
+
+        function observeCardReveal(el) {
+            if (cardObserver) {
+                cardObserver.observe(el);
+            } else {
+                el.classList.add("in-view");
+            }
         }
 
         async function renderPosts() {
@@ -1035,13 +1723,24 @@
                 return;
             }
 
-            posts.forEach(function (post) {
+            posts.forEach(function (post, index) {
                 const article = document.createElement('article');
                 article.className = 'blog-post';
+                article.style.setProperty('--reveal-delay', (index % 6) * 0.08 + 's');
 
                 const meta = document.createElement('p');
                 meta.className = 'post-meta';
                 meta.textContent = formatDate(post.created_at);
+                if (post.attachment_path) {
+                    const badge = document.createElement('a');
+                    badge.className = 'post-attachment-badge';
+                    badge.href = getAttachmentPublicUrl(post.attachment_path);
+                    badge.target = '_blank';
+                    badge.rel = 'noopener';
+                    badge.title = post.attachment_name || 'Anexo';
+                    badge.textContent = '📎';
+                    meta.appendChild(badge);
+                }
                 article.appendChild(meta);
 
                 const h3 = document.createElement('h3');
@@ -1069,17 +1768,32 @@
                 author.textContent = 'Por ' + (post.author || 'Comunidade Tomista');
                 footerRow.appendChild(author);
 
+                const readBtn = document.createElement('button');
+                readBtn.type = 'button';
+                readBtn.className = 'btn-ct outline btn-read-article';
+                readBtn.textContent = 'Ler artigo completo';
+                readBtn.addEventListener('click', function () { openArticleReader(post); });
+                footerRow.appendChild(readBtn);
+
                 if (isAdmin()) {
+                    const editBtn = document.createElement('button');
+                    editBtn.type = 'button';
+                    editBtn.className = 'btn-ct outline';
+                    editBtn.textContent = 'Editar';
+                    editBtn.addEventListener('click', function () { startEditPost(post); });
+                    footerRow.appendChild(editBtn);
+
                     const del = document.createElement('button');
                     del.type = 'button';
                     del.className = 'btn-ct danger';
                     del.textContent = 'Excluir';
-                    del.addEventListener('click', function () { deletePost(post.id); });
+                    del.addEventListener('click', function () { deletePost(post.id, post.attachment_path); });
                     footerRow.appendChild(del);
                 }
 
                 article.appendChild(footerRow);
                 blogList.appendChild(article);
+                observeCardReveal(article);
             });
         }
 
