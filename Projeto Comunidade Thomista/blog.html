@@ -248,6 +248,160 @@
         }
         .admin-secret-indicator button:hover { text-decoration: underline; }
 
+        /*
+            ---------- Aba lateral do administrador (usuários online + comentários) ----------
+            Painel deslizante, visível apenas quando existe sessão de admin ativa.
+            Aberto pelo botão "Painel" dentro do indicador discreto do administrador.
+        */
+        .admin-sidebar-backdrop {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(var(--ink-rgb), 0.35);
+            z-index: 190;
+        }
+        .admin-sidebar-backdrop[hidden] { display: none; }
+
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: min(380px, 92vw);
+            background-color: var(--color-cream);
+            color: var(--color-ink);
+            box-shadow: var(--shadow-md);
+            z-index: 191;
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-3);
+            box-sizing: border-box;
+            overflow-y: auto;
+            animation: fadeInUp var(--transition-base) both;
+        }
+        .admin-sidebar[hidden] { display: none; }
+
+        .admin-sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+        .admin-sidebar-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            margin: 0;
+        }
+        .admin-sidebar-close {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--color-ink);
+            opacity: 0.6;
+        }
+        .admin-sidebar-close:hover { opacity: 1; }
+
+        .admin-sidebar-panel { display: flex; flex-direction: column; gap: var(--space-2); }
+        .admin-sidebar-panel[hidden] { display: none; }
+
+        .admin-sidebar-hint {
+            font-size: 0.78rem;
+            color: var(--color-ink);
+            opacity: 0.6;
+            margin: 0 0 var(--space-1);
+        }
+
+        .online-users-list, .admin-comments-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .online-user-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--color-white);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            box-shadow: var(--shadow-sm);
+            font-size: 0.82rem;
+        }
+        .online-user-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #3ba25a;
+            flex-shrink: 0;
+        }
+        .online-user-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .online-user-role {
+            margin-left: auto;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--color-gold);
+            white-space: nowrap;
+        }
+
+        .admin-comment-item {
+            background-color: var(--color-white);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            box-shadow: var(--shadow-sm);
+            font-size: 0.82rem;
+        }
+        .admin-comment-item .comment-item-header { margin-bottom: 0.25rem; }
+        .admin-comment-post-title {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            margin-bottom: 0.2rem;
+        }
+        .admin-comment-item .comment-text { font-size: 0.85rem; margin-bottom: 0.4rem; }
+
+        .comment-item-actions {
+            display: flex;
+            gap: var(--space-2);
+            margin-top: 0.4rem;
+        }
+        .comment-item-actions[hidden] { display: none; }
+        .comment-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0;
+            color: var(--color-gold);
+        }
+        .comment-action-btn:hover { text-decoration: underline; }
+        .comment-action-btn.danger { color: var(--color-error); }
+
+        .comment-edit-form { margin-top: 0.5rem; }
+        .comment-edit-form textarea {
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            padding: 0.6rem 0.7rem;
+            border: 1.5px solid rgba(var(--gold-rgb), 0.5);
+            border-radius: var(--radius-sm);
+            background: var(--color-white);
+            color: var(--color-ink);
+            box-sizing: border-box;
+            min-height: 60px;
+            resize: vertical;
+            margin-bottom: 0.5rem;
+        }
+        .comment-edit-form-actions { display: flex; gap: var(--space-2); }
+
         /* ---------- Abas dentro do modal (Entrar / Cadastrar) ---------- */
         .modal-tabs {
             display: flex;
@@ -446,6 +600,69 @@
             gap: var(--space-1);
             margin-top: 0.4rem;
         }
+
+        /* ---------- Seções organizadas do formulário de publicação ---------- */
+        .form-section {
+            margin: 0 0 var(--space-4);
+            padding: var(--space-3) var(--space-3) var(--space-1);
+            background: rgba(var(--gold-rgb), 0.04);
+            border: 1px solid rgba(var(--gold-rgb), 0.2);
+            border-radius: var(--radius-sm);
+        }
+        .form-section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            margin: 0 0 var(--space-3);
+        }
+        .form-section-title .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-gold);
+            color: var(--color-white);
+            font-size: 0.68rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+        }
+        @media (max-width: 640px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+        .article-structure-legend {
+            margin-top: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            background: var(--color-white);
+            border: 1px dashed rgba(var(--gold-rgb), 0.4);
+            border-radius: var(--radius-sm);
+        }
+        .article-structure-legend-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-ink);
+            opacity: 0.7;
+            margin: 0 0 0.4rem;
+        }
+        .article-structure-legend ul {
+            margin: 0 0 0.4rem;
+            padding-left: 1.2em;
+            font-size: 0.82rem;
+            color: var(--color-ink);
+        }
+        .article-structure-legend li { margin-bottom: 0.2em; }
 
         /* ---------- Lista de artigos (grid moderno) ---------- */
         .blog-list {
@@ -705,6 +922,7 @@
         */
         .article-reader-body.theological-style {
             font-family: var(--font-display);
+            text-align: center;
         }
 
         /* Cabeçalho decorativo, como o "COMUNIDADE TOMISTA" do topo de cada página do PDF */
@@ -760,13 +978,16 @@
 
         /* Título de Artigo (nível 3) — ex.: "ARTIGO I." */
         .article-reader-body.theological-style h3 {
+            text-align: center;
             text-transform: uppercase;
             font-size: 1.08em;
             font-weight: 700;
+            letter-spacing: 0.04em;
             color: var(--color-gold);
-            border-left: 3px solid var(--color-gold);
-            padding-left: 0.6em;
+            padding-bottom: 0.3em;
+            border-bottom: 1px solid rgba(var(--gold-rgb), 0.4);
             margin: 1.4em 0 0.6em;
+            display: inline-block;
         }
 
         /* Marcadores inline de argumentação: "Digo:", "Prova.", "Nota:", "R." */
@@ -780,8 +1001,11 @@
             border-left: 3px solid var(--color-gold);
             background: rgba(var(--gold-rgb), 0.06);
             border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            padding: 0.6em 1em;
+            padding: 0.6em 1.2em;
+            margin: 1em auto;
+            max-width: 90%;
             font-style: italic;
+            text-align: center;
         }
 
         /* Divisor entre Dissertações/Artigos, equivalente à linha horizontal do PDF */
@@ -789,6 +1013,19 @@
             width: 60%;
             margin: 2em auto;
             border-top: 1px solid rgba(var(--gold-rgb), 0.5);
+        }
+
+        /* Listas também acompanham a centralização geral do modelo */
+        .article-reader-body.theological-style ul,
+        .article-reader-body.theological-style ol {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+
+        /* Imagens do conteúdo centralizadas, como no modelo do PDF */
+        .article-reader-body.theological-style img {
+            display: block;
+            margin: 1em auto;
         }
 
         /* Selo "Compêndio" no cartão da lista de artigos */
@@ -1003,6 +1240,18 @@
             opacity: 0.55;
             margin: 0.3rem 0 0;
         }
+        .rating-remove-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 0.78rem;
+            color: var(--color-error, #b23b3b);
+            opacity: 0.75;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .rating-remove-btn:hover { opacity: 1; }
+        .rating-remove-btn[hidden] { display: none; }
 
         .card-rating {
             display: flex;
@@ -1052,6 +1301,15 @@
             font-size: 0.82rem;
             font-weight: 700;
             color: var(--color-ink);
+        }
+        .comment-author-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .comment-author-stars .star {
+            font-size: 0.7rem;
         }
         .comment-date {
             font-size: 0.7rem;
@@ -1154,7 +1412,18 @@
                         alt="Logo da Comunidade Tomista">
                 </a>
             </div>
-            <nav class="navbar-titles" aria-label="Menu principal">
+            <button
+                type="button"
+                class="navbar-toggle"
+                id="navbarToggle"
+                aria-label="Abrir menu"
+                aria-expanded="false"
+                aria-controls="navbarTitles">
+                <span class="navbar-toggle-bar"></span>
+                <span class="navbar-toggle-bar"></span>
+                <span class="navbar-toggle-bar"></span>
+            </button>
+            <nav class="navbar-titles" id="navbarTitles" aria-label="Menu principal">
                 <ul>    
                     <li><a href="index.html">Inicial</a></li>
                     <li><a href="sobre.html">Sobre</a></li>
@@ -1282,22 +1551,32 @@
         <section class="publish-panel" id="publishPanel" hidden>
             <h2 id="publishPanelTitle">Publicar novo artigo</h2>
             <form id="newPostForm">
-                <div class="field-group">
-                    <label for="postTitle">Título</label>
-                    <input type="text" id="postTitle" required>
+
+                <div class="form-section">
+                    <p class="form-section-title"><span class="step-number">1</span> Informações básicas</p>
+                    <div class="form-row">
+                        <div class="field-group">
+                            <label for="postTitle">Título</label>
+                            <input type="text" id="postTitle" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="postAuthor">Nome do autor</label>
+                            <input type="text" id="postAuthor" placeholder="Quem escreveu este artigo" required>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="postExcerpt">Resumo</label>
+                        <input type="text" id="postExcerpt" placeholder="Uma linha de apresentação do artigo" required>
+                    </div>
                 </div>
-                <div class="field-group">
-                    <label for="postAuthor">Nome do autor</label>
-                    <input type="text" id="postAuthor" placeholder="Quem escreveu este artigo" required>
-                </div>
-                <div class="field-group">
-                    <label for="postExcerpt">Resumo</label>
-                    <input type="text" id="postExcerpt" placeholder="Uma linha de apresentação do artigo" required>
-                </div>
-                <div class="field-group">
-                    <label for="postContent">Conteúdo</label>
-                    <textarea id="postContent" required placeholder="Escreva normalmente ou use Markdown: **negrito**, _itálico_, # Título, - lista, [link](url)..."></textarea>
-                    <p class="field-hint">Aceita Markdown (títulos, negrito, listas, links, citações...) ou apenas texto corrido — os dois funcionam.</p>
+
+                <div class="form-section">
+                    <p class="form-section-title"><span class="step-number">2</span> Conteúdo do artigo</p>
+                    <div class="field-group">
+                        <label for="postContent">Conteúdo</label>
+                        <textarea id="postContent" required placeholder="Escreva normalmente ou use Markdown: **negrito**, _itálico_, # Título, - lista, [link](url)..."></textarea>
+                        <p class="field-hint">Aceita Markdown (títulos, negrito, listas, links, citações...) ou apenas texto corrido — os dois funcionam.</p>
+                    </div>
                     <!-- Upload de fotos dentro do corpo do artigo: a imagem é enviada ao
                          Supabase Storage e o link é inserido como Markdown no ponto do
                          cursor dentro do texto, para aparecer no meio do conteúdo. -->
@@ -1305,12 +1584,13 @@
                         <button type="button" class="btn-ct outline" id="btnInsertContentImage">📷 Inserir foto no conteúdo</button>
                         <input type="file" id="postContentImageInput" accept="image/*">
                         <span class="content-image-status" id="contentImageStatus"></span>
+                        <button type="button" class="btn-ct outline" id="btnMarkAsCitation">🔖 Marcar seleção como citação</button>
                     </div>
 
                     <!--
                         Opção de estilo "Compêndio de Teologia": reproduz o padrão de
                         títulos/subtítulos/parágrafos do modelo em PDF da Comunidade
-                        Tomista (Tratado > Dissertação > Artigo > "Digo:"/"Prova:").
+                        Tomista (Tratado/Parte > Dissertação/Capítulo > Artigo > "Digo:"/"Prova:").
                         O botão insere um esqueleto em Markdown; o checkbox liga a
                         formatação visual correspondente no leitor de artigo.
                     -->
@@ -1318,39 +1598,52 @@
                         <button type="button" class="btn-ct outline" id="btnInsertTheologicalTemplate">📜 Inserir modelo </button>
                         <label class="theological-style-toggle" for="postStyleTheological" style="display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;">
                             <input type="checkbox" id="postStyleTheological">
-                            Usar o padrão (Tratado / Dissertação / Artigo)
+                            Usar o padrão (Tratado/Parte / Dissertação/Capítulo / Artigo)
                         </label>
                     </div>
-                    <p class="field-hint">O modelo organiza o texto em Título de Tratado, Dissertações, Artigos e marcadores "Digo:"/"Prova:"/"Nota:", como no Compêndio de Teologia da Comunidade Tomista.</p>
-                </div>
-                <div class="field-group">
-                    <label for="postImage">URL da imagem (opcional)</label>
-                    <input type="url" id="postImage" placeholder="https://...">
-                </div>
-                <div class="field-group">
-                    <label for="postAttachment">📎 Anexar documento (PDF ou DOCX, opcional)</label>
-                    <input type="file" id="postAttachment" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-                    <p class="current-attachment-info" id="currentAttachmentInfo" hidden>
-                        Anexo atual: <span id="currentAttachmentName"></span> —
-                        <button type="button" id="btnRemoveAttachment">remover anexo</button>
-                    </p>
-                    <!-- Só aparece quando o arquivo escolhido acima é um PDF: extrai o
-                         texto do PDF (via PDF.js, no navegador) e reescreve o campo
-                         "Conteúdo" com esse texto. -->
-                    <div class="content-image-tools" id="rewriteFromPdfRow" hidden>
-                        <button type="button" class="btn-ct outline" id="btnRewriteFromPdf">📝 Reescrever conteúdo a partir do PDF</button>
-                        <span class="content-image-status" id="rewriteFromPdfStatus"></span>
+                    <p class="field-hint">O modelo organiza o texto em Título de Tratado ou Parte, Dissertações ou Capítulos, Artigos e marcadores "Digo:"/"Prova:"/"Nota:", como no Compêndio de Teologia da Comunidade Tomista.</p>
+                    <div class="article-structure-legend">
+                        <p class="article-structure-legend-title">Estrutura de artigo reconhecida</p>
+                        <ul>
+                            <li><strong># Título</strong> — Tratado / Parte (nível 1)</li>
+                            <li><strong>## Título</strong> — Dissertação / Capítulo (nível 2)</li>
+                            <li><strong>### Título</strong> — Artigo (nível 3)</li>
+                            <li><strong>Parágrafo</strong> — texto corrido, sem marcação</li>
+                        </ul>
+                        <p class="field-hint">Ao reescrever a partir de um PDF, esses níveis são detectados automaticamente pelo texto ("Tratado", "Parte", "Dissertação", "Capítulo", "Artigo" + numeral romano) e também pelo tamanho da fonte do documento original.</p>
                     </div>
                 </div>
-                <div class="field-group">
-                    <label>Pré-visualização do PDF anexado</label>
-                    <div class="pdf-preview-toggle-row">
-                        <button type="button" class="btn-ct outline" id="btnTogglePdfPreviewForm" hidden>👁 Pré-visualizar PDF</button>
+
+                <div class="form-section">
+                    <p class="form-section-title"><span class="step-number">3</span> Mídia e anexo (opcional)</p>
+                    <div class="field-group">
+                        <label for="postImage">URL da imagem de capa</label>
+                        <input type="url" id="postImage" placeholder="https://...">
+                        <p class="field-hint">Cole o link direto do arquivo de imagem (termina em .jpg, .png etc.), não o link de uma página.</p>
                     </div>
-                    <div class="pdf-preview-frame-wrap" id="formPdfPreviewWrap" hidden>
-                        <iframe id="formPdfPreviewFrame" class="pdf-preview-frame" title="Pré-visualização do PDF"></iframe>
+                    <div class="field-group">
+                        <label for="postAttachment">📎 Anexar documento (PDF ou DOCX)</label>
+                        <input type="file" id="postAttachment" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                        <p class="current-attachment-info" id="currentAttachmentInfo" hidden>
+                            Anexo atual: <span id="currentAttachmentName"></span> —
+                            <button type="button" id="btnRemoveAttachment">remover anexo</button>
+                        </p>
+                        <!-- Só aparece quando o arquivo escolhido acima é um PDF: extrai o
+                             texto do PDF (via PDF.js, no navegador) e reescreve o campo
+                             "Conteúdo" com esse texto. -->
+                        <div class="content-image-tools" id="rewriteFromPdfRow" hidden>
+                            <button type="button" class="btn-ct outline" id="btnRewriteFromPdf">📝 Reescrever conteúdo a partir do PDF</button>
+                            <span class="content-image-status" id="rewriteFromPdfStatus"></span>
+                        </div>
+                        <div class="pdf-preview-toggle-row">
+                            <button type="button" class="btn-ct outline" id="btnTogglePdfPreviewForm" hidden>👁 Pré-visualizar PDF</button>
+                        </div>
+                        <div class="pdf-preview-frame-wrap" id="formPdfPreviewWrap" hidden>
+                            <iframe id="formPdfPreviewFrame" class="pdf-preview-frame" title="Pré-visualização do PDF"></iframe>
+                        </div>
                     </div>
                 </div>
+
                 <div class="publish-actions">
                     <button type="button" class="btn-ct outline" id="btnCancelEdit" hidden>Cancelar edição</button>
                     <button type="submit" class="btn-ct solid" id="btnSubmitPost">Publicar artigo</button>
@@ -1422,6 +1715,7 @@
                     <div class="rating-block-row">
                         <div class="star-rating" id="readerRatingStars" aria-label="Avaliação do artigo"></div>
                         <span class="rating-summary-text" id="readerRatingSummary"></span>
+                        <button type="button" class="rating-remove-btn" id="readerRatingRemoveBtn" hidden>Remover minha avaliação</button>
                     </div>
                     <p class="rating-login-hint" id="readerRatingLoginHint" hidden>Faça login com sua conta para avaliar este artigo.</p>
                 </div>
@@ -1453,8 +1747,38 @@
     <div class="admin-secret-indicator" id="adminIndicator" hidden>
         <span class="admin-secret-dot" aria-hidden="true"></span>
         <span id="adminIndicatorEmail">Administrador</span>
+        <button type="button" id="btnOpenAdminSidebar">Painel</button>
         <button type="button" id="btnAdminLogout">Sair</button>
     </div>
+
+    <!--
+        Aba lateral do administrador: só é aberta/renderizada quando existe
+        sessão de administrador ativa (ver isAdmin() no script). Mostra quem
+        está logado no site no momento e permite moderar (apagar) os
+        comentários de qualquer usuário.
+    -->
+    <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop" hidden></div>
+    <aside class="admin-sidebar" id="adminSidebar" hidden role="dialog" aria-modal="true" aria-labelledby="adminSidebarTitle">
+        <div class="admin-sidebar-header">
+            <h2 id="adminSidebarTitle">Painel do administrador</h2>
+            <button type="button" class="admin-sidebar-close" id="btnCloseAdminSidebar" aria-label="Fechar painel">&times;</button>
+        </div>
+
+        <div class="modal-tabs">
+            <button type="button" class="modal-tab-btn active" id="adminTabBtnOnline">Usuários online</button>
+            <button type="button" class="modal-tab-btn" id="adminTabBtnComments">Comentários</button>
+        </div>
+
+        <div class="admin-sidebar-panel modal-tab-panel" id="adminTabPanelOnline">
+            <p class="admin-sidebar-hint">Usuários com uma sessão ativa nos últimos minutos.</p>
+            <ul class="online-users-list" id="onlineUsersList"></ul>
+        </div>
+
+        <div class="admin-sidebar-panel modal-tab-panel" id="adminTabPanelComments" hidden>
+            <p class="admin-sidebar-hint">Todos os comentários do blog. É possível apagar qualquer comentário aqui.</p>
+            <ul class="admin-comments-list" id="adminCommentsList"></ul>
+        </div>
+    </aside>
 
     <!-- SDK do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1467,6 +1791,7 @@
          próprio navegador (sem precisar de um servidor), para a opção
          "Reescrever conteúdo a partir do PDF" e para a publicação rápida. -->
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="script.js"></script>
 
     <script>
     (function () {
@@ -1534,6 +1859,18 @@
         const btnAdminLogout = document.getElementById('btnAdminLogout');
         const adminIndicator = document.getElementById('adminIndicator');
         const adminIndicatorEmail = document.getElementById('adminIndicatorEmail');
+
+        // ---------- Elementos: aba lateral do administrador ----------
+        const btnOpenAdminSidebar = document.getElementById('btnOpenAdminSidebar');
+        const btnCloseAdminSidebar = document.getElementById('btnCloseAdminSidebar');
+        const adminSidebar = document.getElementById('adminSidebar');
+        const adminSidebarBackdrop = document.getElementById('adminSidebarBackdrop');
+        const adminTabBtnOnline = document.getElementById('adminTabBtnOnline');
+        const adminTabBtnComments = document.getElementById('adminTabBtnComments');
+        const adminTabPanelOnline = document.getElementById('adminTabPanelOnline');
+        const adminTabPanelComments = document.getElementById('adminTabPanelComments');
+        const onlineUsersList = document.getElementById('onlineUsersList');
+        const adminCommentsList = document.getElementById('adminCommentsList');
         const adminModal = document.getElementById('adminModal');
         const adminLoginForm = document.getElementById('adminLoginForm');
         const adminError = document.getElementById('adminError');
@@ -1549,7 +1886,6 @@
         const btnRemoveAttachment = document.getElementById('btnRemoveAttachment');
         const blogList = document.getElementById('blogList');
 
-        // ---------- Elementos: visitante (cadastro/login), na navbar ----------
         const btnVisitorAccount = document.getElementById('btnVisitorAccount');
         const btnVisitorLogout = document.getElementById('btnVisitorLogout');
         const visitorLoggedInWrap = document.getElementById('visitorLoggedInWrap');
@@ -1585,21 +1921,11 @@
 
         // ---------- Elementos: foto no corpo do conteúdo ----------
         const btnInsertContentImage = document.getElementById('btnInsertContentImage');
+        const btnMarkAsCitation = document.getElementById('btnMarkAsCitation');
         const postContentImageInput = document.getElementById('postContentImageInput');
         const btnInsertTheologicalTemplate = document.getElementById('btnInsertTheologicalTemplate');
         const postStyleTheological = document.getElementById('postStyleTheological');
 
-        /*
-            ==========================================================================
-            ESTILO "COMPÊNDIO DE TEOLOGIA" — marcador de formatação
-            ==========================================================================
-            Para não exigir alteração no schema do Supabase (sem coluna nova em
-            "posts"), o estilo escolhido é guardado como uma marca invisível na
-            própria primeira linha do campo "content": "<!--style:teologico-->".
-            Ela é removida antes de exibir o texto no formulário de edição e antes
-            de renderizar o Markdown, servindo apenas para acionar a classe CSS
-            ".theological-style" no leitor de artigo.
-        */
         const STYLE_MARKER_THEOLOGICAL = '<!--style:teologico-->';
 
         function hasTheologicalMarker(content) {
@@ -1640,6 +1966,7 @@
         const readerRatingStars = document.getElementById('readerRatingStars');
         const readerRatingSummary = document.getElementById('readerRatingSummary');
         const readerRatingLoginHint = document.getElementById('readerRatingLoginHint');
+        const readerRatingRemoveBtn = document.getElementById('readerRatingRemoveBtn');
 
         // ---------- Elementos: comentários ----------
         const commentsList = document.getElementById('commentsList');
@@ -1693,6 +2020,16 @@
             publishPanel.hidden = !admin;
             if (admin) {
                 adminIndicatorEmail.textContent = session.user.email;
+            } else {
+                closeAdminSidebar();
+            }
+
+            // Presença "online": só faz sentido enquanto existe alguém logado
+            // (visitante ou admin). Ver seção "PRESENÇA ONLINE" mais abaixo.
+            if (currentSession) {
+                startPresenceHeartbeat();
+            } else {
+                stopPresenceHeartbeat();
             }
 
             renderPosts();
@@ -1700,6 +2037,225 @@
 
         function logoutSession() {
             sb.auth.signOut().then(refreshSessionUI);
+        }
+
+        /*
+            ==========================================================================
+            ABA LATERAL DO ADMINISTRADOR (usuários online + comentários)
+            ==========================================================================
+            Só pode ser aberta quando isAdmin() é verdadeiro. O botão "Painel" que
+            a abre só existe dentro do indicador discreto do administrador, que já
+            fica oculto para qualquer pessoa sem sessão de admin.
+        */
+        let onlineUsersRefreshTimer = null;
+
+        function openAdminSidebar() {
+            if (!isAdmin()) return;
+            adminSidebar.hidden = false;
+            adminSidebarBackdrop.hidden = false;
+            loadOnlineUsers();
+            loadAdminComments();
+            if (onlineUsersRefreshTimer) clearInterval(onlineUsersRefreshTimer);
+            onlineUsersRefreshTimer = setInterval(function () {
+                if (!adminSidebar.hidden) loadOnlineUsers();
+            }, 20000);
+        }
+
+        function closeAdminSidebar() {
+            adminSidebar.hidden = true;
+            adminSidebarBackdrop.hidden = true;
+            if (onlineUsersRefreshTimer) {
+                clearInterval(onlineUsersRefreshTimer);
+                onlineUsersRefreshTimer = null;
+            }
+        }
+
+        btnOpenAdminSidebar.addEventListener('click', openAdminSidebar);
+        btnCloseAdminSidebar.addEventListener('click', closeAdminSidebar);
+        adminSidebarBackdrop.addEventListener('click', closeAdminSidebar);
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !adminSidebar.hidden) closeAdminSidebar();
+        });
+
+        function setAdminSidebarTab(tab) {
+            const isOnline = tab === 'online';
+            adminTabBtnOnline.classList.toggle('active', isOnline);
+            adminTabBtnComments.classList.toggle('active', !isOnline);
+            adminTabPanelOnline.hidden = !isOnline;
+            adminTabPanelComments.hidden = isOnline;
+        }
+        adminTabBtnOnline.addEventListener('click', function () { setAdminSidebarTab('online'); });
+        adminTabBtnComments.addEventListener('click', function () { setAdminSidebarTab('comments'); });
+
+        /*
+            ==========================================================================
+            PRESENÇA ONLINE (tabela "user_presence" no Supabase)
+            ==========================================================================
+            Não existe, no Supabase Auth padrão, uma forma de o cliente consultar
+            "quem está logado agora" — por isso essa informação é guardada numa
+            tabela própria, atualizada por um "heartbeat" (um upsert a cada 30s)
+            enquanto a pessoa tem a página aberta e está logada (visitante ou
+            admin). O painel do admin considera "online" quem teve um heartbeat
+            nos últimos 2 minutos. Ver o guia SUPABASE-PAINEL-ADMIN-GUIA.md para
+            o SQL necessário (criação da tabela e das policies de RLS).
+        */
+        const ONLINE_THRESHOLD_MINUTES = 2;
+        let presenceHeartbeatTimer = null;
+
+        async function sendPresenceHeartbeat() {
+            if (!currentSession) return;
+            const name = (currentSession.user.user_metadata && currentSession.user.user_metadata.name)
+                ? currentSession.user.user_metadata.name
+                : currentSession.user.email;
+            await sb.from('user_presence').upsert({
+                user_id: currentSession.user.id,
+                email: currentSession.user.email,
+                name: name,
+                is_admin: isAdmin(),
+                last_seen: new Date().toISOString()
+            });
+        }
+
+        function startPresenceHeartbeat() {
+            sendPresenceHeartbeat();
+            if (presenceHeartbeatTimer) clearInterval(presenceHeartbeatTimer);
+            presenceHeartbeatTimer = setInterval(sendPresenceHeartbeat, 30000);
+        }
+
+        function stopPresenceHeartbeat() {
+            if (presenceHeartbeatTimer) {
+                clearInterval(presenceHeartbeatTimer);
+                presenceHeartbeatTimer = null;
+            }
+        }
+
+        // Também envia um heartbeat quando a aba volta a ficar visível, para
+        // que a lista do admin fique correta mesmo depois de um tempo em
+        // segundo plano.
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible' && currentSession) {
+                sendPresenceHeartbeat();
+            }
+        });
+
+        async function loadOnlineUsers() {
+            if (!isAdmin()) return;
+            const threshold = new Date(Date.now() - ONLINE_THRESHOLD_MINUTES * 60000).toISOString();
+            const { data: users, error } = await sb
+                .from('user_presence')
+                .select('*')
+                .gte('last_seen', threshold)
+                .order('last_seen', { ascending: false });
+
+            onlineUsersList.innerHTML = '';
+            if (error) {
+                onlineUsersList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Não foi possível carregar os usuários online.</li>';
+                console.error(error);
+                return;
+            }
+            if (!users || !users.length) {
+                onlineUsersList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Nenhum usuário online no momento.</li>';
+                return;
+            }
+            users.forEach(function (u) {
+                const li = document.createElement('li');
+                li.className = 'online-user-item';
+
+                const dot = document.createElement('span');
+                dot.className = 'online-user-dot';
+                dot.setAttribute('aria-hidden', 'true');
+                li.appendChild(dot);
+
+                const name = document.createElement('span');
+                name.className = 'online-user-name';
+                name.textContent = u.name || u.email;
+                li.appendChild(name);
+
+                if (u.is_admin) {
+                    const role = document.createElement('span');
+                    role.className = 'online-user-role';
+                    role.textContent = 'Admin';
+                    li.appendChild(role);
+                }
+
+                onlineUsersList.appendChild(li);
+            });
+        }
+
+        /*
+            ==========================================================================
+            MODERAÇÃO DE COMENTÁRIOS PELO ADMINISTRADOR
+            ==========================================================================
+            Lista todos os comentários do blog (de todos os artigos) para que o
+            administrador possa apagar qualquer um deles, além de poder gerenciar
+            os próprios artigos. Exige a policy de DELETE para admin descrita no
+            guia SUPABASE-PAINEL-ADMIN-GUIA.md.
+        */
+        async function loadAdminComments() {
+            if (!isAdmin()) return;
+            const { data: comments, error } = await sb
+                .from('comments')
+                .select('*, posts(title)')
+                .order('created_at', { ascending: false });
+
+            adminCommentsList.innerHTML = '';
+            if (error) {
+                adminCommentsList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Não foi possível carregar os comentários.</li>';
+                console.error(error);
+                return;
+            }
+            if (!comments || !comments.length) {
+                adminCommentsList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Nenhum comentário publicado ainda.</li>';
+                return;
+            }
+            comments.forEach(function (c) {
+                const li = document.createElement('li');
+                li.className = 'admin-comment-item';
+
+                const postTitle = document.createElement('span');
+                postTitle.className = 'admin-comment-post-title';
+                postTitle.textContent = (c.posts && c.posts.title) ? c.posts.title : 'Artigo removido';
+                li.appendChild(postTitle);
+
+                const header = document.createElement('div');
+                header.className = 'comment-item-header';
+                const author = document.createElement('span');
+                author.className = 'comment-author';
+                author.textContent = c.author_name || 'Usuário';
+                header.appendChild(author);
+                const date = document.createElement('span');
+                date.className = 'comment-date';
+                date.textContent = formatDate(c.created_at);
+                header.appendChild(date);
+                li.appendChild(header);
+
+                const text = document.createElement('p');
+                text.className = 'comment-text';
+                text.textContent = c.content;
+                li.appendChild(text);
+
+                const actions = document.createElement('div');
+                actions.className = 'comment-item-actions';
+                const del = document.createElement('button');
+                del.type = 'button';
+                del.className = 'comment-action-btn danger';
+                del.textContent = 'Apagar';
+                del.addEventListener('click', async function () {
+                    if (!confirm('Apagar este comentário?')) return;
+                    const { error: delError } = await sb.from('comments').delete().eq('id', c.id);
+                    if (delError) {
+                        alert('Erro ao apagar comentário: ' + delError.message);
+                        return;
+                    }
+                    loadAdminComments();
+                    // Se o leitor de artigo estiver aberto no mesmo post, atualiza a lista visível também.
+                    if (currentReaderPostId === c.post_id) loadAndRenderComments(currentReaderPostId);
+                });
+                actions.appendChild(del);
+                li.appendChild(actions);
+
+                adminCommentsList.appendChild(li);
+            });
         }
 
         // ---------- Modal de login do administrador ----------
@@ -1891,6 +2447,12 @@
             Retorna o texto encontrado (parágrafo por página) ou lança um
             erro se o PDF for só imagem escaneada (sem texto selecionável)
             ou se o PDF.js não tiver carregado.
+
+            Também remove cabeçalhos e rodapés repetidos (ex.: "COMUNIDADE
+            TOMISTA" no topo de cada página, ou "23 Fulano de Tal" no
+            rodapé) e reconecta palavras quebradas por hífen no fim da
+            linha (ex.: "com-" + "posição" -> "composição"), para que o
+            texto reescrito não fique picotado nem repita ruído de página.
         */
         async function extractTextFromPdfFile(file) {
             if (!window.pdfjsLib) {
@@ -1906,6 +2468,19 @@
             // estrutura: ele só devolve fragmentos de texto soltos, então
             // primeiro precisamos reagrupá-los em linhas por posição (Y).
             const allLines = [];
+
+            // Texto normalizado (sem números de página) da primeira e da
+            // última linha de cada página, usado para detectar cabeçalhos e
+            // rodapés que se repetem página após página.
+            function normalizeForRepeatCheck(text) {
+                return text
+                    .replace(/^\d+\s+/, '')
+                    .replace(/\s+\d+$/, '')
+                    .trim()
+                    .toLowerCase();
+            }
+            const headerCandidates = {};
+            const footerCandidates = {};
 
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
@@ -1933,7 +2508,15 @@
                     const text = row.parts.join(' ').replace(/\s+/g, ' ').trim();
                     if (!text) return;
                     const gap = idx > 0 ? (rows[idx - 1].y - row.y) : 0;
-                    allLines.push({ text: text, size: row.size, gap: gap });
+                    const isTopRow = idx === 0;
+                    const isBottomRow = idx === rows.length - 1;
+                    allLines.push({ text: text, size: row.size, gap: gap, isTopRow: isTopRow, isBottomRow: isBottomRow });
+
+                    if (rows.length > 1) {
+                        const normalized = normalizeForRepeatCheck(text);
+                        if (isTopRow) headerCandidates[normalized] = (headerCandidates[normalized] || 0) + 1;
+                        if (isBottomRow) footerCandidates[normalized] = (footerCandidates[normalized] || 0) + 1;
+                    }
                 });
             }
 
@@ -1941,7 +2524,43 @@
                 throw new Error('Não foi possível extrair texto deste PDF (provavelmente é uma imagem escaneada).');
             }
 
-            return formatExtractedPdfText(allLines);
+            // Um texto de topo/rodapé que se repete em boa parte das páginas
+            // (ex.: nome da comunidade, nome do autor, "página X de Y") é
+            // ruído de diagramação, não conteúdo do artigo.
+            const repeatThreshold = Math.max(2, Math.ceil(pdf.numPages * 0.4));
+            const repeatedHeaderTexts = new Set(Object.keys(headerCandidates).filter(function (k) { return headerCandidates[k] >= repeatThreshold; }));
+            const repeatedFooterTexts = new Set(Object.keys(footerCandidates).filter(function (k) { return footerCandidates[k] >= repeatThreshold; }));
+
+            const cleanedLines = allLines.filter(function (line) {
+                const normalized = normalizeForRepeatCheck(line.text);
+                if (line.isTopRow && repeatedHeaderTexts.has(normalized)) return false;
+                if (line.isBottomRow && repeatedFooterTexts.has(normalized)) return false;
+                return true;
+            });
+
+            // Reconecta palavras quebradas por hífen de quebra de linha
+            // (comum em PDFs justificados): uma linha que termina em
+            // "-" logo após uma letra, seguida por outra que começa em
+            // letra minúscula, é a mesma palavra partida em duas linhas.
+            const hyphenRejoinedLines = [];
+            for (let i = 0; i < cleanedLines.length; i++) {
+                const current = cleanedLines[i];
+                const next = cleanedLines[i + 1];
+                const endsWithHyphen = /[a-zà-úA-ZÀ-Ú]-$/.test(current.text);
+                const nextStartsLower = next && /^[a-zà-ú]/.test(next.text);
+                if (endsWithHyphen && nextStartsLower) {
+                    hyphenRejoinedLines.push({
+                        text: current.text.replace(/-$/, '') + next.text,
+                        size: current.size,
+                        gap: current.gap
+                    });
+                    i++; // pula a próxima linha, já incorporada
+                } else {
+                    hyphenRejoinedLines.push(current);
+                }
+            }
+
+            return formatExtractedPdfText(hyphenRejoinedLines);
         }
 
         /*
@@ -1950,23 +2569,56 @@
             ==========================================================================
             O PDF não guarda "isto é um título" ou "isto é um parágrafo" — ele só
             guarda texto posicionado na página. Para reconstruir essa estrutura
-            usamos o TAMANHO DA FONTE de cada linha, comparado com o tamanho mais
-            comum do documento (que é, por definição, o corpo do texto):
+            usamos DOIS sinais, combinados:
+
+              1) PADRÃO TEXTUAL (mais confiável, usado primeiro): linhas que
+                 começam com "TRATADO", "PARTE" (nível 1), "DISSERTAÇÃO" ou
+                 "CAPÍTULO" (nível 2), ou "ARTIGO" (nível 3), seguidas de um
+                 número romano — como no modelo do Compêndio de Teologia da
+                 Comunidade Tomista. Isso garante o mesmo nível de título
+                 mesmo quando o PDF não aumenta o tamanho da fonte dessas
+                 linhas (comum em documentos com "Capítulo I: ..." no corpo
+                 do texto).
+              2) TAMANHO DE FONTE (recurso usado quando o padrão textual não
+                 se aplica), comparado com o tamanho mais comum do documento
+                 (que é, por definição, o corpo do texto):
 
               • linha com fonte >= 1.4x o corpo do texto      -> Título     -> "# "
               • linha com fonte >= 1.15x o corpo do texto     -> Subtítulo  -> "## "
-              • linha curta (até 70 caracteres) e sem pontuação
-                final, isolada entre linhas maiores            -> Subtítulo -> "## "
+              • linha curta (até 70 caracteres), em maiúsculas ou sem
+                pontuação final, isolada entre linhas maiores  -> Subtítulo -> "## "
               • linha começando com "•", "-", "*" ou "1.", "2)"...  -> item de lista -> "- "
               • qualquer outra linha entra no parágrafo atual; um espaço vertical
                 bem maior que o normal entre duas linhas indica quebra de parágrafo
 
-            O resultado é sempre Markdown válido (#, ##, listas e parágrafos
+            O resultado é sempre Markdown válido (#, ##, ###, listas e parágrafos
             separados por linha em branco), que é exatamente o que a função
-            renderMarkdown() mais abaixo já sabe transformar em HTML. Ou seja: o
-            padrão vale tanto para o texto extraído automaticamente do PDF quanto
-            para quem digita o conteúdo manualmente.
+            renderMarkdown() mais abaixo já sabe transformar em HTML, e que o
+            estilo "Compêndio de Teologia" (.theological-style, mais abaixo no
+            CSS) sabe formatar com fonte, espaçamento e margens consistentes,
+            independentemente de como o PDF original estava formatado. Ou
+            seja: o padrão vale tanto para o texto extraído automaticamente do
+            PDF quanto para quem digita o conteúdo manualmente.
         */
+        const H1_PATTERN_RE = /^(TRATADO\b|(PRIMEIRA|SEGUNDA|TERCEIRA|QUARTA|QUINTA)\s+PARTE\b|PARTE\s+[IVXLCDM0-9]+\b)/i;
+        const H2_PATTERN_RE = /^(DISSERTA[CÇ][AÃ]O|CAP[IÍ]TULO)\s*[IVXLCDM0-9]+/i;
+        const H3_PATTERN_RE = /^ARTIGO\s*[IVXLCDM0-9]+/i;
+
+        // Pares de aspas (retas, tipográficas, angulares) reconhecidos como
+        // marcação de citação: um parágrafo inteiramente entre um par destes
+        // vira uma citação (bloco "> ..."), como as citações bíblicas,
+        // patrísticas e conciliares do modelo do Compêndio de Teologia.
+        const QUOTE_PAIRS = { '"': '"', '“': '”', '«': '»', '‘': '’' };
+
+        function isFullyQuotedText(text) {
+            const opener = text.charAt(0);
+            const closer = QUOTE_PAIRS[opener];
+            if (!closer) return false;
+            // Ignora pontuação final (. , ; :) depois da aspa de fechamento.
+            const trimmed = text.replace(/[.,;:]+$/, '');
+            return trimmed.length > opener.length && trimmed.charAt(trimmed.length - 1) === closer;
+        }
+
         function formatExtractedPdfText(lines) {
             // Descobre o tamanho de fonte mais frequente = corpo do texto.
             const sizeCount = {};
@@ -1987,7 +2639,8 @@
 
             function flushParagraph() {
                 if (paragraph.length) {
-                    blocks.push(paragraph.join(' ').replace(/\s+/g, ' ').trim());
+                    const merged = paragraph.join(' ').replace(/\s+/g, ' ').trim();
+                    blocks.push(isFullyQuotedText(merged) ? '> ' + merged : merged);
                     paragraph = [];
                 }
             }
@@ -1998,12 +2651,30 @@
                 const isBullet = bulletRe.test(text);
                 const isShort = text.length <= 70 && !/[.,;:]$/.test(text);
 
+                // 1) Padrão textual do modelo do Compêndio, independente da fonte.
+                if (H1_PATTERN_RE.test(text)) {
+                    flushParagraph();
+                    blocks.push('# ' + text);
+                    return;
+                }
+                if (H2_PATTERN_RE.test(text)) {
+                    flushParagraph();
+                    blocks.push('## ' + text);
+                    return;
+                }
+                if (H3_PATTERN_RE.test(text)) {
+                    flushParagraph();
+                    blocks.push('### ' + text);
+                    return;
+                }
+
                 if (isBullet) {
                     flushParagraph();
                     blocks.push(text.replace(bulletRe, '- '));
                     return;
                 }
 
+                // 2) Tamanho de fonte, para o restante do texto.
                 if (ratio >= 1.4) {
                     flushParagraph();
                     blocks.push('# ' + text);
@@ -2214,6 +2885,40 @@
             } finally {
                 postContentImageInput.value = '';
             }
+        });
+
+        // Marca o trecho selecionado no campo "Conteúdo" como citação: cada
+        // linha da seleção recebe o prefixo Markdown "> ", que o renderMarkdown()
+        // e o estilo do Compêndio de Teologia já sabem exibir como citação
+        // recuada e centralizada. Se nada estiver selecionado, insere um
+        // esqueleto de citação vazio no ponto do cursor.
+        btnMarkAsCitation.addEventListener('click', function () {
+            const start = postContentTextarea.selectionStart != null ? postContentTextarea.selectionStart : postContentTextarea.value.length;
+            const end = postContentTextarea.selectionEnd != null ? postContentTextarea.selectionEnd : postContentTextarea.value.length;
+            const before = postContentTextarea.value.slice(0, start);
+            const after = postContentTextarea.value.slice(end);
+            const selected = postContentTextarea.value.slice(start, end);
+
+            let quoted;
+            if (selected.trim()) {
+                quoted = selected
+                    .split('\n')
+                    .map(function (line) { return line.trim() ? '> ' + line : '>'; })
+                    .join('\n');
+            } else {
+                quoted = '> Cite aqui a passagem bíblica, patrística ou conciliar';
+            }
+
+            const needsLeadingBreak = before.length && !before.endsWith('\n\n');
+            const needsTrailingBreak = after.length && !after.startsWith('\n\n');
+            const insertion = (needsLeadingBreak ? '\n\n' : '') + quoted + (needsTrailingBreak ? '\n\n' : '');
+
+            postContentTextarea.value = before + insertion + after;
+
+            const selectionStartPos = before.length + (needsLeadingBreak ? 2 : 0);
+            const selectionEndPos = selectionStartPos + quoted.length;
+            postContentTextarea.focus();
+            postContentTextarea.setSelectionRange(selectionStartPos, selectionEndPos);
         });
 
         /*
@@ -2534,6 +3239,7 @@
             create policy "Qualquer um pode ler avaliações" on ratings for select using (true);
             create policy "Usuário logado pode avaliar" on ratings for insert with check (auth.uid() = user_id);
             create policy "Usuário só edita a própria avaliação" on ratings for update using (auth.uid() = user_id);
+            create policy "Usuário só remove a própria avaliação" on ratings for delete using (auth.uid() = user_id);
         */
         function renderStarsMarkup(avg, interactive, userStars) {
             let html = '';
@@ -2548,7 +3254,8 @@
             const { data: allRatings, error } = await sb.from('ratings').select('stars, user_id').eq('post_id', postId);
 
             if (error) {
-                readerRatingSummary.textContent = '';
+                console.error('Erro ao carregar avaliações (verifique se a tabela "ratings" existe no Supabase e se as policies de RLS estão corretas):', error);
+                readerRatingSummary.textContent = 'Não foi possível carregar as avaliações.';
                 readerRatingStars.innerHTML = '';
                 return;
             }
@@ -2564,6 +3271,7 @@
                 ? avg.toFixed(1) + ' de 5 (' + total + (total === 1 ? ' avaliação' : ' avaliações') + ')'
                 : 'Ainda sem avaliações';
             readerRatingLoginHint.hidden = canRate;
+            readerRatingRemoveBtn.hidden = !(canRate && myRating);
 
             if (canRate) {
                 Array.prototype.forEach.call(readerRatingStars.querySelectorAll('.star'), function (btn) {
@@ -2577,6 +3285,18 @@
                         loadAndRenderRating(postId);
                     });
                 });
+
+                readerRatingRemoveBtn.onclick = async function () {
+                    const { error: deleteError } = await sb.from('ratings')
+                        .delete()
+                        .eq('post_id', postId)
+                        .eq('user_id', currentSession.user.id);
+                    if (deleteError) {
+                        console.error('Erro ao remover avaliação (verifique se existe a policy de DELETE na tabela "ratings"):', deleteError);
+                        return;
+                    }
+                    loadAndRenderRating(postId);
+                };
             }
         }
 
@@ -2585,9 +3305,13 @@
             COMENTÁRIOS (tabela "comments" no Supabase)
             ==========================================================================
             Qualquer visitante pode ler os comentários, mas somente quem tem
-            conta e está logado pode publicar um novo comentário.
+            conta e está logado pode publicar um novo comentário. Cada usuário
+            pode editar/apagar apenas o seu próprio comentário; o administrador
+            pode apagar qualquer comentário (moderação, ver aba lateral).
 
-            SQL necessário no Supabase (rodar uma vez em SQL Editor):
+            SQL necessário no Supabase (rodar uma vez em SQL Editor) — o guia
+            completo, incluindo as policies de UPDATE/DELETE e a tabela de
+            presença online, está em SUPABASE-PAINEL-ADMIN-GUIA.md:
 
             create table comments (
                 id bigint generated always as identity primary key,
@@ -2600,8 +3324,10 @@
             alter table comments enable row level security;
             create policy "Qualquer um pode ler comentários" on comments for select using (true);
             create policy "Usuário logado pode comentar" on comments for insert with check (auth.uid() = user_id);
+            -- Novas policies (edição/exclusão) — ver guia para o SQL completo.
         */
-        function renderCommentsList(comments) {
+        function renderCommentsList(comments, starsByUserId) {
+            starsByUserId = starsByUserId || {};
             commentsList.innerHTML = '';
             if (!comments.length) {
                 commentsList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Nenhum comentário ainda. Seja o primeiro a comentar.</li>';
@@ -2614,10 +3340,24 @@
                 const header = document.createElement('div');
                 header.className = 'comment-item-header';
 
+                const authorWrap = document.createElement('span');
+                authorWrap.className = 'comment-author-wrap';
+
                 const author = document.createElement('span');
                 author.className = 'comment-author';
                 author.textContent = c.author_name || 'Usuário';
-                header.appendChild(author);
+                authorWrap.appendChild(author);
+
+                const userStars = starsByUserId[c.user_id];
+                if (userStars) {
+                    const starsBadge = document.createElement('span');
+                    starsBadge.className = 'comment-author-stars star-rating';
+                    starsBadge.title = userStars + ' de 5 estrelas dadas por este usuário';
+                    starsBadge.innerHTML = renderStarsMarkup(userStars, false, 0);
+                    authorWrap.appendChild(starsBadge);
+                }
+
+                header.appendChild(authorWrap);
 
                 const date = document.createElement('span');
                 date.className = 'comment-date';
@@ -2631,8 +3371,103 @@
                 text.textContent = c.content;
                 li.appendChild(text);
 
+                // Edição e exclusão: o próprio autor do comentário pode editar
+                // ou apagar; o administrador pode apagar qualquer comentário
+                // (também disponível de forma centralizada na aba lateral).
+                const isOwner = !!currentSession && currentSession.user.id === c.user_id;
+                const canDelete = isOwner || isAdmin();
+
+                if (isOwner || canDelete) {
+                    const actions = document.createElement('div');
+                    actions.className = 'comment-item-actions';
+
+                    if (isOwner) {
+                        const editBtn = document.createElement('button');
+                        editBtn.type = 'button';
+                        editBtn.className = 'comment-action-btn';
+                        editBtn.textContent = 'Editar';
+                        editBtn.addEventListener('click', function () { startEditComment(li, c); });
+                        actions.appendChild(editBtn);
+                    }
+
+                    if (canDelete) {
+                        const delBtn = document.createElement('button');
+                        delBtn.type = 'button';
+                        delBtn.className = 'comment-action-btn danger';
+                        delBtn.textContent = 'Apagar';
+                        delBtn.addEventListener('click', function () { deleteComment(c.id); });
+                        actions.appendChild(delBtn);
+                    }
+
+                    li.appendChild(actions);
+                }
+
                 commentsList.appendChild(li);
             });
+        }
+
+        // Troca o texto do comentário por um formulário de edição em linha.
+        function startEditComment(li, comment) {
+            const existingForm = li.querySelector('.comment-edit-form');
+            if (existingForm) return; // já está em modo de edição
+
+            const textEl = li.querySelector('.comment-text');
+            const actionsEl = li.querySelector('.comment-item-actions');
+            if (textEl) textEl.hidden = true;
+            if (actionsEl) actionsEl.hidden = true;
+
+            const form = document.createElement('div');
+            form.className = 'comment-edit-form';
+
+            const textarea = document.createElement('textarea');
+            textarea.value = comment.content;
+            form.appendChild(textarea);
+
+            const formActions = document.createElement('div');
+            formActions.className = 'comment-edit-form-actions';
+
+            const saveBtn = document.createElement('button');
+            saveBtn.type = 'button';
+            saveBtn.className = 'btn-ct solid';
+            saveBtn.textContent = 'Salvar';
+            saveBtn.addEventListener('click', async function () {
+                const newContent = textarea.value.trim();
+                if (!newContent) return;
+                const { error } = await sb.from('comments')
+                    .update({ content: newContent })
+                    .eq('id', comment.id);
+                if (error) {
+                    alert('Erro ao editar comentário: ' + error.message);
+                    return;
+                }
+                loadAndRenderComments(comment.post_id);
+            });
+            formActions.appendChild(saveBtn);
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.type = 'button';
+            cancelBtn.className = 'btn-ct outline';
+            cancelBtn.textContent = 'Cancelar';
+            cancelBtn.addEventListener('click', function () {
+                form.remove();
+                if (textEl) textEl.hidden = false;
+                if (actionsEl) actionsEl.hidden = false;
+            });
+            formActions.appendChild(cancelBtn);
+
+            form.appendChild(formActions);
+            li.appendChild(form);
+            textarea.focus();
+        }
+
+        async function deleteComment(commentId) {
+            if (!confirm('Apagar este comentário?')) return;
+            const { error } = await sb.from('comments').delete().eq('id', commentId);
+            if (error) {
+                alert('Erro ao apagar comentário: ' + error.message);
+                return;
+            }
+            if (currentReaderPostId) loadAndRenderComments(currentReaderPostId);
         }
 
         async function loadAndRenderComments(postId) {
@@ -2646,13 +3481,32 @@
                 commentsList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Não foi possível carregar os comentários.</li>';
                 return;
             }
-            renderCommentsList(comments || []);
+
+            // Busca as avaliações do artigo para poder mostrar, ao lado do nome
+            // de cada autor de comentário, quantas estrelas essa pessoa deu.
+            const { data: ratingsForPost, error: ratingsError } = await sb
+                .from('ratings')
+                .select('user_id, stars')
+                .eq('post_id', postId);
+            if (ratingsError) {
+                console.error('Erro ao carregar avaliações para exibir junto dos comentários:', ratingsError);
+            }
+            const starsByUserId = {};
+            (ratingsForPost || []).forEach(function (r) {
+                starsByUserId[r.user_id] = r.stars;
+            });
+
+            renderCommentsList(comments || [], starsByUserId);
         }
 
         // Busca e exibe a média de estrelas (somente leitura) num cartão da lista.
         async function loadCardRatingBadge(postId, container) {
             const { data: allRatings, error } = await sb.from('ratings').select('stars').eq('post_id', postId);
-            if (error || !allRatings || !allRatings.length) return;
+            if (error) {
+                console.error('Erro ao carregar avaliações do cartão (tabela "ratings"):', error);
+                return;
+            }
+            if (!allRatings || !allRatings.length) return;
 
             const total = allRatings.length;
             const avg = allRatings.reduce(function (sum, r) { return sum + r.stars; }, 0) / total;

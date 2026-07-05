@@ -265,6 +265,56 @@ nav.navbar-titles a.active::after { width: 100%; }
 }
 
 /* ==========================================================================
+   COMPONENTE: BOTÃO HAMBÚRGUER
+   Fica oculto no desktop; aparece apenas na navbar mobile para abrir/
+   fechar o menu. As três barras se transformam em "X" quando o menu
+   está aberto — mesma linguagem de transição suave usada no resto do
+   site (var(--transition-*)), sem introduzir nenhuma cor nova.
+   ========================================================================== */
+
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    z-index: 101;
+    transition: background-color var(--transition-fast);
+}
+
+.navbar-toggle:hover { background-color: var(--gold-08); }
+
+.navbar-toggle-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--color-ink);
+    transition: transform var(--transition-base), opacity var(--transition-base), background-color var(--transition-base);
+}
+
+.navbar-toggle[aria-expanded="true"] .navbar-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+    background-color: var(--color-gold);
+}
+
+.navbar-toggle[aria-expanded="true"] .navbar-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.navbar-toggle[aria-expanded="true"] .navbar-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+    background-color: var(--color-gold);
+}
+
+/* ==========================================================================
    COMPONENTE: BOTÕES
    Um único par (preenchido / contorno) reutilizado no site inteiro.
    ========================================================================== */
@@ -490,17 +540,43 @@ section > h1.title-sobre {
     html, body { overflow-x: hidden; }
 
     header .navbar {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
-        height: auto;
-        padding: var(--space-3);
+        justify-content: space-between;
+        height: var(--nav-height);
+        padding: 0 var(--space-3);
         gap: var(--space-3);
-        position: relative;
+        position: fixed;
     }
 
-    .navbar-detail { position: relative; top: 0; }
     .navbar-logo .logo { height: 46px; }
+
+    .navbar-toggle { display: flex; }
+
+    /* Painel do menu: some por padrão, some abaixo da navbar fixa,
+       e desliza/aparece quando .is-open é adicionado via JS. */
+    nav.navbar-titles {
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        width: 100%;
+        max-height: calc(100vh - var(--nav-height));
+        overflow-y: auto;
+        background-color: var(--color-cream);
+        box-shadow: var(--shadow-md);
+        padding: var(--space-3);
+
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity var(--transition-base), transform var(--transition-base), visibility var(--transition-base);
+    }
+
+    nav.navbar-titles.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
 
     nav.navbar-titles ul {
         flex-direction: column;
@@ -518,6 +594,7 @@ section > h1.title-sobre {
         border-top: 1px solid var(--ink-12);
         width: 100%;
     }
+
 
     section.container { align-items: center; }
     section.container .sobre { text-align: center; padding: var(--space-6) var(--space-3); }
