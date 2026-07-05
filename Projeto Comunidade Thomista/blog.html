@@ -2107,13 +2107,16 @@
             const name = (currentSession.user.user_metadata && currentSession.user.user_metadata.name)
                 ? currentSession.user.user_metadata.name
                 : currentSession.user.email;
-            await sb.from('user_presence').upsert({
+            const { error } = await sb.from('user_presence').upsert({
                 user_id: currentSession.user.id,
                 email: currentSession.user.email,
                 name: name,
                 is_admin: isAdmin(),
                 last_seen: new Date().toISOString()
-            });
+            }, { onConflict: 'user_id' });
+            if (error) {
+                console.error('Falha ao enviar heartbeat de presença:', error);
+            }
         }
 
         function startPresenceHeartbeat() {
