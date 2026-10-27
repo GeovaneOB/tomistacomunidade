@@ -312,41 +312,13 @@
             margin: 0 0 var(--space-1);
         }
 
-        .online-users-list, .admin-comments-list {
+        .admin-comments-list {
             list-style: none;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             gap: var(--space-1);
-        }
-
-        .online-user-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: var(--color-white);
-            border-radius: var(--radius-sm);
-            padding: 10px 12px;
-            box-shadow: var(--shadow-sm);
-            font-size: 0.82rem;
-        }
-        .online-user-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #3ba25a;
-            flex-shrink: 0;
-        }
-        .online-user-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .online-user-role {
-            margin-left: auto;
-            font-size: 0.68rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--color-gold);
-            white-space: nowrap;
         }
 
         .admin-comment-item {
@@ -571,6 +543,22 @@
             margin: 0.4rem 0 0;
             min-height: 1em;
         }
+
+        .link-btn {
+            display: inline-block;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: -0.5rem 0 0.6rem;
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--color-gold);
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .link-btn:hover { opacity: 0.8; }
 
         /* ---------- Painel de publicação (somente admin logado) ---------- */
         .publish-panel {
@@ -1429,6 +1417,7 @@
                     <li><a href="sobre.html">Sobre</a></li>
                     <li><a href="educacao.html">Educação</a></li>
                     <li><a href="blog.html" class="active">Blog</a></li>
+                    <li><a href="contribua.html">Contribua</a></li>
                     <li><a href="mailto:tomistacomunidade@gmail.com">Contato</a></li>
                     <!-- Conta do visitante: agora vive dentro da navbar -->
                     <li class="nav-account">
@@ -1465,7 +1454,7 @@
                 <h2 id="visitorModalTitle">Sua conta</h2>
                 <p class="hint">Crie uma conta ou entre para acompanhar os artigos da Comunidade Tomista.</p>
 
-                <div class="modal-tabs">
+                <div class="modal-tabs" id="visitorModalTabs">
                     <button type="button" class="modal-tab-btn active" id="tabBtnLogin">Entrar</button>
                     <button type="button" class="modal-tab-btn" id="tabBtnRegister">Cadastrar</button>
                 </div>
@@ -1481,6 +1470,7 @@
                             <label for="visitorLoginPass">Senha</label>
                             <input type="password" id="visitorLoginPass" autocomplete="current-password" required>
                         </div>
+                        <button type="button" class="link-btn" id="btnShowForgotPassword">Esqueci minha senha</button>
                         <p class="admin-error" id="visitorLoginError"></p>
                         <div class="admin-modal-actions">
                             <button type="button" class="btn-ct outline" id="btnCancelVisitor">Cancelar</button>
@@ -1515,6 +1505,49 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- Aba: recuperação de senha (não faz parte das abas Entrar/Cadastrar) -->
+                <div class="modal-tab-panel" id="tabPanelForgot" hidden>
+                    <p class="hint" style="margin-top: -0.4rem;">Informe o e-mail da sua conta. Enviaremos um link para você criar uma nova senha.</p>
+                    <form id="visitorForgotForm">
+                        <div class="field-group">
+                            <label for="visitorForgotEmail">E-mail</label>
+                            <input type="email" id="visitorForgotEmail" autocomplete="email" required>
+                        </div>
+                        <p class="admin-error" id="visitorForgotError"></p>
+                        <div class="admin-modal-actions">
+                            <button type="button" class="btn-ct outline" id="btnCancelForgot">Voltar</button>
+                            <button type="submit" class="btn-ct solid">Enviar link</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--
+            Modal para definir uma NOVA senha depois que a pessoa clica no link
+            de recuperação recebido por e-mail. O Supabase abre esta página com
+            uma sessão temporária de recuperação (evento "PASSWORD_RECOVERY");
+            este modal é aberto automaticamente quando esse evento é detectado.
+        -->
+        <div class="admin-modal-backdrop" id="resetPasswordModal" hidden>
+            <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="resetPasswordModalTitle">
+                <h2 id="resetPasswordModalTitle">Criar nova senha</h2>
+                <p class="hint">Escolha uma nova senha para sua conta.</p>
+                <form id="resetPasswordForm">
+                    <div class="field-group">
+                        <label for="resetPasswordNew">Nova senha</label>
+                        <input type="password" id="resetPasswordNew" autocomplete="new-password" minlength="6" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="resetPasswordConfirm">Confirmar nova senha</label>
+                        <input type="password" id="resetPasswordConfirm" autocomplete="new-password" minlength="6" required>
+                    </div>
+                    <p class="admin-error" id="resetPasswordError"></p>
+                    <div class="admin-modal-actions">
+                        <button type="submit" class="btn-ct solid">Salvar nova senha</button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -1764,17 +1797,7 @@
             <button type="button" class="admin-sidebar-close" id="btnCloseAdminSidebar" aria-label="Fechar painel">&times;</button>
         </div>
 
-        <div class="modal-tabs">
-            <button type="button" class="modal-tab-btn active" id="adminTabBtnOnline">Usuários online</button>
-            <button type="button" class="modal-tab-btn" id="adminTabBtnComments">Comentários</button>
-        </div>
-
-        <div class="admin-sidebar-panel modal-tab-panel" id="adminTabPanelOnline">
-            <p class="admin-sidebar-hint">Usuários com uma sessão ativa nos últimos minutos.</p>
-            <ul class="online-users-list" id="onlineUsersList"></ul>
-        </div>
-
-        <div class="admin-sidebar-panel modal-tab-panel" id="adminTabPanelComments" hidden>
+        <div class="admin-sidebar-panel" id="adminTabPanelComments">
             <p class="admin-sidebar-hint">Todos os comentários do blog. É possível apagar qualquer comentário aqui.</p>
             <ul class="admin-comments-list" id="adminCommentsList"></ul>
         </div>
@@ -1865,11 +1888,6 @@
         const btnCloseAdminSidebar = document.getElementById('btnCloseAdminSidebar');
         const adminSidebar = document.getElementById('adminSidebar');
         const adminSidebarBackdrop = document.getElementById('adminSidebarBackdrop');
-        const adminTabBtnOnline = document.getElementById('adminTabBtnOnline');
-        const adminTabBtnComments = document.getElementById('adminTabBtnComments');
-        const adminTabPanelOnline = document.getElementById('adminTabPanelOnline');
-        const adminTabPanelComments = document.getElementById('adminTabPanelComments');
-        const onlineUsersList = document.getElementById('onlineUsersList');
         const adminCommentsList = document.getElementById('adminCommentsList');
         const adminModal = document.getElementById('adminModal');
         const adminLoginForm = document.getElementById('adminLoginForm');
@@ -1894,15 +1912,26 @@
         const btnCancelVisitor = document.getElementById('btnCancelVisitor');
         const btnCancelVisitor2 = document.getElementById('btnCancelVisitor2');
 
+        const visitorModalTabs = document.getElementById('visitorModalTabs');
         const tabBtnLogin = document.getElementById('tabBtnLogin');
         const tabBtnRegister = document.getElementById('tabBtnRegister');
         const tabPanelLogin = document.getElementById('tabPanelLogin');
         const tabPanelRegister = document.getElementById('tabPanelRegister');
+        const tabPanelForgot = document.getElementById('tabPanelForgot');
 
         const visitorLoginForm = document.getElementById('visitorLoginForm');
         const visitorLoginError = document.getElementById('visitorLoginError');
         const visitorRegisterForm = document.getElementById('visitorRegisterForm');
         const visitorRegisterError = document.getElementById('visitorRegisterError');
+
+        const btnShowForgotPassword = document.getElementById('btnShowForgotPassword');
+        const btnCancelForgot = document.getElementById('btnCancelForgot');
+        const visitorForgotForm = document.getElementById('visitorForgotForm');
+        const visitorForgotError = document.getElementById('visitorForgotError');
+
+        const resetPasswordModal = document.getElementById('resetPasswordModal');
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        const resetPasswordError = document.getElementById('resetPasswordError');
 
         // ---------- Elementos: leitor de artigo (aberto para todos os visitantes) ----------
         const articleReaderBackdrop = document.getElementById('articleReaderBackdrop');
@@ -2024,14 +2053,6 @@
                 closeAdminSidebar();
             }
 
-            // Presença "online": só faz sentido enquanto existe alguém logado
-            // (visitante ou admin). Ver seção "PRESENÇA ONLINE" mais abaixo.
-            if (currentSession) {
-                startPresenceHeartbeat();
-            } else {
-                stopPresenceHeartbeat();
-            }
-
             renderPosts();
         }
 
@@ -2041,33 +2062,22 @@
 
         /*
             ==========================================================================
-            ABA LATERAL DO ADMINISTRADOR (usuários online + comentários)
+            ABA LATERAL DO ADMINISTRADOR (comentários)
             ==========================================================================
             Só pode ser aberta quando isAdmin() é verdadeiro. O botão "Painel" que
             a abre só existe dentro do indicador discreto do administrador, que já
             fica oculto para qualquer pessoa sem sessão de admin.
         */
-        let onlineUsersRefreshTimer = null;
-
         function openAdminSidebar() {
             if (!isAdmin()) return;
             adminSidebar.hidden = false;
             adminSidebarBackdrop.hidden = false;
-            loadOnlineUsers();
             loadAdminComments();
-            if (onlineUsersRefreshTimer) clearInterval(onlineUsersRefreshTimer);
-            onlineUsersRefreshTimer = setInterval(function () {
-                if (!adminSidebar.hidden) loadOnlineUsers();
-            }, 20000);
         }
 
         function closeAdminSidebar() {
             adminSidebar.hidden = true;
             adminSidebarBackdrop.hidden = true;
-            if (onlineUsersRefreshTimer) {
-                clearInterval(onlineUsersRefreshTimer);
-                onlineUsersRefreshTimer = null;
-            }
         }
 
         btnOpenAdminSidebar.addEventListener('click', openAdminSidebar);
@@ -2076,114 +2086,6 @@
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && !adminSidebar.hidden) closeAdminSidebar();
         });
-
-        function setAdminSidebarTab(tab) {
-            const isOnline = tab === 'online';
-            adminTabBtnOnline.classList.toggle('active', isOnline);
-            adminTabBtnComments.classList.toggle('active', !isOnline);
-            adminTabPanelOnline.hidden = !isOnline;
-            adminTabPanelComments.hidden = isOnline;
-        }
-        adminTabBtnOnline.addEventListener('click', function () { setAdminSidebarTab('online'); });
-        adminTabBtnComments.addEventListener('click', function () { setAdminSidebarTab('comments'); });
-
-        /*
-            ==========================================================================
-            PRESENÇA ONLINE (tabela "user_presence" no Supabase)
-            ==========================================================================
-            Não existe, no Supabase Auth padrão, uma forma de o cliente consultar
-            "quem está logado agora" — por isso essa informação é guardada numa
-            tabela própria, atualizada por um "heartbeat" (um upsert a cada 30s)
-            enquanto a pessoa tem a página aberta e está logada (visitante ou
-            admin). O painel do admin considera "online" quem teve um heartbeat
-            nos últimos 2 minutos. Ver o guia SUPABASE-PAINEL-ADMIN-GUIA.md para
-            o SQL necessário (criação da tabela e das policies de RLS).
-        */
-        const ONLINE_THRESHOLD_MINUTES = 2;
-        let presenceHeartbeatTimer = null;
-
-        async function sendPresenceHeartbeat() {
-            if (!currentSession) return;
-            const name = (currentSession.user.user_metadata && currentSession.user.user_metadata.name)
-                ? currentSession.user.user_metadata.name
-                : currentSession.user.email;
-            const { error } = await sb.from('user_presence').upsert({
-                user_id: currentSession.user.id,
-                email: currentSession.user.email,
-                name: name,
-                is_admin: isAdmin(),
-                last_seen: new Date().toISOString()
-            }, { onConflict: 'user_id' });
-            if (error) {
-                console.error('Falha ao enviar heartbeat de presença:', error);
-            }
-        }
-
-        function startPresenceHeartbeat() {
-            sendPresenceHeartbeat();
-            if (presenceHeartbeatTimer) clearInterval(presenceHeartbeatTimer);
-            presenceHeartbeatTimer = setInterval(sendPresenceHeartbeat, 30000);
-        }
-
-        function stopPresenceHeartbeat() {
-            if (presenceHeartbeatTimer) {
-                clearInterval(presenceHeartbeatTimer);
-                presenceHeartbeatTimer = null;
-            }
-        }
-
-        // Também envia um heartbeat quando a aba volta a ficar visível, para
-        // que a lista do admin fique correta mesmo depois de um tempo em
-        // segundo plano.
-        document.addEventListener('visibilitychange', function () {
-            if (document.visibilityState === 'visible' && currentSession) {
-                sendPresenceHeartbeat();
-            }
-        });
-
-        async function loadOnlineUsers() {
-            if (!isAdmin()) return;
-            const threshold = new Date(Date.now() - ONLINE_THRESHOLD_MINUTES * 60000).toISOString();
-            const { data: users, error } = await sb
-                .from('user_presence')
-                .select('*')
-                .gte('last_seen', threshold)
-                .order('last_seen', { ascending: false });
-
-            onlineUsersList.innerHTML = '';
-            if (error) {
-                onlineUsersList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Não foi possível carregar os usuários online.</li>';
-                console.error(error);
-                return;
-            }
-            if (!users || !users.length) {
-                onlineUsersList.innerHTML = '<li class="empty-state" style="padding: var(--space-2) 0;">Nenhum usuário online no momento.</li>';
-                return;
-            }
-            users.forEach(function (u) {
-                const li = document.createElement('li');
-                li.className = 'online-user-item';
-
-                const dot = document.createElement('span');
-                dot.className = 'online-user-dot';
-                dot.setAttribute('aria-hidden', 'true');
-                li.appendChild(dot);
-
-                const name = document.createElement('span');
-                name.className = 'online-user-name';
-                name.textContent = u.name || u.email;
-                li.appendChild(name);
-
-                if (u.is_admin) {
-                    const role = document.createElement('span');
-                    role.className = 'online-user-role';
-                    role.textContent = 'Admin';
-                    li.appendChild(role);
-                }
-
-                onlineUsersList.appendChild(li);
-            });
-        }
 
         /*
             ==========================================================================
@@ -2335,8 +2237,10 @@
         function openVisitorModal() {
             visitorLoginError.textContent = '';
             visitorRegisterError.textContent = '';
+            visitorForgotError.textContent = '';
             visitorLoginForm.reset();
             visitorRegisterForm.reset();
+            visitorForgotForm.reset();
             switchVisitorTab('login');
             visitorModal.hidden = false;
             document.getElementById('visitorLoginEmail').focus();
@@ -2352,6 +2256,23 @@
             tabBtnRegister.classList.toggle('active', !isLogin);
             tabPanelLogin.hidden = !isLogin;
             tabPanelRegister.hidden = isLogin;
+            tabPanelForgot.hidden = true;
+            visitorModalTabs.hidden = false;
+        }
+
+        function showForgotPasswordPanel() {
+            visitorForgotError.textContent = '';
+            visitorForgotError.style.color = '';
+            visitorForgotForm.reset();
+            const emailAlreadyTyped = document.getElementById('visitorLoginEmail').value.trim();
+            if (emailAlreadyTyped) {
+                document.getElementById('visitorForgotEmail').value = emailAlreadyTyped;
+            }
+            visitorModalTabs.hidden = true;
+            tabPanelLogin.hidden = true;
+            tabPanelRegister.hidden = true;
+            tabPanelForgot.hidden = false;
+            document.getElementById('visitorForgotEmail').focus();
         }
 
         btnVisitorAccount.addEventListener('click', openVisitorModal);
@@ -2363,6 +2284,8 @@
 
         tabBtnLogin.addEventListener('click', function () { switchVisitorTab('login'); });
         tabBtnRegister.addEventListener('click', function () { switchVisitorTab('register'); });
+        btnShowForgotPassword.addEventListener('click', showForgotPasswordPanel);
+        btnCancelForgot.addEventListener('click', function () { switchVisitorTab('login'); });
 
         // ---------- Cadastro do visitante ----------
         visitorRegisterForm.addEventListener('submit', async function (e) {
@@ -2422,6 +2345,68 @@
 
             await refreshSessionUI();
             closeVisitorModal();
+        });
+
+        // ---------- Recuperação de senha do visitante ----------
+        // Envia um e-mail (via Supabase Auth) com um link mágico de
+        // recuperação. Ao clicar no link, o Supabase abre esta mesma página
+        // já autenticado com uma sessão temporária de recuperação, o que
+        // dispara o evento "PASSWORD_RECOVERY" tratado mais abaixo.
+        visitorForgotForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            visitorForgotError.textContent = '';
+
+            const email = document.getElementById('visitorForgotEmail').value.trim().toLowerCase();
+
+            const { error } = await sb.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + window.location.pathname
+            });
+
+            if (error) {
+                visitorForgotError.textContent = 'Não foi possível enviar o link. Tente novamente.';
+                console.error(error);
+                return;
+            }
+
+            visitorForgotError.style.color = 'var(--color-ink)';
+            visitorForgotError.textContent = 'Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.';
+        });
+
+        // ---------- Definir nova senha (depois de clicar no link do e-mail) ----------
+        sb.auth.onAuthStateChange(function (event) {
+            if (event === 'PASSWORD_RECOVERY') {
+                closeVisitorModal();
+                resetPasswordError.textContent = '';
+                resetPasswordForm.reset();
+                resetPasswordModal.hidden = false;
+            }
+        });
+
+        resetPasswordForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            resetPasswordError.textContent = '';
+
+            const newPass = document.getElementById('resetPasswordNew').value;
+            const confirmPass = document.getElementById('resetPasswordConfirm').value;
+
+            if (newPass.length < 6) {
+                resetPasswordError.textContent = 'A senha precisa ter pelo menos 6 caracteres.';
+                return;
+            }
+            if (newPass !== confirmPass) {
+                resetPasswordError.textContent = 'As senhas não coincidem.';
+                return;
+            }
+
+            const { error } = await sb.auth.updateUser({ password: newPass });
+            if (error) {
+                resetPasswordError.textContent = 'Não foi possível salvar a nova senha. Tente pedir um novo link.';
+                console.error(error);
+                return;
+            }
+
+            resetPasswordModal.hidden = true;
+            await refreshSessionUI();
         });
 
         // ---------- Logout do visitante ----------

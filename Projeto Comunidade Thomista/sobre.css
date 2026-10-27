@@ -70,11 +70,6 @@ section.colaboradores img {
     transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
-section.colaboradores img:hover {
-    transform: scale(1.01);
-    box-shadow: var(--shadow-lg);
-}
-
 @media screen and (max-width: 768px) {
     div.sobre-inicio {
         grid-template-columns: 1fr;
