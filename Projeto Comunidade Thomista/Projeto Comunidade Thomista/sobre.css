@@ -1,0 +1,88 @@
+/* ==========================================================================
+   PÁGINA: SOBRE (sobre.html)
+   Importa o sistema compartilhado; define o conteúdo específico —
+   grade de quatro cartões "marginália" e a faixa de colaboradores.
+   ========================================================================== */
+@import url("tokens.css");
+
+section.container {
+    background-image: url("img/luxa.org-opacity-changed-._tomas-de-aquino.jpg");
+    background-position: 44% 22%;
+}
+
+section.comunidade-description {
+    background-color: var(--color-cream);
+    padding: var(--space-8) 0 var(--space-6);
+}
+
+div.sobre-inicio {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr 1fr;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--space-3);
+}
+
+/* ---------- COLABORADORES ----------
+   Título tratado como uma "rubrica" de manuscrito: pequena, dourada,
+   sobre um fio horizontal — não mais um H1 solto e genérico. */
+
+div.titulo-colaboradores {
+    max-width: var(--content-width);
+    margin: var(--space-8) auto 0;
+    padding: 0 var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+div.titulo-colaboradores::before,
+div.titulo-colaboradores::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: var(--gold-24);
+}
+
+div.titulo-colaboradores h1 {
+    color: var(--color-gold);
+    text-align: center;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    font-style: italic;
+    white-space: nowrap;
+    padding: 0 var(--space-2);
+}
+
+section.colaboradores {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-5) var(--space-3) var(--space-8);
+}
+
+section.colaboradores img {
+    width: 640px;
+    max-width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+section.colaboradores img:hover {
+    transform: scale(1.01);
+    box-shadow: var(--shadow-lg);
+}
+
+@media screen and (max-width: 768px) {
+    div.sobre-inicio {
+        grid-template-columns: 1fr;
+        padding: var(--space-3) var(--space-2);
+    }
+
+    div.titulo-colaboradores h1 { font-size: var(--text-md); white-space: normal; }
+
+    section.colaboradores { padding: var(--space-5) var(--space-2); }
+    section.colaboradores img { width: 100%; }
+}

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO básico -->
+    <title>Contribua | Comunidade Tomista</title>
+    <meta name="description" content="Ajude a Comunidade Tomista a continuar produzindo conteúdo de educação, filosofia e formação intelectual. Contribua com qualquer valor através do Mercado Pago.">
+    <link rel="shortcut icon" href="img/385304a8-2019-4a51-9206-1a709c6d7eb3.png" type="image/x-icon">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!--
+        Estilos específicos da página "Contribua".
+        Paleta 100% preservada do style.css (mesmos códigos hex):
+        #fffbef, #C9A24D, #1C1C1C, #282828, #777, #b23b3b.
+        Segue exatamente os mesmos tokens/variáveis e a mesma linguagem
+        visual já usada em blog.html (cards, btn-ct, sombras, cantos etc).
+    -->
+    <style>
+        :root {
+            --color-cream:      #fffbef;
+            --color-gold:        #C9A24D;
+            --color-ink:          #1C1C1C;
+            --color-charcoal:    #282828;
+            --color-white:       #ffffff;
+            --color-gray:         #777777;
+            --color-error:        #b23b3b;
+            --color-success:      #3b7a4d;
+
+            --gold-rgb: 201, 162, 77;
+            --ink-rgb: 28, 28, 28;
+
+            --font-display: "Cormorant Garamond", "Iowan Old Style", serif;
+            --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
+
+            --space-1: 8px;
+            --space-2: 16px;
+            --space-3: 24px;
+            --space-4: 32px;
+            --space-5: 40px;
+            --space-6: 48px;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+
+            --shadow-sm: 0 2px 8px rgba(var(--ink-rgb), 0.06);
+            --shadow-md: 0 12px 32px rgba(var(--ink-rgb), 0.12);
+            --shadow-gold: 0 10px 30px rgba(var(--gold-rgb), 0.28);
+
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.2s var(--ease);
+            --transition-base: 0.3s var(--ease);
+            --transition-slow: 0.5s var(--ease);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .contribute-main {
+            background-color: var(--color-cream);
+            min-height: 100vh;
+            color: var(--color-ink);
+            font-family: var(--font-body);
+            padding: 150px 5% var(--space-6);
+        }
+
+        /* ---------- Hero ---------- */
+        .contribute-hero {
+            background-color: var(--color-ink);
+            background-image: radial-gradient(circle at top right, rgba(var(--gold-rgb), 0.15), transparent 60%);
+            border-radius: var(--radius-lg);
+            padding: 56px 40px;
+            max-width: 900px;
+            margin: 0 auto var(--space-5);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp var(--transition-slow) both;
+        }
+        .contribute-hero .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            display: inline-block;
+        }
+        .contribute-hero h1 {
+            color: var(--color-cream);
+            font-family: var(--font-display);
+            font-size: 44px;
+            font-weight: 700;
+            line-height: 1.15;
+            margin: var(--space-2) 0 var(--space-2);
+        }
+        .contribute-hero h1 strong { color: var(--color-gold); }
+        .contribute-hero p {
+            color: var(--color-cream);
+            opacity: 0.85;
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        /* ---------- Card do formulário ---------- */
+        .contribute-card {
+            background-color: var(--color-white);
+            border: 1px solid rgba(var(--ink-rgb), 0.06);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            max-width: 640px;
+            margin: 0 auto var(--space-5);
+            padding: var(--space-5) var(--space-4);
+            animation: fadeInUp var(--transition-slow) both;
+            animation-delay: 0.1s;
+        }
+
+        .contribute-card h2 {
+            font-family: var(--font-display);
+            font-size: 26px;
+            margin: 0 0 var(--space-1);
+        }
+        .contribute-card .subtitle {
+            color: var(--color-gray);
+            font-size: 14px;
+            margin: 0 0 var(--space-4);
+        }
+
+        /* Valores predefinidos */
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-2);
+            margin-bottom: var(--space-3);
+        }
+        .amount-btn {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 8px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid rgba(var(--gold-rgb), 0.5);
+            background: transparent;
+            color: var(--color-ink);
+            cursor: pointer;
+            transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+        }
+        .amount-btn:hover {
+            border-color: var(--color-gold);
+            transform: translateY(-2px);
+        }
+        .amount-btn.selected {
+            background-color: var(--color-gold);
+            border-color: var(--color-gold);
+            color: var(--color-cream);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .custom-amount-wrap {
+            margin-bottom: var(--space-4);
+        }
+        .custom-amount-wrap label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-gray);
+            margin-bottom: 6px;
+        }
+        .custom-amount-input-wrap {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid rgba(var(--ink-rgb), 0.15);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            transition: border-color var(--transition-fast);
+        }
+        .custom-amount-input-wrap:focus-within {
+            border-color: var(--color-gold);
+        }
+        .custom-amount-input-wrap .prefix {
+            padding: 12px 14px;
+            font-weight: 700;
+            color: var(--color-gray);
+            background: rgba(var(--ink-rgb), 0.03);
+        }
+        .custom-amount-input-wrap input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 14px 12px 0;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--color-ink);
+            background: transparent;
+        }
+
+        .field-group {
+            margin-bottom: var(--space-3);
+        }
+        .field-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-gray);
+            margin-bottom: 6px;
+        }
+        .field-group input,
+        .field-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid rgba(var(--ink-rgb), 0.15);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--color-ink);
+            background: var(--color-white);
+            transition: border-color var(--transition-fast);
+        }
+        .field-group input:focus,
+        .field-group select:focus {
+            outline: none;
+            border-color: var(--color-gold);
+        }
+        .field-group .hint {
+            font-size: 0.72rem;
+            color: var(--color-gray);
+            margin-top: 4px;
+        }
+
+        .contribute-error {
+            background-color: rgba(178, 59, 59, 0.08);
+            border: 1px solid rgba(178, 59, 59, 0.3);
+            color: var(--color-error);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            margin-bottom: var(--space-3);
+        }
+        .contribute-error[hidden] { display: none; }
+
+        .btn-contribute {
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            background-color: var(--color-gold);
+            color: var(--color-ink);
+            box-shadow: var(--shadow-gold);
+            transition: transform var(--transition-fast), opacity var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-contribute:hover { transform: translateY(-2px); opacity: 0.94; }
+        .btn-contribute:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mp-logo-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: var(--space-3);
+            font-size: 0.72rem;
+            color: var(--color-gray);
+        }
+        .mp-logo-note svg { flex-shrink: 0; }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(28, 28, 28, 0.25);
+            border-top-color: var(--color-ink);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ---------- Banners de retorno do Mercado Pago ---------- */
+        .status-banner {
+            max-width: 640px;
+            margin: 0 auto var(--space-4);
+            border-radius: var(--radius-md);
+            padding: var(--space-3) var(--space-3);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fadeIn var(--transition-base) both;
+        }
+        .status-banner[hidden] { display: none; }
+        .status-banner.success {
+            background-color: rgba(59, 122, 77, 0.1);
+            border: 1px solid rgba(59, 122, 77, 0.35);
+            color: var(--color-success);
+        }
+        .status-banner.pending {
+            background-color: rgba(var(--gold-rgb), 0.12);
+            border: 1px solid rgba(var(--gold-rgb), 0.4);
+            color: #8a6a1f;
+        }
+        .status-banner.error {
+            background-color: rgba(178, 59, 59, 0.08);
+            border: 1px solid rgba(178, 59, 59, 0.3);
+            color: var(--color-error);
+        }
+        .status-banner .icon { font-size: 1.4rem; line-height: 1; }
+        .status-banner strong { display: block; margin-bottom: 2px; }
+        .status-banner p { margin: 0; font-size: 0.85rem; opacity: 0.9; }
+
+        /* ---------- Seção "Como usamos" ---------- */
+        .contribute-info {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-3);
+        }
+        .info-card {
+            background-color: var(--color-white);
+            border: 1px solid rgba(var(--ink-rgb), 0.06);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            padding: var(--space-3);
+            text-align: center;
+        }
+        .info-card .info-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .info-card h3 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            margin: 0 0 6px;
+        }
+        .info-card p {
+            font-size: 0.85rem;
+            color: var(--color-gray);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 720px) {
+            .amount-grid { grid-template-columns: repeat(2, 1fr); }
+            .contribute-info { grid-template-columns: 1fr; }
+            .contribute-hero h1 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <div class="navbar-logo">
+                <a href="/">
+                    <img
+                        class="logo"
+                        src="img/385304a8-2019-4a51-9206-1a709c6d7eb3.png"
+                        alt="Logo da Comunidade Tomista">
+                </a>
+            </div>
+            <button
+                type="button"
+                class="navbar-toggle"
+                id="navbarToggle"
+                aria-label="Abrir menu"
+                aria-expanded="false"
+                aria-controls="navbarTitles">
+                <span class="navbar-toggle-bar"></span>
+                <span class="navbar-toggle-bar"></span>
+                <span class="navbar-toggle-bar"></span>
+            </button>
+            <nav class="navbar-titles" id="navbarTitles" aria-label="Menu principal">
+                <ul>
+                    <li><a href="index.html">Inicial</a></li>
+                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="educacao.html">Educação</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contribua.html" class="active">Contribua</a></li>
+                    <li><a href="mailto:tomistacomunidade@gmail.com">Contato</a></li>
+                    <li class="nav-contato" aria-label="Redes sociais">
+                        <a href="https://www.instagram.com/comunidade_tomista?igsh=MWJsZWdwYjh1czRuOQ==" target="_blank"><img class="media" src="img/instagram.png" alt="Instagram"></a>
+                        <a href="https://youtube.com/@comunidadetomista?si=FdLPEXtPwTkDObHS" target="_blank"><img class="media" src="img/youtube.png" alt="YouTube"></a>
+                        <a href="https://www.tiktok.com/@comunidadetomista?_r=1&_t=ZS-93qb0MaSJZX" target="_blank"><img class="media" src="img/tiktok.png" alt="TikTok"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="navbar-detail" aria-hidden="true"></div>
+    </header>
+
+    <main class="contribute-main">
+
+        <section class="contribute-hero">
+            <span class="eyebrow">Apoie a comunidade</span>
+            <h1>Sua contribuição mantém <strong>viva</strong> esta obra</h1>
+            <p>
+                Tudo o que publicamos — artigos, aulas e materiais de formação — depende
+                do apoio de pessoas como você. Contribua com qualquer valor, de forma
+                rápida e segura, através do Mercado Pago.
+            </p>
+        </section>
+
+        <!-- Banners exibidos quando o usuário retorna do checkout do Mercado Pago -->
+        <div class="status-banner success" id="bannerSuccess" hidden>
+            <span class="icon">✅</span>
+            <div>
+                <strong>Contribuição recebida, muito obrigado!</strong>
+                <p>Seu apoio faz toda a diferença para a continuidade do nosso trabalho.</p>
+            </div>
+        </div>
+        <div class="status-banner pending" id="bannerPending" hidden>
+            <span class="icon">⏳</span>
+            <div>
+                <strong>Pagamento em processamento</strong>
+                <p>Assim que o Mercado Pago confirmar, sua contribuição será registrada.</p>
+            </div>
+        </div>
+        <div class="status-banner error" id="bannerError" hidden>
+            <span class="icon">⚠️</span>
+            <div>
+                <strong>Pagamento não concluído</strong>
+                <p>O pagamento foi cancelado ou não pôde ser processado. Você pode tentar novamente abaixo.</p>
+            </div>
+        </div>
+
+        <section class="contribute-card">
+            <h2>Faça sua contribuição</h2>
+            <p class="subtitle">Escolha um valor ou digite o quanto deseja contribuir.</p>
+
+            <div class="contribute-error" id="contributeError" hidden></div>
+
+            <form id="contributeForm">
+                <div class="amount-grid" id="amountGrid">
+                    <button type="button" class="amount-btn" data-amount="20">R$ 20</button>
+                    <button type="button" class="amount-btn" data-amount="50">R$ 50</button>
+                    <button type="button" class="amount-btn" data-amount="100">R$ 100</button>
+                    <button type="button" class="amount-btn" data-amount="200">R$ 200</button>
+                </div>
+
+                <div class="custom-amount-wrap">
+                    <label for="customAmount">Ou digite outro valor (R$)</label>
+                    <div class="custom-amount-input-wrap">
+                        <span class="prefix">R$</span>
+                        <input type="number" id="customAmount" name="customAmount" min="5" step="0.01" placeholder="0,00" inputmode="decimal">
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="donorName">Seu nome</label>
+                    <input type="text" id="donorName" name="donorName" placeholder="Como quer ser chamado" autocomplete="name" required>
+                </div>
+
+                <div class="field-group">
+                    <label for="donorEmail">E-mail</label>
+                    <input type="email" id="donorEmail" name="donorEmail" placeholder="seuemail@exemplo.com" autocomplete="email" required>
+                    <p class="hint">Usado apenas para enviar a confirmação do pagamento.</p>
+                </div>
+
+                <button type="submit" class="btn-contribute" id="btnSubmitContribution">
+                    <span id="btnSubmitLabel">Contribuir com Mercado Pago</span>
+                </button>
+
+                <div class="mp-logo-note">
+                    <span>🔒</span>
+                    <span>Pagamento processado com segurança pelo Mercado Pago — aceita Pix, cartão e boleto.</span>
+                </div>
+            </form>
+        </section>
+
+        <section class="contribute-info">
+            <div class="info-card">
+                <div class="info-icon">📚</div>
+                <h3>Produção de conteúdo</h3>
+                <p>Artigos, aulas e materiais de formação filosófica e teológica.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">🖥️</div>
+                <h3>Manutenção do site</h3>
+                <p>Hospedagem, domínio e infraestrutura que mantêm a comunidade online.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">🤝</div>
+                <h3>Extensão da comunidade</h3>
+                <p>Ações e projetos que ajudam a levar o pensamento tomista a mais pessoas.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SDK do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+
+    <script>
+    (function () {
+        /*
+            ==========================================================================
+            CONFIGURAÇÃO DO SUPABASE
+            ==========================================================================
+            Mesmo projeto usado em blog.html. A chave "anon public" é feita para
+            ficar exposta no front-end; a Edge Function abaixo é quem realmente
+            fala com o Mercado Pago usando o Access Token secreto (guardado nos
+            "Secrets" do Supabase, nunca aqui no código do site).
+        */
+        const SUPABASE_URL = 'https://ajdcxxtpgkqhnukgbrit.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZGN4eHRwZ2txaG51a2dicml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwODAzOTUsImV4cCI6MjA5ODY1NjM5NX0.zAcqnENHIhYK6sihvB9_c7fUwZNAqt35vT_DIIvLrTo';
+
+        // Nome da Edge Function responsável por criar a preferência de
+        // pagamento no Mercado Pago (ver guia SUPABASE-MERCADOPAGO-SETUP.md).
+        const CREATE_PREFERENCE_FUNCTION = 'criar-preferencia-mp';
+
+        const { createClient } = supabase;
+        const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ---------- Elementos ----------
+        const amountGrid = document.getElementById('amountGrid');
+        const amountButtons = Array.from(amountGrid.querySelectorAll('.amount-btn'));
+        const customAmountInput = document.getElementById('customAmount');
+        const contributeForm = document.getElementById('contributeForm');
+        const contributeError = document.getElementById('contributeError');
+        const donorNameInput = document.getElementById('donorName');
+        const donorEmailInput = document.getElementById('donorEmail');
+        const btnSubmitContribution = document.getElementById('btnSubmitContribution');
+        const btnSubmitLabel = document.getElementById('btnSubmitLabel');
+
+        const bannerSuccess = document.getElementById('bannerSuccess');
+        const bannerPending = document.getElementById('bannerPending');
+        const bannerError = document.getElementById('bannerError');
+
+        let selectedAmount = null;
+
+        // ---------- Seleção de valores predefinidos ----------
+        amountButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                amountButtons.forEach(function (b) { b.classList.remove('selected'); });
+                btn.classList.add('selected');
+                selectedAmount = parseFloat(btn.dataset.amount);
+                customAmountInput.value = '';
+            });
+        });
+
+        customAmountInput.addEventListener('input', function () {
+            if (customAmountInput.value) {
+                amountButtons.forEach(function (b) { b.classList.remove('selected'); });
+                selectedAmount = null;
+            }
+        });
+
+        function getChosenAmount() {
+            if (customAmountInput.value) {
+                const val = parseFloat(customAmountInput.value.replace(',', '.'));
+                return isNaN(val) ? null : val;
+            }
+            return selectedAmount;
+        }
+
+        function showError(message) {
+            contributeError.textContent = message;
+            contributeError.hidden = false;
+        }
+        function clearError() {
+            contributeError.hidden = true;
+            contributeError.textContent = '';
+        }
+
+        function setLoading(isLoading) {
+            btnSubmitContribution.disabled = isLoading;
+            btnSubmitLabel.innerHTML = isLoading
+                ? '<span class="spinner"></span> Redirecionando para o Mercado Pago...'
+                : 'Contribuir com Mercado Pago';
+        }
+
+        // ---------- Envio do formulário ----------
+        contributeForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            clearError();
+
+            const amount = getChosenAmount();
+            const donorName = donorNameInput.value.trim();
+            const donorEmail = donorEmailInput.value.trim();
+
+            if (!amount || amount < 5) {
+                showError('Escolha ou digite um valor válido (mínimo R$ 5,00).');
+                return;
+            }
+            if (!donorName) {
+                showError('Por favor, informe seu nome.');
+                return;
+            }
+            if (!donorEmail) {
+                showError('Por favor, informe um e-mail válido.');
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const { data, error } = await sb.functions.invoke(CREATE_PREFERENCE_FUNCTION, {
+                    body: {
+                        amount: amount,
+                        donor_name: donorName,
+                        donor_email: donorEmail
+                    }
+                });
+
+                if (error) throw error;
+                if (!data || !data.init_point) {
+                    throw new Error('Não foi possível iniciar o pagamento. Tente novamente em instantes.');
+                }
+
+                // Redireciona para o Checkout Pro do Mercado Pago
+                window.location.href = data.init_point;
+            } catch (err) {
+                console.error(err);
+                showError('Não foi possível iniciar o pagamento agora. Tente novamente em alguns instantes.');
+                setLoading(false);
+            }
+        });
+
+        // ---------- Banners de retorno (back_urls configuradas na Edge Function) ----------
+        function showReturnBanner() {
+            const params = new URLSearchParams(window.location.search);
+            const status = params.get('status'); // approved | pending | failure
+
+            if (status === 'approved') {
+                bannerSuccess.hidden = false;
+            } else if (status === 'pending' || status === 'in_process') {
+                bannerPending.hidden = false;
+            } else if (status === 'failure' || status === 'rejected') {
+                bannerError.hidden = false;
+            }
+        }
+
+        showReturnBanner();
+    })();
+    </script>
+</body>
+</html>

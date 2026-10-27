@@ -1,0 +1,35 @@
+/* ==========================================================================
+   PÁGINA: EDUCAÇÃO (educacao.html)
+   Importa o sistema compartilhado; define o conteúdo específico —
+   a grade de seis cartões que expõe o programa (Trivium/Quadrivium).
+   ========================================================================== */
+@import url("tokens.css");
+
+section.container {
+    background-image: url("img/e69z7pdxw1y78xmmlpywyd2z8zq5.jpg");
+    background-position: 50% 18%;
+}
+
+section.educacao-description { height: 100%; }
+
+section.section-conteudo-educacao {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr 1fr;
+    background-color: var(--color-cream);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-3);
+}
+
+/* Os cartões deste programa seguem uma ordem pedagógica real
+   (crise → retorno → trivium → quadrivium → método → divisão),
+   por isso o algarismo romano em cada .paragrafos (via data-mark
+   no HTML) é informação, não decoração. */
+
+@media screen and (max-width: 768px) {
+    section.section-conteudo-educacao {
+        grid-template-columns: 1fr;
+        padding: var(--space-3) var(--space-2);
+    }
+}
